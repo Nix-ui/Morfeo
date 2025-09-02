@@ -3,24 +3,29 @@ package com.ucb.morfeo.features.home.presentation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +43,7 @@ import com.ucb.morfeo.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.font.FontWeight
 
 
 @Composable
@@ -49,38 +55,7 @@ fun HomeScreen(){
             .background(color = colorResource(R.color.firefly)),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-                .background(brush = Brush.linearGradient(
-                    colors = listOf<Color>(
-                        Color.White.copy(0.06f),
-                        Color.White.copy(alpha = 0.0f)
-                    )
-                ))
-        ) {
-            Image(
-                painter = painterResource(R.drawable.morfeo),
-                contentDescription = "Icono de principal",
-                modifier = Modifier
-                    .size(50.dp)
-                    .clip(CircleShape)
-                    .padding(0.dp),
-                alignment = Alignment.Center
-            )
-            Text(
-                text = "Morfeo",
-                style = TextStyle(
-                    color = Color.Cyan
-                )
-            )
-            Image(
-                painter = painterResource(R.drawable.morfeo),
-                contentDescription = "Logo principal de inicio",
-                modifier = Modifier.size(50.dp)
-            )
-        }
+        MorfeoTopBar(false,"Morfeo")
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -111,7 +86,10 @@ fun HomeScreen(){
             ){
                 Button(
                     onClick = {},
-                    colors = ButtonColors(Color.Red,Color.Blue,Color.Red,Color.Blue)
+                    colors = ButtonColors(
+                        Color.Red,Color.Blue,
+                        Color.Red,Color.Blue
+                    )
                 ){
                     Text(
                         "Tomar la pastilla roja",
@@ -164,7 +142,86 @@ fun ButtomNavigationBar(selectedItem:Int, onItemSelected: (Int)-> Unit){
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MorfeoTopBar(
+    isBackEnable: Boolean,
+    currentScreenName: String,
+    onBackScreen : ()->Unit = {}
+){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(64.dp)
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        Color.White.copy(0.06f),
+                        Color.White.copy(0.0f)
+                    )
+                )
+            )
+    ) {
+        // Fila con back y app icon
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Back arrow (left)
+            if (isBackEnable) {
+                IconButton(onClick = onBackScreen) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White
+                    )
+                }
+            } else {
+                // Para mantener el texto centrado si no hay back, agrega espacio vacío
+                Spacer(modifier = Modifier.size(48.dp))
+            }
 
+            // App name (center) → usamos Box para centrarlo absolutamente
+            Box(
+                modifier = Modifier.weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "Morfeo",
+                        fontSize = 14.sp,
+                        color = Color.Cyan,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = currentScreenName,
+                        fontSize = 12.sp,
+                        color = Color.White
+                    )
+                }
+            }
+
+            // App icon (right)
+            Icon(
+                painter = painterResource(R.drawable.morfeo),
+                contentDescription = "App Icon",
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun previewNavigationMorfeoTopBar(){
+    MorfeoTopBar(false,"")
+}
 
 @Preview
 @Composable
