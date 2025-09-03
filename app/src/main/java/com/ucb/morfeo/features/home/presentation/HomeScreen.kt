@@ -1,5 +1,6 @@
 package com.ucb.morfeo.features.home.presentation
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +15,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
@@ -53,6 +56,7 @@ fun HomeScreen(onNavigatedToTab: (Int) -> Unit = {}) {
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
+            .padding(top=40.dp)
             .background(colorResource(R.color.firefly)),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -61,8 +65,10 @@ fun HomeScreen(onNavigatedToTab: (Int) -> Unit = {}) {
 
         Column(
             modifier = Modifier
+                .weight(1f)
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -75,10 +81,11 @@ fun HomeScreen(onNavigatedToTab: (Int) -> Unit = {}) {
                 bedTime = bedTime,
                 wakeTime = wakeTime
             )
+            SleepWeeklyBar(
+                weekScore = listOf(20,40,79,59,39,0,0)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
         }
-        SleepWeeklyBar(
-            weekScore = listOf(20,40,79,59,39,70,72)
-        )
         var selectedItem by remember { mutableIntStateOf(0) }
         ButtomNavBar(
             selectedItem = selectedItem,

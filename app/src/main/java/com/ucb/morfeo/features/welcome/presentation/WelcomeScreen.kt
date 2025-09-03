@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
@@ -41,7 +43,7 @@ import com.ucb.morfeo.features.TopNavBar.presentation.TopNavBar
 fun WelcomeScreen(onNavigateToTab :(Int)-> Unit = {}){
     Column(
         modifier = Modifier.fillMaxWidth()
-            .padding(top = 20.dp)
+            .padding(top = 40.dp)
             .fillMaxHeight()
             .background(color = colorResource(R.color.firefly)),
         verticalArrangement = Arrangement.SpaceBetween
@@ -52,6 +54,7 @@ fun WelcomeScreen(onNavigateToTab :(Int)-> Unit = {}){
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()
                 .padding(top = 0.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             Image(
                 painter = painterResource(R.drawable.morfeo),
