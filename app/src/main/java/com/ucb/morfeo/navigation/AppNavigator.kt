@@ -5,6 +5,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ucb.morfeo.features.home.presentation.HomeScreen
 import com.ucb.morfeo.features.welcome.presentation.WelcomeScreen
 
 
@@ -19,7 +20,16 @@ fun AppNavigator() {
             WelcomeScreen(
                 onNavigateToTab = { tabIndex ->
                     when(tabIndex){
-                        0->navController.navigate(Screen.Welcome.route)
+                        0->navController.navigate(Screen.Home.route)
+                    }
+                }
+            )
+        }
+        composable(Screen.Home.route){
+            HomeScreen(
+                onNavigatedToTab = { tabIndex ->
+                    when(tabIndex){
+                        0 -> navController.navigate(Screen.Home.route)
                     }
                 }
             )

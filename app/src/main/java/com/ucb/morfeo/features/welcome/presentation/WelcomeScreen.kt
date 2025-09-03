@@ -95,7 +95,10 @@ fun WelcomeScreen(onNavigateToTab :(Int)-> Unit = {}){
         var selectedItem by remember { mutableIntStateOf(0) }
         ButtomNavBar(
             selectedItem = selectedItem,
-            onItemSelected = {selectedItem = it}
+            onItemSelected = {index ->
+                selectedItem = index
+                onNavigateToTab(index)
+            }
         )
     }
 }
