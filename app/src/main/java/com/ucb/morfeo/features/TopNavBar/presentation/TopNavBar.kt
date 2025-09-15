@@ -43,8 +43,8 @@ fun TopNavBar(
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        Color.White.copy(0.06f),
-                        Color.White.copy(0.0f)
+                        Color.White.copy(0.0f),
+                        Color.White.copy(0.06f)
                     )
                 )
             )

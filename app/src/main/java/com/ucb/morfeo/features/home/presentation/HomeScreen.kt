@@ -21,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -45,57 +47,60 @@ import com.ucb.morfeo.features.ButtomNavBar.presentation.ButtomNavBar
 import com.ucb.morfeo.features.TopNavBar.presentation.TopNavBar
 
 @Composable
-fun HomeScreen(onNavigatedToTab: (Int) -> Unit = {}) {
+fun HomeScreen(onNavigatedToTab: (Int) -> Unit = {}){
     val sleepScore = 50
     val averageSleep = "7h 25m"
     val bedTime = "23:40"
     val wakeTime = "06:58"
     val weeklyImprovement = 5
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(top=40.dp)
-            .background(colorResource(R.color.firefly)),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        TopNavBar(false, "Dashboard")
-
+    var selectItem by remember { mutableIntStateOf(0) }
+    Scaffold(
+        topBar = {
+            TopNavBar(false, stringResource(R.string.app_name))
+        },
+        bottomBar = {
+            ButtomNavBar(
+                selectItem, { index ->
+                    selectItem = index
+                    onNavigatedToTab(selectItem)
+                }
+            )
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
-                .weight(1f)
                 .fillMaxWidth()
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .fillMaxHeight()
+                .background(colorResource(R.color.firefly)),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            SleepScoreCard(
-                score = sleepScore,
-                improvement = weeklyImprovement
-            )
-            SleepStatsCard(
-                averageSleep = averageSleep,
-                bedTime = bedTime,
-                wakeTime = wakeTime
-            )
-            SleepWeeklyBar(
-                weekScore = listOf(20,40,79,59,39,0,0)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-        var selectedItem by remember { mutableIntStateOf(0) }
-        ButtomNavBar(
-            selectedItem = selectedItem,
-            onItemSelected = { index ->
-                selectedItem = index
-                onNavigatedToTab(index)
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp, alignment = Alignment.CenterVertically)
+            ) {
+                SleepScoreCard(
+                    score = sleepScore,
+                    improvement = weeklyImprovement
+                )
+                SleepStatsCard(
+                    averageSleep = averageSleep,
+                    bedTime = bedTime,
+                    wakeTime = wakeTime
+                )
+                SleepWeeklyBar(
+                    weekScore = listOf(20,40,79,59,39,0,0)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
             }
-        )
+        }
     }
 }
+
 
 @Composable
 fun SleepScoreCard(

@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -41,68 +42,74 @@ import com.ucb.morfeo.features.TopNavBar.presentation.TopNavBar
 
 @Composable
 fun WelcomeScreen(onNavigateToTab :(Int)-> Unit = {}){
-    Column(
-        modifier = Modifier.fillMaxWidth()
-            .padding(top = 40.dp)
-            .fillMaxHeight()
-            .background(color = colorResource(R.color.firefly)),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        TopNavBar(false, stringResource(R.string.welcome_screen_title))
+    var selectedItem by remember { mutableIntStateOf(0) }
+    Scaffold(
+        topBar = {
+            TopNavBar(false,stringResource(R.string.welcome_screen_title))
+        },
+        bottomBar = {
+            ButtomNavBar(
+                selectedItem = selectedItem,
+                onItemSelected = {index ->
+                    selectedItem = index
+                    onNavigateToTab(index)
+                }
+            )
+        }
+    ) { innerPadding ->
         Column(
-            verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()
-                .padding(top = 0.dp)
-                .verticalScroll(rememberScrollState())
+                .fillMaxHeight()
+                .background(color = colorResource(R.color.firefly)),
+            verticalArrangement = Arrangement.SpaceAround
         ) {
-            Image(
-                painter = painterResource(R.drawable.morfeo),
-                contentDescription = "Logo principal",
-                modifier = Modifier.size(200.dp)
-                    .clip(CircleShape)
+            Column(
+                verticalArrangement = Arrangement.SpaceAround,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+                    .padding(top = 0.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.morfeo),
+                    contentDescription = "Logo principal",
+                    modifier = Modifier.size(200.dp)
+                        .clip(CircleShape)
 
-            )
-            Text(text = "Bienvenido a Morfeo", textAlign = TextAlign.Center,
-                style = TextStyle(
-                    color = Color.Cyan,
-                    fontSize = 30.sp,
+                )
+                Text(text = "Bienvenido a Morfeo", textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        color = Color.Cyan,
+                        fontSize = 30.sp,
 
-                ),
-                modifier = Modifier.padding(top = 40.dp)
-            )
-            Spacer(
-                modifier = Modifier.size(100.dp)
-            )
-            Row (
-                horizontalArrangement = Arrangement.SpaceAround,
-                modifier = Modifier.width(400.dp)
-            ){
-                Button(
-                    onClick = {},
-                    colors = ButtonColors(
-                        Color.Red,Color.Blue,
-                        Color.Red,Color.Blue
-                    )
+                        ),
+                    modifier = Modifier.padding(top = 40.dp)
+                )
+                Spacer(
+                    modifier = Modifier.size(100.dp)
+                )
+                Row (
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    modifier = Modifier.width(400.dp)
                 ){
-                    Text(
-                        "Tomar la pastilla roja",
-                        color = Color.White,
-                        style = TextStyle(
-                            fontSize = 15.sp
+                    Button(
+                        onClick = {},
+                        colors = ButtonColors(
+                            Color.Red,Color.Blue,
+                            Color.Red,Color.Blue
                         )
-                    )
+                    ){
+                        Text(
+                            "Tomar la pastilla roja",
+                            color = Color.White,
+                            style = TextStyle(
+                                fontSize = 15.sp
+                            )
+                        )
+                    }
                 }
             }
         }
-        var selectedItem by remember { mutableIntStateOf(0) }
-        ButtomNavBar(
-            selectedItem = selectedItem,
-            onItemSelected = {index ->
-                selectedItem = index
-                onNavigateToTab(index)
-            }
-        )
     }
 }
 
@@ -117,7 +124,7 @@ fun WelcomeScreen(onNavigateToTab :(Int)-> Unit = {}){
 
 @Preview
 @Composable
-fun previewWelcomeScreen(){
+fun PreviewWelcomeScreen(){
     WelcomeScreen()
 }
 
