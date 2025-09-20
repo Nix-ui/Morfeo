@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -71,7 +72,10 @@ fun TopNavBar(
                 modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.Center
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceAround
+                    ) {
                     Text(
                         text = "Morfeo",
                         fontSize = 14.sp,
@@ -81,7 +85,8 @@ fun TopNavBar(
                     Text(
                         text = currentScreenName,
                         fontSize = 12.sp,
-                        color = Color.White
+                        color = Color.White,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
@@ -100,5 +105,5 @@ fun TopNavBar(
 @Preview
 @Composable
 fun previewTopNavBar(){
-    TopNavBar(false,"")
+    TopNavBar(false,"Welcome")
 }

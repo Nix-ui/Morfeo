@@ -56,7 +56,7 @@ fun HomeScreen(onNavigatedToTab: (Int) -> Unit = {}){
     var selectItem by remember { mutableIntStateOf(0) }
     Scaffold(
         topBar = {
-            TopNavBar(false, stringResource(R.string.app_name))
+            TopNavBar(false, stringResource(R.string.dashboard_title))
         },
         bottomBar = {
             ButtomNavBar(
