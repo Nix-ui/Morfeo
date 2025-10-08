@@ -9,12 +9,12 @@ import com.ucb.morfeo.features.welcome.data.database.entity.UserEntity
 
 @Dao
 interface IUserDao {
-    @Query("SELECT * FROM users")
+    @Query("SELECT * FROM user")
     suspend fun getAll(): List<UserEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(user: UserEntity)
 
-    @Query("DELETE FROM users")
+    @Query("DELETE FROM user")
     suspend fun deleteAll()
 }

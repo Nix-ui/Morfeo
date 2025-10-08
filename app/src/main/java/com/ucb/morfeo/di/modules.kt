@@ -1,6 +1,16 @@
 package com.ucb.morfeo.di
 
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.auth0.android.jwt.JWT
+import com.ucb.morfeo.features.login.data.datasource.JWTDataStore
+import com.ucb.morfeo.features.login.data.repository.LogInRepository
+import com.ucb.morfeo.features.login.domain.repository.ILogInRepository
+import com.ucb.morfeo.features.login.domain.usecase.FetchLogInUserUseCase
+import com.ucb.morfeo.features.login.presentation.LogInViewModel
+import com.ucb.morfeo.features.notification.data.repository.NotificationRepository
+import com.ucb.morfeo.features.notification.domain.presentation.NotificationViewModel
+import com.ucb.morfeo.features.notification.domain.repository.INotificationRepository
+import com.ucb.morfeo.features.notification.domain.usecase.FetchNotificationCase
 import com.ucb.morfeo.features.welcome.data.database.AppRoomDatabase
 import com.ucb.morfeo.features.welcome.data.repository.UserRepository
 import com.ucb.morfeo.features.welcome.domain.repository.IWelcomeRepository
@@ -13,7 +23,15 @@ val appModule = module {
     single { AppRoomDatabase.getDatabase(get()) }
     single { get<AppRoomDatabase>().userDao() }
     single<IWelcomeRepository> { UserRepository(get()) }
+    single<INotificationRepository> { NotificationRepository(get()) }
+    factory { FetchNotificationCase(get()) }
+    viewModel{ NotificationViewModel()}
 
     factory { FetchUserCase(get()) }
     viewModel{ WelcomeViewModel(get())}
+
+    single { JWTDataStore(get()) }
+    single<ILogInRepository> { LogInRepository(get()) }
+    factory { FetchLogInUserUseCase(get())}
+    viewModel { LogInViewModel(get()) }
 }

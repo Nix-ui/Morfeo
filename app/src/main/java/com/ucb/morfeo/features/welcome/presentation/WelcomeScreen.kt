@@ -1,12 +1,12 @@
 package com.ucb.morfeo.features.welcome.presentation
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,41 +34,39 @@ import androidx.compose.ui.unit.sp
 import com.ucb.morfeo.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import com.ucb.morfeo.features.ButtomNavBar.presentation.ButtomNavBar
 import com.ucb.morfeo.features.TopNavBar.presentation.TopNavBar
+import com.ucb.morfeo.navigation.Screen
 
 
 @Composable
-fun WelcomeScreen(onNavigateToTab :(Int)-> Unit = {}){
-    var selectedItem by remember { mutableIntStateOf(0) }
+fun WelcomeScreen(
+    onNavigateToTab :(String)-> Unit = {}
+    ){
+    var selectedItem by remember { mutableStateOf("") }
+    var selectedTab by remember { mutableIntStateOf(0) }
     Scaffold(
         topBar = {
             TopNavBar(false,stringResource(R.string.welcome_screen_title))
         },
-        bottomBar = {
-            ButtomNavBar(
-                selectedItem = selectedItem,
-                onItemSelected = {index ->
-                    selectedItem = index
-                    onNavigateToTab(index)
-                }
-            )
-        }
+        bottomBar = {},
+        containerColor = colorResource(R.color.firefly),
+        modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         Column(
             modifier = Modifier.fillMaxWidth()
                 .fillMaxHeight()
-                .background(color = colorResource(R.color.firefly)),
-            verticalArrangement = Arrangement.SpaceAround
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Center
         ) {
             Column(
-                verticalArrangement = Arrangement.SpaceAround,
+                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth()
                     .padding(top = 0.dp)
-                    .verticalScroll(rememberScrollState())
             ) {
                 Image(
                     painter = painterResource(R.drawable.morfeo),
@@ -93,7 +91,9 @@ fun WelcomeScreen(onNavigateToTab :(Int)-> Unit = {}){
                     modifier = Modifier.width(400.dp)
                 ){
                     Button(
-                        onClick = {},
+                        onClick = {
+                            onNavigateToTab(Screen.LogIn.route)
+                        },
                         colors = ButtonColors(
                             Color.Red,Color.Blue,
                             Color.Red,Color.Blue
@@ -128,4 +128,3 @@ fun PreviewWelcomeScreen(){
     WelcomeScreen()
 }
 
-data class NavigationItem(val label:String)

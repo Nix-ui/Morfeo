@@ -40,7 +40,7 @@ fun TopNavBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(64.dp)
+            .height(80.dp)
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
@@ -54,7 +54,7 @@ fun TopNavBar(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             if (isBackEnable) {

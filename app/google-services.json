@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "747100936125",
+    "project_id": "morfeo-bf167",
+    "storage_bucket": "morfeo-bf167.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:747100936125:android:d40332c7cddc8aef90a4d4",
+        "android_client_info": {
+          "package_name": "com.ucb.morfeo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhltX8bhxX8HZdLt9YdVe3Kwb1CgioWcA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
