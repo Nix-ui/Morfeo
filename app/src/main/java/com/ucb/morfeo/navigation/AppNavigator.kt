@@ -1,18 +1,13 @@
 package com.ucb.morfeo.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ucb.morfeo.features.core.maintenance.presentation.MaintenanceScreen
 import com.ucb.morfeo.features.home.presentation.HomeScreen
 import com.ucb.morfeo.features.login.presentation.LoginScreen
-import com.ucb.morfeo.features.notification.domain.presentation.NotificationViewModel
 import com.ucb.morfeo.features.welcome.presentation.WelcomeScreen
 
 
@@ -49,6 +44,13 @@ fun AppNavigator() {
         }
         composable(Screen.LogIn.route){
             LoginScreen(
+                onNavigateRoute = { route ->
+                    navController.navigate(route)
+                }
+            )
+        }
+        composable(Screen.Maintenance.route){
+            MaintenanceScreen(
                 onNavigateRoute = { route ->
                     navController.navigate(route)
                 }

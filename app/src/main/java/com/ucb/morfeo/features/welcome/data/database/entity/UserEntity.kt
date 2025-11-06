@@ -22,7 +22,7 @@ data class UserEntity(
     var password: String,
 
     @ColumnInfo(name="burn_date")
-    var burnedDate: Date,
+    var burnedDate: String,
     @ColumnInfo(name = "weight")
     var weight: Double,
     @ColumnInfo(name = "height")

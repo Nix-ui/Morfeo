@@ -4,7 +4,7 @@ import java.util.Date
 
 data class UserModel(
     val email:String, val password:String,
-    val burnDate: Date, val weight: Double,
+    val burnDate: String, val weight: Double,
     val height: Double
 ) {
 }

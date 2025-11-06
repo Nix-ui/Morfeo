@@ -30,12 +30,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ucb.morfeo.R
+import com.ucb.morfeo.navigation.Screen
 
 @Composable
 fun TopNavBar(
     isBackEnable: Boolean,
     currentScreenName: String,
-    onBackScreen : ()->Unit = {}
+    onBackScreen : (String)->Unit = {}
 ){
     Box(
         modifier = Modifier
@@ -58,7 +59,7 @@ fun TopNavBar(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             if (isBackEnable) {
-                IconButton(onClick = onBackScreen) {
+                IconButton(onClick = { onBackScreen(Screen.Home.route) }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",

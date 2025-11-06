@@ -14,7 +14,7 @@ class UserRepository(
         localDataSource.insertUser(user)
     }
     override suspend fun getUser(): Flow<UserModel> {
-        insertUser(UserModel("algo@example.com","password", burnDate =Date(2003,1,15),78.0,180.0))
+        insertUser(UserModel("algo@example.com","password", burnDate = "2023-08-01",78.0,180.0))
         var user = localDataSource.getAll()
         return flow {
             emit(user[0])

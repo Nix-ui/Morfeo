@@ -2,6 +2,10 @@ package com.ucb.morfeo.di
 
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.auth0.android.jwt.JWT
+import com.ucb.morfeo.features.core.firabase.config.data.repository.FirebaseConfigRepository
+import com.ucb.morfeo.features.core.firabase.config.domain.repository.IFirebaseConfigRepository
+import com.ucb.morfeo.features.core.firabase.config.domain.usecase.AppInMaintenanceUseCase
+import com.ucb.morfeo.features.core.maintenance.presentation.MaintenanceStatusViewModel
 import com.ucb.morfeo.features.login.data.datasource.JWTDataStore
 import com.ucb.morfeo.features.login.data.repository.LogInRepository
 import com.ucb.morfeo.features.login.domain.repository.ILogInRepository
@@ -34,4 +38,8 @@ val appModule = module {
     single<ILogInRepository> { LogInRepository(get()) }
     factory { FetchLogInUserUseCase(get())}
     viewModel { LogInViewModel(get()) }
+
+    single<IFirebaseConfigRepository>{ FirebaseConfigRepository() }
+    factory { AppInMaintenanceUseCase(get()) }
+    viewModel{ MaintenanceStatusViewModel(get())}
 }
