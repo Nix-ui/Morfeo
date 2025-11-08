@@ -1,6 +1,7 @@
 package com.ucb.morfeo.di
 
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ucb.morfeo.features.settings.data.datastore.SettingsDataStore
+import com.ucb.morfeo.features.settings.presentation.SettingsViewModel
 import com.auth0.android.jwt.JWT
 import com.ucb.morfeo.features.core.firabase.config.data.repository.FirebaseConfigRepository
 import com.ucb.morfeo.features.core.firabase.config.domain.repository.IFirebaseConfigRepository
@@ -28,26 +29,39 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
+
+    // 📦 ROOM DATABASE
     single { AppRoomDatabase.getDatabase(get()) }
     single { get<AppRoomDatabase>().userDao() }
+
+    // 👤 WELCOME / USER
     single<IWelcomeRepository> { UserRepository(get()) }
+    factory { FetchUserCase(get()) }
+    viewModel { WelcomeViewModel(get()) }
+
+    // 🔔 NOTIFICATIONS
     single<INotificationRepository> { NotificationRepository(get()) }
     factory { FetchNotificationCase(get()) }
-    viewModel{ NotificationViewModel()}
+    viewModel { NotificationViewModel() }
 
-    factory { FetchUserCase(get()) }
-    viewModel{ WelcomeViewModel(get())}
-
+    // 🔐 LOGIN
     single { JWTDataStore(get()) }
     single<ILogInRepository> { LogInRepository(get()) }
-    factory { FetchLogInUserUseCase(get())}
+    factory { FetchLogInUserUseCase(get()) }
+    // 🔹 ahora recibe dos dependencias: el usecase y el datastore
     viewModel { LogInViewModel(get()) }
 
-    single<IFirebaseConfigRepository>{ FirebaseConfigRepository() }
+    // 🛠️ MANTENIMIENTO
+    single<IFirebaseConfigRepository> { FirebaseConfigRepository() }
     factory { AppInMaintenanceUseCase(get()) }
-    viewModel{ MaintenanceStatusViewModel(get())}
+    viewModel { MaintenanceStatusViewModel(get()) }
 
+    // 💾 CHECK SESSION / SPLASH
     single<ICheckSessionRepository> { CheckSessionRepository(get()) }
     factory { CheckSessionUseCase(get()) }
     viewModel { SplashViewModel(get()) }
+
+    // ⚙️ SETTINGS
+    single { SettingsDataStore(get()) }
+    viewModel { SettingsViewModel(get()) }
 }

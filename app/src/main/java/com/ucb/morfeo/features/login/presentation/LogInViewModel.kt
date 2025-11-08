@@ -25,7 +25,7 @@ class LogInViewModel(
     }
     private val _logInState = MutableStateFlow<LogInUIState>(LogInUIState.Init)
     val logInState : StateFlow<LogInUIState> = _logInState.asStateFlow()
-     fun logIn(email: String, password: String){
+    fun logIn(email: String, password: String){
         viewModelScope.launch(Dispatchers.IO) {
             _logInState.value = LogInUIState.Loading
             val result = fetchLogInUserUseCase.invoke(LogInUser(Email(email), Password (password)))

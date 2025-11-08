@@ -12,4 +12,7 @@ sealed class Screen(val route:String) {
     object Settings:Screen("/settings")
     object Tips:Screen("/tips")
     object Profile:Screen("/profile")
+
+
+
 }
