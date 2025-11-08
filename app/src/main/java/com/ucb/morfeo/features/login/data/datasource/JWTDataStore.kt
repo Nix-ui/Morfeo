@@ -59,6 +59,28 @@ class JWTDataStore(
         }
     }
 
+    suspend fun getName(): Result<String>{
+        return try{
+            val preferences = context.dataStore.data.first()
+            val tokenString = preferences[JWT_TOKEN]
+            if(tokenString.isNullOrBlank()){
+                return Result.failure(Exception("No token found"))
+            }
+            val jwt = JWT(tokenString)
+            if(jwt.isExpired(10)){
+                clearToken()
+                return Result.failure(Exception("Token expired"))
+            }
+            val name = jwt.getClaim("name").asString()
+            if(name.isNullOrBlank()){
+                return Result.failure(Exception("No Name found"))
+            }
+            Result.success(name)
+        }catch (e: Exception){
+            Result.failure(Exception("Failed to decode session token: ${e.message}"))
+        }
+    }
+
     suspend fun clearToken(){
         context.dataStore.edit{
             it.remove(JWT_TOKEN)

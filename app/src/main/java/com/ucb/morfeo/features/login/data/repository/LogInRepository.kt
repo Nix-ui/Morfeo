@@ -31,7 +31,15 @@ class LogInRepository(
             if(fireBaseUser != null){
                 val jwtToken = createSampleJwtTokenString(fireBaseUser,logInUser)
                 logInDataStore.saveToken(jwtToken)
-                Result.success(createUserModelFromFirebaseUser(fireBaseUser,logInUser))
+                val name = logInDataStore.getName()
+                name.fold(
+                    onSuccess = {
+                        Result.success(createUserModelFromFirebaseUser(fireBaseUser,logInUser,it))
+                    },
+                    onFailure = {
+                        Result.success(createUserModelFromFirebaseUser(fireBaseUser,logInUser,"Morfi"))
+                    }
+                )
             }else{
                 Result.failure(Exception("User is null"))
             }
@@ -41,30 +49,13 @@ class LogInRepository(
     }
 
     private fun createSampleJwtTokenString(firebaseUser: FirebaseUser, logInUser: LogInUser): String {
-        // Este token fue generado con una herramienta online (como jwt.io) y es válido.
-        // Payload:
-        // {
-        //   "sub": "some_firebase_uid",
-        //   "name": "Some User Name",
-        //   "email": "user@example.com",
-        //   "iat": 1672531200, (timestamp de creación)
-        //   "exp": 9999999999  (timestamp de expiración muy lejano para pruebas)
-        // }
-        // La firma usa el secreto "your-super-secret-key"
-        val header = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
-        // Modificación: Se agrega el campo "email" al payload del JWT
-        val payload = "eyJzdWIiOiIke3VzZXJfdWlkfSIsIm5hbWUiOiIke3VzZXJfbmFtZX0iLCJlbWFpbCI6IiR7dXNlcl9lbWFpbH0iLCJleHAiOjE4OTM0NTYwMDB9"
-            .replace("\$${"uid"}", firebaseUser.uid)
-            .replace("\$${"name"}", firebaseUser.displayName ?: "Morfeo")
-            .replace("\$${"email"}", firebaseUser.email ?: logInUser.email.value)
-        val signature = "your_generated_signature_part"
-        return "$header.$payload."
+        return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ik1vcmZlbyIsImVtYWlsIjoibW9yZmVvQHVjYi5lZHUuYm8iLCJpYXQiOjE1MTYyMzkwMjJ9.-mCtaDlhaRXlSV43Di4BQdTcbklOBmCLdz44esWOeYs"
     }
 
-    private fun createUserModelFromFirebaseUser(firebaseUser: FirebaseUser, logInUser: LogInUser): UserModel{
+    private fun createUserModelFromFirebaseUser(firebaseUser: FirebaseUser, logInUser: LogInUser,name: String): UserModel{
         return UserModel(
             email = Email(firebaseUser.email ?: logInUser.email.value),
-            nombre = firebaseUser.displayName ?: "User",
+            nombre = firebaseUser.displayName ?: name,
             edad = Edad(20),
             peso = Peso(70.0),
             altura = Altura(1.70),
