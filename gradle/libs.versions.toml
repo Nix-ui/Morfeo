@@ -21,6 +21,8 @@ firebaseMessaging = "25.0.1"
 datastore = "1.0.0"
 jwt-decode = "2.0.2"
 firebaseConfig = "23.0.1"
+firebaseAuth = "24.0.1"
+serialization = "1.6.3"
 
 
 [libraries]
@@ -57,6 +59,8 @@ firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging
 jwt-decode = { module = "com.auth0.android:jwtdecode", version.ref = "jwt-decode" }
 datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore"}
 firebase-config = { group = "com.google.firebase", name = "firebase-config", version.ref = "firebaseConfig" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+kotlinx-serialization = { group="org.jetbrains.kotlinx", name="kotlinx-serialization-json", version.ref="serialization"}
 
 
 [bundles]
@@ -70,3 +74,4 @@ sentry = {id = "io.sentry.android.gradle",version.ref = "sentry"}
 ksp = {id = "com.google.devtools.ksp", version.ref = "ksp"}
 okHttp = { id = "com.squareup.okhttp", version.ref = "okHttp"}
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+kotlin-serialization = { id="org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}

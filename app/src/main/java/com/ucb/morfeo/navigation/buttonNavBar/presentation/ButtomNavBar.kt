@@ -26,10 +26,10 @@ fun ButtomNavBar(selectedRoute:String, onRouteSelected: (String)-> Unit){
     ) {
         val items = listOf(
             NavigationItem("Inicio", Screen.Home.route),
-            NavigationItem("Semana",""),
-            NavigationItem("Analisis",""),
-            NavigationItem("Consejos",""),
-            NavigationItem("Ajustes",""),
+            NavigationItem("Semana", Screen.Week.route),
+            NavigationItem("Analisis", Screen.Analysis.route),
+            NavigationItem("Consejos", Screen.Tips.route),
+            NavigationItem("Ajustes", Screen.Settings.route),
         )
         items.forEach { item ->
             NavigationBarItem(

@@ -16,73 +16,37 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ucb.morfeo.R
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
 import com.ucb.morfeo.features.TopNavBar.presentation.TopNavBar
-import com.ucb.morfeo.features.core.maintenance.presentation.MaintenanceStatusViewModel
 import com.ucb.morfeo.navigation.Screen
-import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun WelcomeScreen(
-    onNavigateToTab :(String)-> Unit = {},
-    maintenanceStatusViewModel: MaintenanceStatusViewModel = koinViewModel()
+    onNavigateToTab :(String)-> Unit = {}
     ){
     var selectedItem by remember { mutableStateOf("") }
     var selectedTab by remember { mutableIntStateOf(0) }
-    LaunchedEffect(Unit) {
-        maintenanceStatusViewModel.checkMaintenanceStatus()
-    }
-    val maintenanceStatus= maintenanceStatusViewModel.maintenanceStatusState.collectAsState()
-
-
-
-    LaunchedEffect(Unit) {
-        maintenanceStatusViewModel.checkMaintenanceStatus()
-    }
-
-    when(val state = maintenanceStatus.value){
-        is MaintenanceStatusViewModel.MaintenanceStatusUIState.Error -> {
-            onNavigateToTab(Screen.Maintenance.route)
-        }
-        is MaintenanceStatusViewModel.MaintenanceStatusUIState.Success -> {
-            if(state.isMaintenance){
-                onNavigateToTab(Screen.Maintenance.route)
-            }
-            else{
-                Text(text = "Bienvenido")
-            }
-        }
-        is MaintenanceStatusViewModel.MaintenanceStatusUIState.Init -> {
-            maintenanceStatusViewModel.checkMaintenanceStatus()
-        }
-        is MaintenanceStatusViewModel.MaintenanceStatusUIState.Loading -> {
-            CircularProgressIndicator()
-        }
-    }
     Scaffold(
         topBar = {
             TopNavBar(false,stringResource(R.string.welcome_screen_title))

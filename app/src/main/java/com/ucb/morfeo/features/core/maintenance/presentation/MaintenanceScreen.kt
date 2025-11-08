@@ -48,11 +48,6 @@ fun MaintenanceScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        maintenanceStatusViewModel.checkMaintenanceStatus()
-    }
-
-
     when (val state = maintenanceStatus.value) {
         is MaintenanceStatusViewModel.MaintenanceStatusUIState.Error -> {
             onNavigateRoute(Screen.Maintenance.route)
@@ -60,7 +55,6 @@ fun MaintenanceScreen(
         is MaintenanceStatusViewModel.MaintenanceStatusUIState.Success -> {
             if (!state.isMaintenance) {
                 onNavigateRoute(Screen.Home.route)
-                Toast.makeText(context, "Mantenimiento terminado", Toast.LENGTH_LONG).show()
             }
         }
         else -> Unit

@@ -52,12 +52,10 @@ import com.ucb.morfeo.features.TopNavBar.presentation.TopNavBar
 import com.ucb.morfeo.features.core.maintenance.presentation.MaintenanceStatusViewModel
 import com.ucb.morfeo.navigation.Screen
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
-    onNavigatedToTab: (String) -> Unit = {},
-    maintenanceStatusViewModel: MaintenanceStatusViewModel = koinViewModel()
+    onNavigatedToTab: (String) -> Unit = {}
 ){
     val sleepScore = 50
     val averageSleep = "7h 25m"
@@ -66,30 +64,6 @@ fun HomeScreen(
     val weeklyImprovement = 5
     var selectItem by remember { mutableStateOf("") }
     val context = LocalContext.current
-    val maintenanceStatus = maintenanceStatusViewModel.maintenanceStatusState.collectAsState()
-
-
-
-    LaunchedEffect(Unit) {
-        maintenanceStatusViewModel.checkMaintenanceStatus()
-    }
-
-
-    when (val state = maintenanceStatus.value) {
-        is MaintenanceStatusViewModel.MaintenanceStatusUIState.Error -> {
-            onNavigatedToTab(Screen.Maintenance.route)
-        }
-        is MaintenanceStatusViewModel.MaintenanceStatusUIState.Success -> {
-            if (state.isMaintenance) {
-                onNavigatedToTab(Screen.Maintenance.route)
-                Toast.makeText(context, "En mantenimiento", Toast.LENGTH_LONG).show()
-            }else{
-                onNavigatedToTab(Screen.Home.route)
-                Toast.makeText(context, "En funcionamiento", Toast.LENGTH_LONG).show()
-            }
-        }
-        else -> Unit
-    }
     Scaffold(
         containerColor = colorResource(R.color.firefly),
         topBar = {

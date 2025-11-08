@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.sentry)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -56,6 +57,7 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.config)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -73,4 +75,5 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     implementation(libs.jwt.decode)
     implementation(libs.datastore)
+    implementation(libs.kotlinx.serialization)
 }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -79,6 +80,7 @@ fun LoginScreen(
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
                     OutlinedTextField(
+                        maxLines = 1,
                         value = email,
                         onValueChange = { email = it },
                         label = { Text(text = "Email") },
@@ -91,7 +93,8 @@ fun LoginScreen(
                                 OutlinedTextFieldDefaults.colors().copy(
                                 focusedIndicatorColor = colorResource(R.color.dodger_blue),
                                 unfocusedIndicatorColor = colorResource(R.color.dodger_blue))
-                            }
+                            },
+                        modifier = Modifier.width(300.dp)
                     )
                     if(email.isEmpty()){
                         Text(
@@ -111,6 +114,7 @@ fun LoginScreen(
                         }
                     }
                     OutlinedTextField(
+                        maxLines = 1,
                         value = password,
                         onValueChange = { password = it },
                         label = { Text(text = "Password") },
@@ -125,7 +129,8 @@ fun LoginScreen(
                                     contentDescription = "Toggle password visibility"
                                 )
                             }
-                        }
+                        },
+                        modifier = Modifier.width(300.dp)
                     )
                     Row(
                         verticalAlignment = Alignment.CenterVertically,

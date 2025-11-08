@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class MaintenanceStatusViewModel(
@@ -22,19 +23,35 @@ class MaintenanceStatusViewModel(
     private val _maintenanceStatusState = MutableStateFlow<MaintenanceStatusUIState>(MaintenanceStatusUIState.Init)
     val maintenanceStatusState : StateFlow<MaintenanceStatusUIState> = _maintenanceStatusState.asStateFlow()
 
-    fun checkMaintenanceStatus(){
-        viewModelScope.launch(Dispatchers.IO) {
-            _maintenanceStatusState.value = MaintenanceStatusUIState.Loading
-            val result = appInMaintenanceUseCase.invoke()
-            result.fold(
-                onSuccess = {
-                    _maintenanceStatusState.value = MaintenanceStatusUIState.Success(it)
-                },
-                onFailure = {
-                    _maintenanceStatusState.value = MaintenanceStatusUIState.Error(it.message ?: "Error desconocido")
-                }
-            )
-        }
+    init{
+        listenForMaintenanceStatus()
     }
 
+    private fun listenForMaintenanceStatus(){
+        viewModelScope.launch(Dispatchers.IO){
+            _maintenanceStatusState.value = MaintenanceStatusUIState.Loading
+            appInMaintenanceUseCase.getInitialStatus()
+                .onSuccess {initialStatus ->
+                    _maintenanceStatusState.value = MaintenanceStatusUIState.Success(initialStatus)
+                }
+                .onFailure {
+                    _maintenanceStatusState.value = MaintenanceStatusUIState.Error(it.message ?: "Error desconocido")
+                }
+
+            appInMaintenanceUseCase.listenForUpdates()
+                .catch { exception->
+                    _maintenanceStatusState.value = MaintenanceStatusUIState.Error(exception.message ?: "Error desconocido")
+                }
+                .collect {result ->
+                    result.fold(
+                        onSuccess = {
+                            _maintenanceStatusState.value = MaintenanceStatusUIState.Success(it)
+                        },
+                        onFailure = {
+                            _maintenanceStatusState.value = MaintenanceStatusUIState.Error(it.message ?: "Error desconocido")
+                        }
+                    )
+                }
+        }
+    }
 }

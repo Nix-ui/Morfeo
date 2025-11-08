@@ -7,14 +7,18 @@ import com.ucb.morfeo.features.core.firabase.config.domain.repository.IFirebaseC
 import com.ucb.morfeo.features.core.firabase.config.domain.usecase.AppInMaintenanceUseCase
 import com.ucb.morfeo.features.core.maintenance.presentation.MaintenanceStatusViewModel
 import com.ucb.morfeo.features.login.data.datasource.JWTDataStore
+import com.ucb.morfeo.features.login.data.repository.CheckSessionRepository
 import com.ucb.morfeo.features.login.data.repository.LogInRepository
+import com.ucb.morfeo.features.login.domain.repository.ICheckSessionRepository
 import com.ucb.morfeo.features.login.domain.repository.ILogInRepository
+import com.ucb.morfeo.features.login.domain.usecase.CheckSessionUseCase
 import com.ucb.morfeo.features.login.domain.usecase.FetchLogInUserUseCase
 import com.ucb.morfeo.features.login.presentation.LogInViewModel
 import com.ucb.morfeo.features.notification.data.repository.NotificationRepository
 import com.ucb.morfeo.features.notification.domain.presentation.NotificationViewModel
 import com.ucb.morfeo.features.notification.domain.repository.INotificationRepository
 import com.ucb.morfeo.features.notification.domain.usecase.FetchNotificationCase
+import com.ucb.morfeo.features.splash.presentation.SplashViewModel
 import com.ucb.morfeo.features.welcome.data.database.AppRoomDatabase
 import com.ucb.morfeo.features.welcome.data.repository.UserRepository
 import com.ucb.morfeo.features.welcome.domain.repository.IWelcomeRepository
@@ -42,4 +46,8 @@ val appModule = module {
     single<IFirebaseConfigRepository>{ FirebaseConfigRepository() }
     factory { AppInMaintenanceUseCase(get()) }
     viewModel{ MaintenanceStatusViewModel(get())}
+
+    single<ICheckSessionRepository> { CheckSessionRepository(get()) }
+    factory { CheckSessionUseCase(get()) }
+    viewModel { SplashViewModel(get()) }
 }

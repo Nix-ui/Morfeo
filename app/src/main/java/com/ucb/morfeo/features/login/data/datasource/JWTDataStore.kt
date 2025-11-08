@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.auth0.android.jwt.JWT
 import kotlinx.coroutines.flow.first
 
 val Context.dataStore by preferencesDataStore(name= "login")
@@ -18,12 +19,49 @@ class JWTDataStore(
             it[JWT_TOKEN] = token
         }
     }
-    suspend fun getToken(): Result<String?>{
-        val preferences = context.dataStore.data.first()
-        return if(preferences.contains(JWT_TOKEN)){
-            Result.success(preferences[JWT_TOKEN])
-        }else{
-            Result.failure(Exception("Token not found"))
+    suspend fun getActiveToken(): Result<JWT>{
+        return try{
+            val preferences = context.dataStore.data.first()
+            val tokenString = preferences[JWT_TOKEN]
+            if(tokenString.isNullOrBlank()){
+                return Result.failure(Exception("No token found"))
+            }
+            val jwt = JWT(tokenString)
+            if(jwt.isExpired(10)){
+                clearToken()
+                return Result.failure(Exception("Token expired"))
+            }
+            Result.success(jwt)
+        }catch (e: Exception){
+            Result.failure(Exception("Failed to decode session token: ${e.message}"))
+        }
+    }
+
+    suspend fun getUserMail(): Result<String>{
+        return try{
+            val preferences = context.dataStore.data.first()
+            val tokenString = preferences[JWT_TOKEN]
+            if(tokenString.isNullOrBlank()){
+                return Result.failure(Exception("No token found"))
+            }
+            val jwt = JWT(tokenString)
+            if(jwt.isExpired(10)){
+                clearToken()
+                return Result.failure(Exception("Token expired"))
+            }
+            val email = jwt.getClaim("email").asString()
+            if(email.isNullOrBlank()){
+                return Result.failure(Exception("No email found"))
+            }
+            Result.success(email)
+        }catch (e: Exception){
+            Result.failure(Exception("Failed to decode session token: ${e.message}"))
+        }
+    }
+
+    suspend fun clearToken(){
+        context.dataStore.edit{
+            it.remove(JWT_TOKEN)
         }
     }
 }
