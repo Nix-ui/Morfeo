@@ -9,4 +9,5 @@
     <string name="permision_body_text">La opción ya está hecha, solo te queda entender por qué la hiciste.</string>
     <string name="permision_activity_subtitle">Actividad del dispositivo</string>
     <string name="permision_activity_text">Desbloqueos e inactividad prolongada</string>
+    <string name="settings_screen_name">Ajustes</string>
 </resources>

@@ -101,7 +101,11 @@ fun AppNavigator(
 
         // 🔹 AQUÍ AHORA VA TU NUEVA PANTALLA DE CONFIGURACIÓN
         composable(Screen.Settings.route) {
-            SettingsScreen()
+            SettingsScreen(
+                onNavigate = {route ->
+                    navController.navigate(route)
+                }
+            )
         }
 
         composable(Screen.Tips.route) {

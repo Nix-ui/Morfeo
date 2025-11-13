@@ -54,6 +54,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref="koin"}
 koin-androidx-navigation = { group = "io.insert-koin", name = "koin-androidx-navigation", version.ref="koin"}
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref="koin"}
+
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 jwt-decode = { module = "com.auth0.android:jwtdecode", version.ref = "jwt-decode" }
