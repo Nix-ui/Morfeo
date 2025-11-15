@@ -77,3 +77,9 @@ dependencies {
     implementation(libs.datastore)
     implementation(libs.kotlinx.serialization)
 }
+
+sentry {
+    org.set("universidad-catolica-bolivi-tm")
+    projectName.set("morfeo")
+    includeSourceContext.set(true)
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Loco xml export: Android strings
+ Project: Untitled project
+ Locale: en-US, English (USA)
+ Exported by: Matheo Leonardo Quiroga Sanchez
+ Exported at: Sat, 15 Nov 2025 08:06:41 -0400
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">morfeo</string>
+    <string name="main_title">Morfeo</string>
+    <string name="welcome_screen_title">Bienvenido El Amigo</string>
+    <string name="dashboard_title">DashBoard</string>
+    <string name="log_in_title">Log In</string>
+    <string name="permision_title">Permissions</string>
+    <string name="permision_subtitle">Choose your destiny</string>
+    <string name="permision_body_text">The choose was already taken, you just need to know why</string>
+    <string name="permision_activity_subtitle">Device Activity</string>
+    <string name="permision_activity_text">Stadistics about your device activity</string>
+    <string name="settings_screen_name">Settings</string>
+</resources>
