@@ -35,6 +35,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -106,6 +107,7 @@ fun downloadFile(apiKey: String, apiCode: String, resFolder: String, resDir: Fil
 
 
 dependencies {
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -138,6 +140,8 @@ dependencies {
     implementation(libs.jwt.decode)
     implementation(libs.datastore)
     implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 }
 
 sentry {
