@@ -36,7 +36,8 @@ import com.ucb.morfeo.navigation.Screen
 fun TopNavBar(
     isBackEnable: Boolean,
     currentScreenName: String,
-    onBackScreen : (String)->Unit = {}
+    onBackScreen : (String)->Unit = {},
+    onNavigateTo : (String)->Unit = {}
 ){
     Box(
         modifier = Modifier
@@ -91,14 +92,20 @@ fun TopNavBar(
                     )
                 }
             }
-            Icon(
-                painter = painterResource(R.drawable.morfeo),
-                contentDescription = "App Icon",
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-            )
+            IconButton(
+                onClick = {
+                    onNavigateTo(Screen.Notifications.route)
+                }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.morfeo),
+                    contentDescription = "App Icon",
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                )
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.ucb.morfeo.features.core.maintenance.presentation.MaintenanceScreen
 import com.ucb.morfeo.features.core.maintenance.presentation.MaintenanceStatusViewModel
 import com.ucb.morfeo.features.home.presentation.HomeScreen
+import com.ucb.morfeo.features.innernotification.presentation.NotificationScreen
 import com.ucb.morfeo.features.login.presentation.LoginScreen
 import com.ucb.morfeo.features.settings.presentation.SettingsScreen
 import com.ucb.morfeo.features.splash.presentation.SplashViewModel
@@ -98,8 +99,6 @@ fun AppNavigator(
                 }
             )
         }
-
-        // 🔹 AQUÍ AHORA VA TU NUEVA PANTALLA DE CONFIGURACIÓN
         composable(Screen.Settings.route) {
             SettingsScreen(
                 onNavigate = {route ->
@@ -111,6 +110,13 @@ fun AppNavigator(
         composable(Screen.Tips.route) {
             HomeScreen(
                 onNavigatedToTab = { route ->
+                    navController.navigate(route)
+                }
+            )
+        }
+        composable(Screen.Notifications.route) {
+            NotificationScreen(
+                onBackTap = {route ->
                     navController.navigate(route)
                 }
             )

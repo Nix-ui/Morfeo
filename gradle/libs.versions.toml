@@ -23,6 +23,8 @@ jwt-decode = "2.0.2"
 firebaseConfig = "23.0.1"
 firebaseAuth = "24.0.1"
 serialization = "1.6.3"
+workmanager = "2.11.0"
+
 
 
 [libraries]
@@ -62,7 +64,8 @@ datastore = { module = "androidx.datastore:datastore-preferences", version.ref =
 firebase-config = { group = "com.google.firebase", name = "firebase-config", version.ref = "firebaseConfig" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 kotlinx-serialization = { group="org.jetbrains.kotlinx", name="kotlinx-serialization-json", version.ref="serialization"}
-
+androidx-work-runtime-ktx = {module="androidx.work:work-runtime-ktx", version.ref="workmanager"}
+koin-androidx-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager", version.ref="koin"}
 
 [bundles]
 local = ["room-runtime", "room-ktx", "room-rxjava2", "room-rxjava3", "room-guava", "room-paging" ]

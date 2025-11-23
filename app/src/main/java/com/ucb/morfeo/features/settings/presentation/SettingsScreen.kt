@@ -51,7 +51,7 @@ fun SettingsScreen(
             onConfirm = {timepickerState ->
                 showSleepTimeDialog = false
                 val selectedTime = String.format("%02d:%02d", timepickerState.hour, timepickerState.minute)
-                sleepTimeInput = selectedTime
+                viewModel.updateSleepTime(timepickerState.hour,timepickerState.minute)
                 Toast.makeText(context, "Hora de dormir guardada: $selectedTime", Toast.LENGTH_SHORT).show()
             }
         )
@@ -63,7 +63,7 @@ fun SettingsScreen(
             onConfirm = {timepickerState ->
                 showWakeTimeDialog = false
                 val selectedTime = String.format("%02d:%02d", timepickerState.hour, timepickerState.minute)
-                wakeupTimeInput = selectedTime
+                viewModel.updateWakeupTime(timepickerState.hour,timepickerState.minute)
                 Toast.makeText(context, "Hora para Despertar guardada: $selectedTime", Toast.LENGTH_SHORT).show()
             }
         )
@@ -71,7 +71,7 @@ fun SettingsScreen(
 
     Scaffold(
         topBar = {
-            TopNavBar(true, stringResource(R.string.settings_screen_name),onNavigate)
+            TopNavBar(true, stringResource(R.string.settings_screen_name), onNavigateTo = onNavigate)
         },
         bottomBar = {
             ButtomNavBar(Screen.Settings.route,onNavigate)

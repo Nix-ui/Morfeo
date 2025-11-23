@@ -138,6 +138,8 @@ dependencies {
     implementation(libs.jwt.decode)
     implementation(libs.datastore)
     implementation(libs.kotlinx.serialization)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.koin.androidx.workmanager)
 }
 
 sentry {
