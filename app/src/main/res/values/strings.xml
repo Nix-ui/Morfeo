@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">morfeo</string>
-    <string name="welcome_screen_title"></string>
+    <string name = "main_title">Morfeo</string>
+    <string name="welcome_screen_title">Bienvenido</string>
+    <string name="dashboard_title">Tablero</string>
+    <string name="log_in_title">Iniciar sesión</string>
+    <string name="permision_title">Permisos</string>
+    <string name="permision_subtitle">Elige tu Destino</string>
+    <string name="permision_body_text">La opción ya está hecha, solo te queda entender por qué la hiciste.</string>
+    <string name="permision_activity_subtitle">Actividad del dispositivo</string>
+    <string name="permision_activity_text">Desbloqueos e inactividad prolongada</string>
+    <string name="settings_screen_name">Ajustes</string>
+    <string name="week_screen_name">Resumen semanal</string>
+    <string name="notification_screen_title">Notificaciones</string>
 </resources>

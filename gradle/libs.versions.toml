@@ -8,6 +8,24 @@ espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.9.2"
 activityCompose = "1.10.1"
 composeBom = "2024.09.00"
+sentry = "4.11.0"
+ksp = "2.0.20-1.0.24"
+room = "2.8.0"
+koin = "3.3.0"
+okHttp = "2.7,5"
+navigation = "2.9.3"
+retrofit = "3.0.0"
+googleGmsGoogleServices = "4.4.3"
+firebaseDatabase = "22.0.1"
+firebaseMessaging = "25.0.1"
+datastore = "1.0.0"
+jwt-decode = "2.0.2"
+firebaseConfig = "23.0.1"
+firebaseAuth = "24.0.1"
+serialization = "1.6.3"
+workmanager = "2.11.0"
+
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -24,9 +42,40 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material-extended = { group = "androidx.compose.material", name = "material-icons-extended"}
+androidx-navigation-compose = {group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation"}
+room-runtime = { group="androidx.room", name="room-runtime", version.ref="room"}
+room-compiler = { group="androidx.room", name="room-compiler", version.ref="room"}
+room-ktx = { group="androidx.room", name="room-ktx", version.ref="room"}
+room-rxjava2 = { group="androidx.room", name="room-rxjava2", version.ref="room"}
+room-rxjava3 = { group="androidx.room", name="room-rxjava3", version.ref="room"}
+room-guava = { group="androidx.room", name="room-guava", version.ref="room"}
+room-testing = { group="androidx.room", name="room-testing", version.ref="room"}
+room-paging = { group="androidx.room", name="room-paging", version.ref="room"}
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref="koin"}
+koin-androidx-navigation = { group = "io.insert-koin", name = "koin-androidx-navigation", version.ref="koin"}
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref="koin"}
+
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
+jwt-decode = { module = "com.auth0.android:jwtdecode", version.ref = "jwt-decode" }
+datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore"}
+firebase-config = { group = "com.google.firebase", name = "firebase-config", version.ref = "firebaseConfig" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+kotlinx-serialization = { group="org.jetbrains.kotlinx", name="kotlinx-serialization-json", version.ref="serialization"}
+androidx-work-runtime-ktx = {module="androidx.work:work-runtime-ktx", version.ref="workmanager"}
+koin-androidx-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager", version.ref="koin"}
+
+[bundles]
+local = ["room-runtime", "room-ktx", "room-rxjava2", "room-rxjava3", "room-guava", "room-paging" ]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
+sentry = {id = "io.sentry.android.gradle",version.ref = "sentry"}
+ksp = {id = "com.google.devtools.ksp", version.ref = "ksp"}
+okHttp = { id = "com.squareup.okhttp", version.ref = "okHttp"}
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+kotlin-serialization = { id="org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}

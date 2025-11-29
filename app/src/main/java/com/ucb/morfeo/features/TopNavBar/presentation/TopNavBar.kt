@@ -25,26 +25,29 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ucb.morfeo.R
+import com.ucb.morfeo.navigation.Screen
 
 @Composable
 fun TopNavBar(
     isBackEnable: Boolean,
     currentScreenName: String,
-    onBackScreen : ()->Unit = {}
+    onBackScreen : (String)->Unit = {},
+    onNavigateTo : (String)->Unit = {}
 ){
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(64.dp)
+            .height(80.dp)
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        Color.White.copy(0.06f),
-                        Color.White.copy(0.0f)
+                        Color.White.copy(0.0f),
+                        Color.White.copy(0.06f)
                     )
                 )
             )
@@ -53,11 +56,11 @@ fun TopNavBar(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             if (isBackEnable) {
-                IconButton(onClick = onBackScreen) {
+                IconButton(onClick = { onBackScreen(Screen.Home.route) }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
@@ -71,7 +74,10 @@ fun TopNavBar(
                 modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.Center
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceAround
+                    ) {
                     Text(
                         text = "Morfeo",
                         fontSize = 14.sp,
@@ -81,18 +87,25 @@ fun TopNavBar(
                     Text(
                         text = currentScreenName,
                         fontSize = 12.sp,
-                        color = Color.White
+                        color = Color.White,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
-            Icon(
-                painter = painterResource(R.drawable.morfeo),
-                contentDescription = "App Icon",
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-            )
+            IconButton(
+                onClick = {
+                    onNavigateTo(Screen.Notifications.route)
+                }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.morfeo),
+                    contentDescription = "App Icon",
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                )
+            }
         }
     }
 }
@@ -100,5 +113,5 @@ fun TopNavBar(
 @Preview
 @Composable
 fun previewTopNavBar(){
-    TopNavBar(false,"")
+    TopNavBar(false,"Welcome")
 }
