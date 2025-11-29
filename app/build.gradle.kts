@@ -20,7 +20,7 @@ android {
         minSdk = 24
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"//cambiar esto al momento de generar nuevas versiones, si no android no dejará
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -115,31 +115,47 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
+
+    // Networking
     implementation(libs.retrofit)
+    implementation(libs.retrofit.kotlinx.serialization) // Agregado
+    implementation(libs.okhttp) // Agregado
+    implementation(libs.kotlinx.serialization)
+
+    // Firebase
     implementation(libs.firebase.database)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.config)
     implementation(libs.firebase.auth)
+
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation(libs.androidx.compose.material.extended)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // UI
+    implementation(libs.androidx.compose.material.extended)
+
+    // Room
     implementation(libs.bundles.local)
     annotationProcessor(libs.room.compiler)
     ksp(libs.room.compiler)
     testImplementation(libs.room.testing)
-    implementation (libs.koin.android)
+
+    // Koin
+    implementation(libs.koin.android)
     implementation(libs.koin.androidx.navigation)
     implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.androidx.workmanager)
+
+    // Utils
     implementation(libs.jwt.decode)
     implementation(libs.datastore)
-    implementation(libs.kotlinx.serialization)
     implementation(libs.androidx.work.runtime.ktx)
-    implementation(libs.koin.androidx.workmanager)
 }
 
 sentry {

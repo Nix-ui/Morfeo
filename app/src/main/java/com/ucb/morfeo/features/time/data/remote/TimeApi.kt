@@ -1,4 +1,3 @@
-
 package com.ucb.morfeo.features.time.data.remote
 
 import retrofit2.http.GET

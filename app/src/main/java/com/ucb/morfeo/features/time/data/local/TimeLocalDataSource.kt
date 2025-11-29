@@ -8,11 +8,11 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlin.text.get
 
+// Instancia única del DataStore
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "time_settings")
 
-class TimeLocalDataSource(context: Context) {
+class TimeLocalDataSource(private val context: Context) {
 
     private val dataStore = context.dataStore
 
