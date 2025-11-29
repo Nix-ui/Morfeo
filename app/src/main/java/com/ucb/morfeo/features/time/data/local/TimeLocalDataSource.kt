@@ -1,4 +1,4 @@
-package com.ucb.helpet.features.time.data.local
+package com.ucb.morfeo.features.time.data.local
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlin.text.get
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "time_settings")
 

@@ -1,8 +1,8 @@
 
-package com.ucb.helpet.features.time.di
+package com.ucb.morfeo.features.time.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.ucb.helpet.features.time.data.local.TimeLocalDataSource
+import com.ucb.morfeo.features.time.data.local.TimeLocalDataSource
 import com.ucb.helpet.features.time.data.remote.TimeApi
 import com.ucb.helpet.features.time.presentation.TimeViewModel
 import kotlinx.serialization.json.Json
