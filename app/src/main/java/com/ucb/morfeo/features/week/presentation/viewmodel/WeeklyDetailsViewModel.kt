@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.datetime.*
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
@@ -49,13 +49,13 @@ class WeeklyDetailsViewModel(
     }
 
     fun navigateToPreviousWeek() {
-        val newWeek = _selectedWeek.value.minusDays(7)
+        val newWeek = _selectedWeek.value.minus(7, DateTimeUnit.DAY)
         _selectedWeek.value = newWeek
         loadWeeklySummary(newWeek)
     }
 
     fun navigateToNextWeek() {
-        val newWeek = _selectedWeek.value.plusDays(7)
+        val newWeek = _selectedWeek.value.plus(7, DateTimeUnit.DAY)
         _selectedWeek.value = newWeek
         loadWeeklySummary(newWeek)
     }
@@ -63,15 +63,6 @@ class WeeklyDetailsViewModel(
     init {
         loadWeeklySummary()
     }
-}
-
-// Extension functions para ViewModel
-private fun LocalDate.plusDays(days: Long): LocalDate {
-    return this.plus(days, DateTimeUnit.DAY)
-}
-
-private fun LocalDate.minusDays(days: Long): LocalDate {
-    return this.minus(days, DateTimeUnit.DAY)
 }
 
 sealed class WeeklySummaryState {

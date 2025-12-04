@@ -44,7 +44,10 @@ import com.ucb.morfeo.features.week.presentation.viewmodel.WeeklyDetailsViewMode
 import com.ucb.morfeo.features.week.presentation.viewmodel.WeeklySummaryState
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.plus
+import kotlinx.datetime.toJavaLocalDate
 import org.koin.androidx.compose.koinViewModel
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun WeeklyDetailsScreen(
@@ -124,7 +127,7 @@ private fun WeeklyTopAppBar(
     onNextWeek: () -> Unit,
     onBackClick: () -> Unit
 ) {
-    val weekEnd = selectedWeek.plusDays(6)
+    val weekEnd = selectedWeek.plus(6, DateTimeUnit.DAY)
 
     TopAppBar(
         title = {
@@ -433,7 +436,6 @@ private fun WeekComparisonCard(weeklySummary: com.ucb.morfeo.features.week.domai
     }
 }
 
-// Funciones de utilidad corregidas
 private fun formatDuration(duration: kotlin.time.Duration): String {
     val hours = duration.inWholeHours
     val minutes = duration.inWholeMinutes % 60
@@ -441,16 +443,13 @@ private fun formatDuration(duration: kotlin.time.Duration): String {
 }
 
 private fun formatDate(date: kotlinx.datetime.LocalDate): String {
-    val monthNames = listOf(
-        "Ene", "Feb", "Mar", "Abr", "May", "Jun",
-        "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
-    )
-    return "${date.dayOfMonth} ${monthNames.getOrElse(date.monthNumber - 1) { "Des" }}"
+    val formatter = DateTimeFormatter.ofPattern("d MMM", Locale.getDefault())
+    return date.toJavaLocalDate().format(formatter)
 }
 
 private fun getDayName(date: kotlinx.datetime.LocalDate): String {
-    val dayNames = listOf("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo")
-    return dayNames.getOrElse(date.dayOfWeek.ordinal) { "Desconocido" }
+    val formatter = DateTimeFormatter.ofPattern("EEEE", Locale.getDefault())
+    return date.toJavaLocalDate().format(formatter)
 }
 
 private fun getScoreColor(score: Int): Color {
@@ -476,9 +475,4 @@ private fun getConsistencyMessage(score: Float): String {
         score >= 60 -> "Buena consistencia"
         else -> "Puedes mejorar la consistencia"
     }
-}
-
-// Extension function para LocalDate
-private fun kotlinx.datetime.LocalDate.plusDays(days: Long): kotlinx.datetime.LocalDate {
-    return this.plus(days, DateTimeUnit.DAY)
 }
