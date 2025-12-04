@@ -1,4 +1,3 @@
-// features/week/presentation/viewmodel/WeeklyDetailsViewModel.kt
 package com.ucb.morfeo.features.week.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
@@ -17,6 +16,10 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 
+enum class ViewMode {
+    WEEK, MONTH
+}
+
 class WeeklyDetailsViewModel(
     private val getWeeklySummary: GetWeeklySummaryUseCase
 ) : ViewModel() {
@@ -24,19 +27,27 @@ class WeeklyDetailsViewModel(
     private val _weeklyState = MutableStateFlow<WeeklySummaryState>(WeeklySummaryState.Loading)
     val weeklyState: StateFlow<WeeklySummaryState> = _weeklyState.asStateFlow()
 
-    private val _selectedWeek: MutableStateFlow<LocalDate> = MutableStateFlow(
+    private val _selectedDate: MutableStateFlow<LocalDate> = MutableStateFlow(
         Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
     )
-    val selectedWeek: StateFlow<LocalDate> = _selectedWeek.asStateFlow()
+    val selectedDate: StateFlow<LocalDate> = _selectedDate.asStateFlow()
+
+    private val _viewMode = MutableStateFlow(ViewMode.WEEK)
+    val viewMode: StateFlow<ViewMode> = _viewMode.asStateFlow()
+
+    fun setViewMode(mode: ViewMode) {
+        _viewMode.value = mode
+    }
 
     fun loadWeeklySummary(weekStart: LocalDate? = null) {
         viewModelScope.launch {
             _weeklyState.value = WeeklySummaryState.Loading
             try {
-                val result = getWeeklySummary(weekStart ?: _selectedWeek.value)
+                val startDate = weekStart ?: _selectedDate.value
+                val result = getWeeklySummary(startDate)
                 if (result.isSuccess) {
                     _weeklyState.value = WeeklySummaryState.Success(result.getOrThrow())
-                    weekStart?.let { _selectedWeek.value = it }
+                    _selectedDate.value = startDate
                 } else {
                     _weeklyState.value = WeeklySummaryState.Error(
                         result.exceptionOrNull()?.message ?: "Error desconocido"
@@ -48,16 +59,26 @@ class WeeklyDetailsViewModel(
         }
     }
 
-    fun navigateToPreviousWeek() {
-        val newWeek = _selectedWeek.value.minus(7, DateTimeUnit.DAY)
-        _selectedWeek.value = newWeek
-        loadWeeklySummary(newWeek)
+    fun navigateToPrevious() {
+        val newDate = when (_viewMode.value) {
+            ViewMode.WEEK -> _selectedDate.value.minus(1, DateTimeUnit.WEEK)
+            ViewMode.MONTH -> _selectedDate.value.minus(1, DateTimeUnit.MONTH)
+        }
+        _selectedDate.value = newDate
+        if (_viewMode.value == ViewMode.WEEK) {
+            loadWeeklySummary(newDate)
+        }
     }
 
-    fun navigateToNextWeek() {
-        val newWeek = _selectedWeek.value.plus(7, DateTimeUnit.DAY)
-        _selectedWeek.value = newWeek
-        loadWeeklySummary(newWeek)
+    fun navigateToNext() {
+        val newDate = when (_viewMode.value) {
+            ViewMode.WEEK -> _selectedDate.value.plus(1, DateTimeUnit.WEEK)
+            ViewMode.MONTH -> _selectedDate.value.plus(1, DateTimeUnit.MONTH)
+        }
+        _selectedDate.value = newDate
+        if (_viewMode.value == ViewMode.WEEK) {
+            loadWeeklySummary(newDate)
+        }
     }
 
     init {
@@ -70,3 +91,6 @@ sealed class WeeklySummaryState {
     data class Success(val weeklySummary: WeeklySummary) : WeeklySummaryState()
     data class Error(val message: String) : WeeklySummaryState()
 }
+
+private val DateTimeUnit.WEEK: DateTimeUnit.DateBased get() = DateTimeUnit.DayBased(7)
+private val DateTimeUnit.MONTH: DateTimeUnit.DateBased get() = DateTimeUnit.MonthBased(1)

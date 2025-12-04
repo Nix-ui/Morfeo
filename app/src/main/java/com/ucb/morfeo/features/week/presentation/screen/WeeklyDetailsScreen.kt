@@ -30,6 +30,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -40,6 +42,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
+import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
+import com.patrykandpatrick.vico.compose.chart.Chart
+import com.patrykandpatrick.vico.compose.chart.column.columnChart
+import com.patrykandpatrick.vico.core.axis.AxisPosition
+import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
+import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
+import com.patrykandpatrick.vico.core.entry.entryOf
+import com.ucb.morfeo.features.week.domain.model.DailySleepData
+import com.ucb.morfeo.features.week.presentation.viewmodel.ViewMode
 import com.ucb.morfeo.features.week.presentation.viewmodel.WeeklyDetailsViewModel
 import com.ucb.morfeo.features.week.presentation.viewmodel.WeeklySummaryState
 import kotlinx.datetime.DateTimeUnit
@@ -56,65 +68,94 @@ fun WeeklyDetailsScreen(
     onBackClick: () -> Unit = {}
 ) {
     val weeklyState by viewModel.weeklyState.collectAsState()
-    val selectedWeek by viewModel.selectedWeek.collectAsState()
+    val selectedDate by viewModel.selectedDate.collectAsState()
+    val viewMode by viewModel.viewMode.collectAsState()
 
     Scaffold(
         topBar = {
             WeeklyTopAppBar(
-                selectedWeek = selectedWeek,
-                onPreviousWeek = { viewModel.navigateToPreviousWeek() },
-                onNextWeek = { viewModel.navigateToNextWeek() },
+                selectedDate = selectedDate,
+                viewMode = viewMode,
+                onPreviousClick = { viewModel.navigateToPrevious() },
+                onNextClick = { viewModel.navigateToNext() },
                 onBackClick = onBackClick
             )
         }
     ) { paddingValues ->
-        when (val state = weeklyState) {
-            is WeeklySummaryState.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-            is WeeklySummaryState.Error -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = "Error al cargar datos",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.error
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = state.message,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Button(onClick = { viewModel.loadWeeklySummary() }) {
-                            Text("Reintentar")
+        Column(modifier = Modifier.padding(paddingValues)) {
+            ViewModeTabRow(selectedMode = viewMode, onTabSelected = { viewModel.setViewMode(it) })
+
+            when (viewMode) {
+                ViewMode.WEEK -> {
+                    when (val state = weeklyState) {
+                        is WeeklySummaryState.Loading -> {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        }
+                        is WeeklySummaryState.Error -> {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        text = "Error al cargar datos",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = MaterialTheme.colorScheme.error
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(
+                                        text = state.message,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Button(onClick = { viewModel.loadWeeklySummary() }) {
+                                        Text("Reintentar")
+                                    }
+                                }
+                            }
+                        }
+                        is WeeklySummaryState.Success -> {
+                            WeeklySummaryContent(
+                                weeklySummary = state.weeklySummary,
+                                onDailyDetailClick = onDailyDetailClick
+                            )
                         }
                     }
                 }
+                ViewMode.MONTH -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("Vista mensual en desarrollo")
+                    }
+                }
             }
-            is WeeklySummaryState.Success -> {
-                WeeklySummaryContent(
-                    weeklySummary = state.weeklySummary,
-                    onDailyDetailClick = onDailyDetailClick,
-                    modifier = Modifier.padding(paddingValues)
-                )
-            }
+        }
+    }
+}
+
+@Composable
+private fun ViewModeTabRow(selectedMode: ViewMode, onTabSelected: (ViewMode) -> Unit) {
+    TabRow(
+        selectedTabIndex = selectedMode.ordinal,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        ViewMode.values().forEach { mode ->
+            Tab(
+                selected = selectedMode == mode,
+                onClick = { onTabSelected(mode) },
+                text = { Text(text = mode.name.toLowerCase(Locale.getDefault()).capitalize(Locale.getDefault())) }
+            )
         }
     }
 }
@@ -122,37 +163,41 @@ fun WeeklyDetailsScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WeeklyTopAppBar(
-    selectedWeek: kotlinx.datetime.LocalDate,
-    onPreviousWeek: () -> Unit,
-    onNextWeek: () -> Unit,
+    selectedDate: kotlinx.datetime.LocalDate,
+    viewMode: ViewMode,
+    onPreviousClick: () -> Unit,
+    onNextClick: () -> Unit,
     onBackClick: () -> Unit
 ) {
-    val weekEnd = selectedWeek.plus(6, DateTimeUnit.DAY)
+    val title = when (viewMode) {
+        ViewMode.WEEK -> {
+            val weekEnd = selectedDate.plus(6, DateTimeUnit.DAY)
+            "${formatDate(selectedDate)} - ${formatDate(weekEnd)}"
+        }
+        ViewMode.MONTH -> {
+            val monthFormatter = DateTimeFormatter.ofPattern("MMMM yyyy", Locale.getDefault())
+            selectedDate.toJavaLocalDate().format(monthFormatter).capitalize(Locale.getDefault())
+        }
+    }
 
     TopAppBar(
         title = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                IconButton(onClick = onPreviousWeek) {
-                    Icon(Icons.Default.ArrowBackIos, contentDescription = "Semana anterior")
+                IconButton(onClick = onPreviousClick) {
+                    Icon(Icons.Default.ArrowBackIos, contentDescription = "Anterior")
                 }
 
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "${formatDate(selectedWeek)} - ${formatDate(weekEnd)}",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        text = selectedWeek.year.toString(),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium
+                )
 
-                IconButton(onClick = onNextWeek) {
-                    Icon(Icons.Default.ArrowForwardIos, contentDescription = "Semana siguiente")
+                IconButton(onClick = onNextClick) {
+                    Icon(Icons.Default.ArrowForwardIos, contentDescription = "Siguiente")
                 }
             }
         },
@@ -171,11 +216,15 @@ private fun WeeklySummaryContent(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier.padding(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
             WeeklyStatsCard(weeklySummary)
+        }
+
+        item {
+            SleepScoreChartCard(weeklySummary.dailyData)
         }
 
         item {
@@ -191,6 +240,40 @@ private fun WeeklySummaryContent(
 
         item {
             WeekComparisonCard(weeklySummary)
+        }
+    }
+}
+
+@Composable
+fun SleepScoreChartCard(dailyData: List<DailySleepData>) {
+    if (dailyData.isEmpty()) return
+
+    val chartEntryModelProducer = ChartEntryModelProducer(dailyData.mapIndexed { index, day ->
+        entryOf(index.toFloat(), day.sleepScore)
+    })
+
+    val bottomAxisValueFormatter = AxisValueFormatter<AxisPosition.Horizontal.Bottom> { value, _ ->
+        getDayName(dailyData[value.toInt()].date).substring(0, 3)
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "Puntuación de Sueño Semanal",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Chart(
+                chart = columnChart(),
+                chartModelProducer = chartEntryModelProducer,
+                startAxis = rememberStartAxis(),
+                bottomAxis = rememberBottomAxis(valueFormatter = bottomAxisValueFormatter),
+            )
         }
     }
 }
@@ -216,7 +299,7 @@ private fun WeeklyStatsCard(weeklySummary: com.ucb.morfeo.features.week.domain.m
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
                 StatItem(
                     label = "Promedio Sueño",
@@ -231,11 +314,11 @@ private fun WeeklyStatsCard(weeklySummary: com.ucb.morfeo.features.week.domain.m
                 )
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
                 weeklySummary.bestSleepDay?.let { bestDay ->
                     StatItem(
@@ -362,7 +445,8 @@ private fun DailySleepItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick)
+            .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -475,4 +559,14 @@ private fun getConsistencyMessage(score: Float): String {
         score >= 60 -> "Buena consistencia"
         else -> "Puedes mejorar la consistencia"
     }
+}
+
+private fun String.capitalize(locale: Locale): String {
+    if (isNotEmpty()) {
+        val firstChar = this[0]
+        if (firstChar.isLowerCase()) {
+            return firstChar.toTitleCase(locale) + substring(1)
+        }
+    }
+    return this
 }
