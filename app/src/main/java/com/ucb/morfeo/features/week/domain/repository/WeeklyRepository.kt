@@ -1,4 +1,4 @@
-package com.ucb.morfeo.shared.domain.repository
+package com.ucb.morfeo.features.week.domain.repository
 
 import com.ucb.morfeo.features.week.domain.model.WeeklySummary
 import kotlinx.datetime.LocalDate

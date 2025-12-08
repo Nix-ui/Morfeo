@@ -1,7 +1,7 @@
 package com.ucb.morfeo.features.week.domain.usecase
 
 import com.ucb.morfeo.features.week.domain.model.WeeklySummary
-import com.ucb.morfeo.shared.domain.repository.WeeklyRepository
+import com.ucb.morfeo.features.week.domain.repository.WeeklyRepository
 import kotlinx.datetime.LocalDate
 
 class GetWeeklySummaryUseCase(

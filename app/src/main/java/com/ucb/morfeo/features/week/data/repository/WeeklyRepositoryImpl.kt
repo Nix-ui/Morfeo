@@ -4,7 +4,7 @@ import com.ucb.morfeo.features.core.database.dao.SleepDao
 import com.ucb.morfeo.features.week.domain.model.DailySleepData
 import com.ucb.morfeo.features.week.domain.model.WeeklySummary
 import com.ucb.morfeo.features.week.domain.usecase.CalculateConsistencyUseCase
-import com.ucb.morfeo.shared.domain.repository.WeeklyRepository
+import com.ucb.morfeo.features.week.domain.repository.WeeklyRepository
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -105,3 +105,4 @@ private fun com.ucb.morfeo.features.core.database.entity.SleepCore.toDailySleepD
         lightSleepPercentage = this.lightSleepPercentage
     )
 }
+

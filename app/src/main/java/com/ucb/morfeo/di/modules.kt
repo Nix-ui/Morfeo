@@ -29,10 +29,10 @@ import com.ucb.morfeo.features.welcome.presentation.WelcomeViewModel
 import com.ucb.morfeo.features.core.database.dao.SleepDao
 import com.ucb.morfeo.features.time.di.timeModule
 import com.ucb.morfeo.features.week.data.repository.WeeklyRepositoryImpl
+import com.ucb.morfeo.features.week.domain.repository.WeeklyRepository
 import com.ucb.morfeo.features.week.domain.usecase.CalculateConsistencyUseCase
 import com.ucb.morfeo.features.week.domain.usecase.GetWeeklySummaryUseCase
 import com.ucb.morfeo.features.week.presentation.viewmodel.WeeklyDetailsViewModel
-import com.ucb.morfeo.shared.domain.repository.WeeklyRepository
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
