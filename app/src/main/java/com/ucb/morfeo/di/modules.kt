@@ -27,7 +27,6 @@ import com.ucb.morfeo.features.welcome.domain.repository.IWelcomeRepository
 import com.ucb.morfeo.features.welcome.domain.usecase.FetchUserCase
 import com.ucb.morfeo.features.welcome.presentation.WelcomeViewModel
 import com.ucb.morfeo.features.core.database.dao.SleepDao
-import com.ucb.morfeo.features.time.di.timeModule
 import com.ucb.morfeo.features.week.data.repository.WeeklyRepositoryImpl
 import com.ucb.morfeo.features.week.domain.repository.WeeklyRepository
 import com.ucb.morfeo.features.week.domain.usecase.CalculateConsistencyUseCase
@@ -80,14 +79,13 @@ val appModule = module {
 val weekModule = module {
     factory { GetWeeklySummaryUseCase(get()) }
     factory { CalculateConsistencyUseCase() }
-    factory<WeeklyRepository> { WeeklyRepositoryImpl(get(), get()) }
+    single<WeeklyRepository> { WeeklyRepositoryImpl(get(), get()) }
     viewModel { WeeklyDetailsViewModel(get()) }
 }
 
 // COMBINAR TODOS LOS MÓDULOS
 val allModules = listOf(
     appModule,
-    timeModule,
     weekModule
     // Agregar otros módulos aquí cuando los crees
 )

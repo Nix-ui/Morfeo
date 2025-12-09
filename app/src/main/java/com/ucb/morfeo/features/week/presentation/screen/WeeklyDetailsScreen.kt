@@ -1,5 +1,6 @@
 package com.ucb.morfeo.features.week.presentation.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,10 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.ChevronRight
@@ -24,7 +27,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -33,13 +35,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
@@ -50,6 +55,7 @@ import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.entryOf
+import com.ucb.morfeo.R
 import com.ucb.morfeo.features.week.domain.model.DailySleepData
 import com.ucb.morfeo.features.week.presentation.viewmodel.ViewMode
 import com.ucb.morfeo.features.week.presentation.viewmodel.WeeklyDetailsViewModel
@@ -80,7 +86,8 @@ fun WeeklyDetailsScreen(
                 onNextClick = { viewModel.navigateToNext() },
                 onBackClick = onBackClick
             )
-        }
+        },
+        containerColor = colorResource(R.color.firefly)
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             ViewModeTabRow(selectedMode = viewMode, onTabSelected = { viewModel.setViewMode(it) })
@@ -96,6 +103,7 @@ fun WeeklyDetailsScreen(
                                 CircularProgressIndicator()
                             }
                         }
+
                         is WeeklySummaryState.Error -> {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
@@ -123,6 +131,7 @@ fun WeeklyDetailsScreen(
                                 }
                             }
                         }
+
                         is WeeklySummaryState.Success -> {
                             WeeklySummaryContent(
                                 weeklySummary = state.weeklySummary,
@@ -131,12 +140,13 @@ fun WeeklyDetailsScreen(
                         }
                     }
                 }
+
                 ViewMode.MONTH -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Vista mensual en desarrollo")
+                        Text("Vista mensual en desarrollo", color = Color.White)
                     }
                 }
             }
@@ -148,19 +158,20 @@ fun WeeklyDetailsScreen(
 private fun ViewModeTabRow(selectedMode: ViewMode, onTabSelected: (ViewMode) -> Unit) {
     TabRow(
         selectedTabIndex = selectedMode.ordinal,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        containerColor = Color.Transparent,
+        contentColor = Color.White
     ) {
         ViewMode.values().forEach { mode ->
             Tab(
                 selected = selectedMode == mode,
                 onClick = { onTabSelected(mode) },
-                text = { Text(text = mode.name.toLowerCase(Locale.getDefault()).capitalize(Locale.getDefault())) }
+                text = { Text(text = mode.name.lowercase(Locale.getDefault()).replaceFirstChar { it.uppercase() }) }
             )
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WeeklyTopAppBar(
     selectedDate: kotlinx.datetime.LocalDate,
@@ -176,37 +187,68 @@ private fun WeeklyTopAppBar(
         }
         ViewMode.MONTH -> {
             val monthFormatter = DateTimeFormatter.ofPattern("MMMM yyyy", Locale.getDefault())
-            selectedDate.toJavaLocalDate().format(monthFormatter).capitalize(Locale.getDefault())
+            selectedDate.toJavaLocalDate().format(monthFormatter).replaceFirstChar { it.uppercase() }
         }
     }
 
-    TopAppBar(
-        title = {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        Color.White.copy(0.0f),
+                        Color.White.copy(0.06f)
+                    )
+                )
+            )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 8.dp),
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color.White
+                )
+            }
+            
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.weight(1f)
             ) {
                 IconButton(onClick = onPreviousClick) {
-                    Icon(Icons.Default.ArrowBackIos, contentDescription = "Anterior")
+                    Icon(Icons.Default.ArrowBackIos, contentDescription = "Anterior", tint = Color.White)
                 }
 
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.White
                 )
 
                 IconButton(onClick = onNextClick) {
-                    Icon(Icons.Default.ArrowForwardIos, contentDescription = "Siguiente")
+                    Icon(Icons.Default.ArrowForwardIos, contentDescription = "Siguiente", tint = Color.White)
                 }
             }
-        },
-        navigationIcon = {
-            IconButton(onClick = onBackClick) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
-            }
+            
+            Icon(
+                painter = painterResource(R.drawable.morfeo),
+                contentDescription = "App Icon",
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+            )
         }
-    )
+    }
 }
 
 @Composable
@@ -260,19 +302,21 @@ fun SleepScoreChartCard(dailyData: List<DailySleepData>) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.1f))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = "Puntuación de Sueño Semanal",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White
             )
             Spacer(modifier = Modifier.height(16.dp))
             Chart(
                 chart = columnChart(),
                 chartModelProducer = chartEntryModelProducer,
-                startAxis = rememberStartAxis(),
-                bottomAxis = rememberBottomAxis(valueFormatter = bottomAxisValueFormatter),
+                startAxis = rememberStartAxis(lineColor = Color.White.copy(alpha = 0.5f), labelColor = Color.White),
+                bottomAxis = rememberBottomAxis(valueFormatter = bottomAxisValueFormatter, lineColor = Color.White.copy(alpha = 0.5f), labelColor = Color.White),
             )
         }
     }
@@ -284,7 +328,8 @@ private fun WeeklyStatsCard(weeklySummary: com.ucb.morfeo.features.week.domain.m
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.1f))
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -350,7 +395,7 @@ private fun StatItem(
         Text(
             text = label,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = Color.White.copy(alpha = 0.8f)
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
@@ -367,14 +412,16 @@ private fun ConsistencyCard(weeklySummary: com.ucb.morfeo.features.week.domain.m
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.1f))
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
                 text = "Consistencia",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -384,7 +431,8 @@ private fun ConsistencyCard(weeklySummary: com.ucb.morfeo.features.week.domain.m
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(8.dp),
-                color = getConsistencyColor(weeklySummary.consistencyScore)
+                color = getConsistencyColor(weeklySummary.consistencyScore),
+                trackColor = Color.White.copy(alpha = 0.3f)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -398,7 +446,7 @@ private fun ConsistencyCard(weeklySummary: com.ucb.morfeo.features.week.domain.m
             Text(
                 text = getConsistencyMessage(weeklySummary.consistencyScore),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = Color.White.copy(alpha = 0.8f)
             )
         }
     }
@@ -412,14 +460,16 @@ private fun DailySleepList(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.1f))
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
                 text = "Días de la Semana",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -430,7 +480,7 @@ private fun DailySleepList(
                     onClick = { onDayClick(dayData.date) }
                 )
                 if (dayData != dailyData.last()) {
-                    Divider(modifier = Modifier.padding(vertical = 8.dp))
+                    Divider(modifier = Modifier.padding(vertical = 8.dp), color = Color.White.copy(alpha = 0.2f))
                 }
             }
         }
@@ -453,12 +503,13 @@ private fun DailySleepItem(
         Column {
             Text(
                 text = getDayName(dailyData.date),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White
             )
             Text(
                 text = formatDate(dailyData.date),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = Color.White.copy(alpha = 0.8f)
             )
         }
 
@@ -467,7 +518,8 @@ private fun DailySleepItem(
                 Text(
                     text = formatDuration(dailyData.sleepDuration),
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White
                 )
                 Text(
                     text = "${dailyData.sleepScore} pts",
@@ -479,7 +531,7 @@ private fun DailySleepItem(
             Icon(
                 Icons.Default.ChevronRight,
                 contentDescription = "Ver detalles",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = Color.White.copy(alpha = 0.8f)
             )
         }
     }
@@ -493,7 +545,8 @@ private fun WeekComparisonCard(weeklySummary: com.ucb.morfeo.features.week.domai
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.1f))
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
@@ -533,23 +586,23 @@ private fun formatDate(date: kotlinx.datetime.LocalDate): String {
 
 private fun getDayName(date: kotlinx.datetime.LocalDate): String {
     val formatter = DateTimeFormatter.ofPattern("EEEE", Locale.getDefault())
-    return date.toJavaLocalDate().format(formatter)
+    return date.toJavaLocalDate().format(formatter).replaceFirstChar { it.uppercase() }
 }
 
 private fun getScoreColor(score: Int): Color {
     return when {
-        score >= 80 -> Color(0xFF4CAF50)
-        score >= 60 -> Color(0xFF2196F3)
-        score >= 40 -> Color(0xFFFF9800)
-        else -> Color(0xFFF44336)
+        score >= 80 -> Color(0xFF4CAF50) // Verde
+        score >= 60 -> Color(0xFF2196F3) // Azul
+        score >= 40 -> Color(0xFFFF9800) // Naranja
+        else -> Color(0xFFF44336)      // Rojo
     }
 }
 
 private fun getConsistencyColor(score: Float): Color {
     return when {
-        score >= 80 -> Color(0xFF4CAF50)
-        score >= 60 -> Color(0xFFFF9800)
-        else -> Color(0xFFF44336)
+        score >= 80 -> Color(0xFF4CAF50) // Verde
+        score >= 60 -> Color(0xFFFF9800) // Naranja
+        else -> Color(0xFFF44336)      // Rojo
     }
 }
 
@@ -559,14 +612,4 @@ private fun getConsistencyMessage(score: Float): String {
         score >= 60 -> "Buena consistencia"
         else -> "Puedes mejorar la consistencia"
     }
-}
-
-private fun String.capitalize(locale: Locale): String {
-    if (isNotEmpty()) {
-        val firstChar = this[0]
-        if (firstChar.isLowerCase()) {
-            return firstChar.toTitleCase(locale) + substring(1)
-        }
-    }
-    return this
 }
