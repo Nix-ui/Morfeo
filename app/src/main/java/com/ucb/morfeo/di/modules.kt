@@ -38,9 +38,14 @@ import com.ucb.morfeo.features.welcome.data.repository.UserRepository
 import com.ucb.morfeo.features.welcome.domain.repository.IWelcomeRepository
 import com.ucb.morfeo.features.welcome.domain.usecase.FetchUserCase
 import com.ucb.morfeo.features.welcome.presentation.WelcomeViewModel
+import com.ucb.morfeo.features.core.database.dao.SleepDao
+import com.ucb.morfeo.features.week.data.repository.WeeklyRepositoryImpl
+import com.ucb.morfeo.features.week.domain.repository.WeeklyRepository
+import com.ucb.morfeo.features.week.domain.usecase.CalculateConsistencyUseCase
+import com.ucb.morfeo.features.week.domain.usecase.GetWeeklySummaryUseCase
+import com.ucb.morfeo.features.week.presentation.viewmodel.WeeklyDetailsViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.androidx.workmanager.dsl.worker
 import org.koin.dsl.module
 
 val appModule = module {
@@ -48,6 +53,9 @@ val appModule = module {
     // 📦 ROOM DATABASE
     single { AppRoomDatabase.getDatabase(get()) }
     single { get<AppRoomDatabase>().userDao() }
+
+    // 🛌 SLEEP DATABASE
+    single { get<AppRoomDatabase>().sleepDao() }
 
     // 👤 WELCOME / USER
     single<IWelcomeRepository> { UserRepository(get()) }
@@ -63,7 +71,6 @@ val appModule = module {
     single { JWTDataStore(get()) }
     single<ILogInRepository> { LogInRepository(get()) }
     factory { FetchLogInUserUseCase(get()) }
-    // 🔹 ahora recibe dos dependencias: el usecase y el datastore
     viewModel { LogInViewModel(get()) }
 
     // 🛠️ MANTENIMIENTO
@@ -95,4 +102,10 @@ val appModule = module {
 
 
     single { NotificationManagerHelper(androidContext()) }
+
+    //Week Module
+    factory { GetWeeklySummaryUseCase(get()) }
+    factory { CalculateConsistencyUseCase() }
+    single<WeeklyRepository> { WeeklyRepositoryImpl(get(), get()) }
+    viewModel { WeeklyDetailsViewModel(get()) }
 }
