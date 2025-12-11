@@ -18,4 +18,5 @@
     <string name="permision_activity_subtitle">Device Activity</string>
     <string name="permision_activity_text">Stadistics about your device activity</string>
     <string name="settings_screen_name">Settings</string>
+    <string name="notification_screen_title">Notifications</string>
 </resources>

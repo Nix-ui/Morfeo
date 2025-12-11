@@ -5,23 +5,22 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.ucb.morfeo.features.innernotification.database.dao.INotificationDao
+import com.ucb.morfeo.features.innernotification.database.entity.NotificationEntity
 import com.ucb.morfeo.features.core.database.dao.SleepDao
 import com.ucb.morfeo.features.core.database.entity.SleepCore
 import com.ucb.morfeo.features.welcome.data.database.Converters.Converters
 import com.ucb.morfeo.features.welcome.data.database.dao.IUserDao
 import com.ucb.morfeo.features.welcome.data.database.entity.UserEntity
 
-@Database(
-    entities = [UserEntity::class, SleepCore::class],
-    version = 2,
-    exportSchema = false
-)
+@Database(entities = [UserEntity::class, NotificationEntity::class,SleepCore::class], version = 1)
 @TypeConverters(Converters::class)
-abstract class AppRoomDatabase : RoomDatabase() {
+abstract class AppRoomDatabase(): RoomDatabase() {
     abstract fun userDao(): IUserDao
     abstract fun sleepDao(): SleepDao
+    abstract fun notificationDao(): INotificationDao
 
-    companion object {
+    companion object{
         @Volatile
         private var Instance: AppRoomDatabase? = null
 
@@ -30,7 +29,7 @@ abstract class AppRoomDatabase : RoomDatabase() {
                 Room.databaseBuilder(context, AppRoomDatabase::class.java, "morfeo_db")
                     .fallbackToDestructiveMigration()
                     .build()
-                    .also { Instance = it }
+                    .also { Instance = it}
             }
         }
     }

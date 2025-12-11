@@ -17,4 +17,5 @@
     <color name="warning_light">#FFB74D</color>
     <color name="error_light">#E57373</color>
     <color name="bar_color_day">#E5E9F0</color>
+    <color name="bar_color_night">#1B2441</color>
 </resources>

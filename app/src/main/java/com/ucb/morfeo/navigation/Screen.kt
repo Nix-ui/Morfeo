@@ -13,6 +13,6 @@ sealed class Screen(val route:String) {
     object Tips:Screen("/tips")
     object Profile:Screen("/profile")
 
-
+    object Notifications:Screen("/notifications")
 
 }

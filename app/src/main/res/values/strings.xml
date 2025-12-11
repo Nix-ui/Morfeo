@@ -11,4 +11,5 @@
     <string name="permision_activity_text">Desbloqueos e inactividad prolongada</string>
     <string name="settings_screen_name">Ajustes</string>
     <string name="week_screen_name">Resumen semanal</string>
+    <string name="notification_screen_title">Notificaciones</string>
 </resources>

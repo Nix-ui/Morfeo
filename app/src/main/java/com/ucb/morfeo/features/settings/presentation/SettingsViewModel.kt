@@ -13,11 +13,11 @@ class SettingsViewModel(
 ) : ViewModel() {
 
     // Estados de la interfaz
-    private val _sleepTime = MutableStateFlow<String?>(null)
-    val sleepTime: StateFlow<String?> = _sleepTime.asStateFlow()
+    private val _sleepTime = MutableStateFlow<Pair<Int, Int>>(0 to 0)
+    val sleepTime: StateFlow<Pair<Int, Int>> = _sleepTime.asStateFlow()
 
-    private val _wakeUpTime = MutableStateFlow<String?>(null)
-    val wakeUpTime: StateFlow<String?> = _wakeUpTime.asStateFlow()
+    private val _wakeUpTime = MutableStateFlow<Pair<Int, Int>>(0 to 0)
+    val wakeUpTime: StateFlow<Pair<Int, Int>> = _sleepTime.asStateFlow()
 
     private val _notificationsEnabled = MutableStateFlow(true)
     val notificationsEnabled: StateFlow<Boolean> = _notificationsEnabled.asStateFlow()
@@ -46,12 +46,12 @@ class SettingsViewModel(
     }
 
     // 🔹 Guardar valores actualizados
-    fun updateSleepTime(value: String) {
-        viewModelScope.launch { settingsDataStore.saveSleepTime(value) }
+    fun updateSleepTime(hour: Int,minute: Int) {
+        viewModelScope.launch { settingsDataStore.saveSleepTime(hour,minute) }
     }
 
-    fun updateWakeupTime(value: String) {
-        viewModelScope.launch { settingsDataStore.saveWakeupTime(value) }
+    fun updateWakeupTime(hour: Int,minute: Int) {
+        viewModelScope.launch { settingsDataStore.saveWakeupTime(hour,minute) }
     }
 
     fun toggleNotifications(enabled: Boolean) {

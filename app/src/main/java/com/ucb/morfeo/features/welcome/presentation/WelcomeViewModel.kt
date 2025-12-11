@@ -25,20 +25,8 @@ class WelcomeViewModel(
         class Success(val profile: UserModel): WelcomeStateUI()
     }
 
-    init {
-        getUser()
-    }
-
     private val _uiState = MutableStateFlow<WelcomeStateUI>(WelcomeStateUI.Init)
     val uiState : StateFlow<WelcomeStateUI> = _uiState.asStateFlow()
-
-    fun getUser(){
-        viewModelScope.launch(Dispatchers.IO) {
-            fetchUserCase.invoke().collect {data ->
-                _uiState.value = WelcomeStateUI.Success(data)
-            }
-        }
-    }
 
 
     suspend fun getToken(): String = suspendCoroutine { continuation ->

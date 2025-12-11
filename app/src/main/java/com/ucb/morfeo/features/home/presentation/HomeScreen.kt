@@ -67,7 +67,8 @@ fun HomeScreen(
     Scaffold(
         containerColor = colorResource(R.color.firefly),
         topBar = {
-            TopNavBar(false, stringResource(R.string.dashboard_title))
+            TopNavBar(false, stringResource(R.string.dashboard_title),
+                onNavigateTo = onNavigatedToTab)
         },
         bottomBar = {
             ButtomNavBar(
