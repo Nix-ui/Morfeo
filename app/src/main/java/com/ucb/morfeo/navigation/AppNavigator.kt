@@ -20,6 +20,7 @@ import com.ucb.morfeo.features.home.presentation.HomeScreen
 import com.ucb.morfeo.features.login.presentation.LoginScreen
 import com.ucb.morfeo.features.settings.presentation.SettingsScreen
 import com.ucb.morfeo.features.splash.presentation.SplashViewModel
+import com.ucb.morfeo.features.week.presentation.screen.WeeklyDetailsScreen
 import com.ucb.morfeo.features.welcome.presentation.WelcomeScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -76,9 +77,9 @@ fun AppNavigator(
         }
 
         composable(Screen.Week.route) {
-            HomeScreen(
-                onNavigatedToTab = { route ->
-                    navController.navigate(route)
+            WeeklyDetailsScreen(
+                onDailyDetailClick = { localeDate->
+
                 }
             )
         }

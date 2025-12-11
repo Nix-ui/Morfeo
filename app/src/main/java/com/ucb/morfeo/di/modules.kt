@@ -73,19 +73,10 @@ val appModule = module {
     // ⚙️ SETTINGS
     single { SettingsDataStore(get()) }
     viewModel { SettingsViewModel(get()) }
-}
 
-// 🗓️ WEEK MODULE
-val weekModule = module {
+    //Week Module
     factory { GetWeeklySummaryUseCase(get()) }
     factory { CalculateConsistencyUseCase() }
     single<WeeklyRepository> { WeeklyRepositoryImpl(get(), get()) }
     viewModel { WeeklyDetailsViewModel(get()) }
 }
-
-// COMBINAR TODOS LOS MÓDULOS
-val allModules = listOf(
-    appModule,
-    weekModule
-    // Agregar otros módulos aquí cuando los crees
-)

@@ -290,9 +290,11 @@ private fun WeeklySummaryContent(
 fun SleepScoreChartCard(dailyData: List<DailySleepData>) {
     if (dailyData.isEmpty()) return
 
-    val chartEntryModelProducer = ChartEntryModelProducer(dailyData.mapIndexed { index, day ->
-        entryOf(index.toFloat(), day.sleepScore)
-    })
+    val chartEntryModelProducer = ChartEntryModelProducer(
+        dailyData.mapIndexed { index, day ->
+            entryOf(index.toFloat(), day.sleepScore)
+        }
+    )
 
     val bottomAxisValueFormatter = AxisValueFormatter<AxisPosition.Horizontal.Bottom> { value, _ ->
         getDayName(dailyData[value.toInt()].date).substring(0, 3)
@@ -303,7 +305,9 @@ fun SleepScoreChartCard(dailyData: List<DailySleepData>) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.1f))
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.1f)
+        )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -312,16 +316,23 @@ fun SleepScoreChartCard(dailyData: List<DailySleepData>) {
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(16.dp))
+
             Chart(
                 chart = columnChart(),
                 chartModelProducer = chartEntryModelProducer,
-                startAxis = rememberStartAxis(lineColor = Color.White.copy(alpha = 0.5f), labelColor = Color.White),
-                bottomAxis = rememberBottomAxis(valueFormatter = bottomAxisValueFormatter, lineColor = Color.White.copy(alpha = 0.5f), labelColor = Color.White),
+                startAxis = rememberStartAxis(
+//                    axisLineColor = Color.White.copy(alpha = 0.5f),
+//                    axisLabelColor = Color.White
+                ),
+                bottomAxis = rememberBottomAxis(
+                    valueFormatter = bottomAxisValueFormatter,
+//                    axisLineColor = Color.White.copy(alpha = 0.5f),
+//                    axisLabelColor = Color.White
+                )
             )
         }
     }
 }
-
 @Composable
 private fun WeeklyStatsCard(weeklySummary: com.ucb.morfeo.features.week.domain.model.WeeklySummary) {
     Card(
