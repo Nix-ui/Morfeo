@@ -44,6 +44,7 @@ import com.ucb.morfeo.features.week.domain.repository.WeeklyRepository
 import com.ucb.morfeo.features.week.domain.usecase.CalculateConsistencyUseCase
 import com.ucb.morfeo.features.week.domain.usecase.GetWeeklySummaryUseCase
 import com.ucb.morfeo.features.week.presentation.viewmodel.WeeklyDetailsViewModel
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

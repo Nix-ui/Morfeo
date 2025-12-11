@@ -1,4 +1,4 @@
-package com.ucb.morfeo.features.welcome.data.database.Converters
+package com.ucb.morfeo.features.welcome.data.database.converters
 
 import androidx.room.TypeConverter
 import kotlinx.datetime.LocalDate

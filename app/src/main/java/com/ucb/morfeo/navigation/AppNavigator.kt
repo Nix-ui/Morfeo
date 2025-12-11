@@ -79,9 +79,6 @@ fun AppNavigator(
 
         composable(Screen.Week.route) {
             WeeklyDetailsScreen(
-                onDailyDetailClick = { localeDate->
-
-                }
             )
         }
 

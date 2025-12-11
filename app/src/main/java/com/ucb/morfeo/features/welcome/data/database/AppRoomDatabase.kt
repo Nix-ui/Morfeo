@@ -9,11 +9,11 @@ import com.ucb.morfeo.features.innernotification.database.dao.INotificationDao
 import com.ucb.morfeo.features.innernotification.database.entity.NotificationEntity
 import com.ucb.morfeo.features.core.database.dao.SleepDao
 import com.ucb.morfeo.features.core.database.entity.SleepCore
-import com.ucb.morfeo.features.welcome.data.database.Converters.Converters
+import com.ucb.morfeo.features.welcome.data.database.converters.Converters
 import com.ucb.morfeo.features.welcome.data.database.dao.IUserDao
 import com.ucb.morfeo.features.welcome.data.database.entity.UserEntity
 
-@Database(entities = [UserEntity::class, NotificationEntity::class,SleepCore::class], version = 1)
+@Database(entities = [UserEntity::class, NotificationEntity::class, SleepCore::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class AppRoomDatabase(): RoomDatabase() {
     abstract fun userDao(): IUserDao
