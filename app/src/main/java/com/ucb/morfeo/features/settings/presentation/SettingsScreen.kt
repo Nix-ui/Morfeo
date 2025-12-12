@@ -7,12 +7,14 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -73,18 +75,15 @@ fun SettingsScreen(
             TopNavBar(true, stringResource(R.string.settings_screen_name), onNavigateTo = onNavigate)
         },
         bottomBar = {
-            ButtomNavBar(Screen.Settings.route,onNavigate)
+            ButtomNavBar(Screen.Settings.route, onRouteSelected = onNavigate)
         },
-        containerColor = colorResource(R.color.firefly),
-        modifier = Modifier.scrollable(
-            rememberScrollState(),
-            orientation = Orientation.Vertical,
-            true)
+        containerColor = colorResource(R.color.firefly)
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .verticalScroll(rememberScrollState()) // Correct scrolling modifier
                 .padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -272,7 +271,7 @@ fun SettingsScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Cerrar Sesión")
+                Text(text = "Cerrar Sesión", color = Color.White) // Ensure text is visible
             }
         }
     }
