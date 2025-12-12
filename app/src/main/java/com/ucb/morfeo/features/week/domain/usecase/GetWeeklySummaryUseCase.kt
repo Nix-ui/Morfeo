@@ -7,9 +7,9 @@ import kotlinx.datetime.LocalDate
 class GetWeeklySummaryUseCase(
     private val weeklyRepository: WeeklyRepository
 ) {
-    suspend operator fun invoke(weekStartDate: LocalDate? = null): Result<WeeklySummary> {
+    suspend operator fun invoke(userEmail: String, weekStartDate: LocalDate? = null): Result<WeeklySummary> {
         return try {
-            val summary = weeklyRepository.getWeeklySummary(weekStartDate)
+            val summary = weeklyRepository.getWeeklySummary(userEmail, weekStartDate)
             Result.success(summary)
         } catch (e: Exception) {
             Result.failure(e)

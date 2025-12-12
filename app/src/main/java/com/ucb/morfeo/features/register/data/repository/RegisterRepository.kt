@@ -40,9 +40,9 @@ class RegisterRepository(
                 val userModel = UserModel(
                     email = Email(firebaseUser.email!!),
                     nombre = firebaseUser.displayName!!,
-                    edad = Edad(0),
-                    peso = Peso(0.0),
-                    altura = Altura(0.0),
+                    edad = registerUser.edad,
+                    peso = registerUser.peso,
+                    altura = registerUser.altura,
                     genero = Genero.OTRO
                 )
                 Result.success(userModel)

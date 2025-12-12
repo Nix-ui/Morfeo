@@ -2,6 +2,7 @@ package com.ucb.morfeo.features.settings.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ucb.morfeo.features.login.data.datasource.JWTDataStore
 import com.ucb.morfeo.features.settings.data.datastore.SettingsDataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -9,7 +10,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    private val settingsDataStore: SettingsDataStore
+    private val settingsDataStore: SettingsDataStore,
+    private val jwtDataStore: JWTDataStore
 ) : ViewModel() {
 
     // Estados de la interfaz
@@ -60,5 +62,11 @@ class SettingsViewModel(
 
     fun updateThemeMode(mode: Int) {
         viewModelScope.launch { settingsDataStore.saveThemeMode(mode) }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            jwtDataStore.clearToken()
+        }
     }
 }

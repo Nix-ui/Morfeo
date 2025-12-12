@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -61,7 +63,8 @@ fun RegisterScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .background(colorResource(R.color.firefly)),
+                .background(colorResource(R.color.firefly))
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -73,9 +76,12 @@ fun RegisterScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    var nombre by remember { mutableStateOf("") }
                     var email by remember { mutableStateOf("") }
                     var password by remember { mutableStateOf("") }
-                    var nombre by remember { mutableStateOf("") }
+                    var edad by remember { mutableStateOf("") }
+                    var peso by remember { mutableStateOf("") }
+                    var altura by remember { mutableStateOf("") }
                     var togglePasswordVisibility by remember { mutableStateOf(false) }
                     val registrationState by registerViewModel.registrationState.collectAsState()
 
@@ -119,6 +125,57 @@ fun RegisterScreen(
                     )
 
                     OutlinedTextField(
+                        value = edad,
+                        onValueChange = { edad = it },
+                        label = { Text(text = "Edad") },
+                        placeholder = { Text(text = "25") },
+                        maxLines = 1,
+                        shape = MaterialTheme.shapes.large,
+                        modifier = Modifier.width(300.dp),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        )
+                    )
+
+                    OutlinedTextField(
+                        value = peso,
+                        onValueChange = { peso = it },
+                        label = { Text(text = "Peso (kg)") },
+                        placeholder = { Text(text = "70.5") },
+                        maxLines = 1,
+                        shape = MaterialTheme.shapes.large,
+                        modifier = Modifier.width(300.dp),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        )
+                    )
+
+                    OutlinedTextField(
+                        value = altura,
+                        onValueChange = { altura = it },
+                        label = { Text(text = "Altura (m)") },
+                        placeholder = { Text(text = "1.75") },
+                        maxLines = 1,
+                        shape = MaterialTheme.shapes.large,
+                        modifier = Modifier.width(300.dp),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        )
+                    )
+
+                    OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
                         label = { Text(text = "Password") },
@@ -144,7 +201,7 @@ fun RegisterScreen(
                         keyboardActions = KeyboardActions(
                             onDone = {
                                 focusManager.clearFocus()
-                                registerViewModel.register(email, password, nombre)
+                                registerViewModel.register(email, password, nombre, edad, peso, altura)
                             }
                         )
                     )
@@ -163,7 +220,7 @@ fun RegisterScreen(
 
                     Button(
                         onClick = {
-                            registerViewModel.register(email, password, nombre)
+                            registerViewModel.register(email, password, nombre, edad, peso, altura)
                         }
                     ) {
                         Text(text = "Registrarse")

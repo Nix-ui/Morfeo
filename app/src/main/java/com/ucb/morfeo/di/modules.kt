@@ -94,7 +94,7 @@ val appModule = module {
 
     // ⚙️ SETTINGS
     single { SettingsDataStore(get()) }
-    viewModel { SettingsViewModel(get()) }
+    viewModel { SettingsViewModel(get(), get()) }
 
     //Inner Notification
     single{ get<AppRoomDatabase>().notificationDao() }
@@ -116,5 +116,5 @@ val appModule = module {
     factory { GetWeeklySummaryUseCase(get()) }
     factory { CalculateConsistencyUseCase() }
     single<WeeklyRepository> { WeeklyRepositoryImpl(get(), get()) }
-    viewModel { WeeklyDetailsViewModel(get()) }
+    viewModel { WeeklyDetailsViewModel(get(), get()) }
 }

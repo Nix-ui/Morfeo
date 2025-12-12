@@ -93,6 +93,10 @@ fun AppNavigator(
 
         composable(Screen.Week.route) {
             WeeklyDetailsScreen(
+                onBackClick = { navController.popBackStack() },
+                onNavigate = { route ->
+                    navController.navigate(route)
+                }
             )
         }
 
@@ -115,6 +119,13 @@ fun AppNavigator(
             SettingsScreen(
                 onNavigate = {route ->
                     navController.navigate(route)
+                },
+                onLogout = {
+                    navController.navigate(Screen.Welcome.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }

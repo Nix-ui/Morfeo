@@ -30,6 +30,7 @@ import com.ucb.morfeo.navigation.buttonNavBar.presentation.ButtomNavBar
 @Composable
 fun SettingsScreen(
     onNavigate: (String) -> Unit = {},
+    onLogout: () -> Unit = {},
     viewModel: SettingsViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -41,8 +42,6 @@ fun SettingsScreen(
     val wakeupTime by viewModel.wakeUpTime.collectAsState()
     val notificationsEnabled by viewModel.notificationsEnabled.collectAsState()
     val themeMode by viewModel.themeMode.collectAsState()
-    var sleepTimeInput by remember { mutableStateOf(sleepTime ?: "") }
-    var wakeupTimeInput by remember { mutableStateOf(wakeupTime ?: "") }
 
     if(showSleepTimeDialog){
         TimePickerDialog(
@@ -263,6 +262,18 @@ fun SettingsScreen(
                 }
             }
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    viewModel.logout()
+                    onLogout()
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Cerrar Sesión")
+            }
         }
     }
 }

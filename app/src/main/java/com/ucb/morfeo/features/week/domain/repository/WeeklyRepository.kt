@@ -4,5 +4,5 @@ import com.ucb.morfeo.features.week.domain.model.WeeklySummary
 import kotlinx.datetime.LocalDate
 
 interface WeeklyRepository {
-    suspend fun getWeeklySummary(weekStartDate: LocalDate? = null): WeeklySummary
+    suspend fun getWeeklySummary(userEmail: String, weekStartDate: LocalDate? = null): WeeklySummary
 }

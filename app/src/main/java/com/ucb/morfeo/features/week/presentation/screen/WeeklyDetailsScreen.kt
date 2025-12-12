@@ -60,6 +60,8 @@ import com.ucb.morfeo.features.week.domain.model.DailySleepData
 import com.ucb.morfeo.features.week.presentation.viewmodel.ViewMode
 import com.ucb.morfeo.features.week.presentation.viewmodel.WeeklyDetailsViewModel
 import com.ucb.morfeo.features.week.presentation.viewmodel.WeeklySummaryState
+import com.ucb.morfeo.navigation.Screen
+import com.ucb.morfeo.navigation.buttonNavBar.presentation.ButtomNavBar
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.plus
 import kotlinx.datetime.toJavaLocalDate
@@ -71,7 +73,8 @@ import java.util.Locale
 fun WeeklyDetailsScreen(
     viewModel: WeeklyDetailsViewModel = koinViewModel(),
     onDailyDetailClick: (kotlinx.datetime.LocalDate) -> Unit = {},
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onNavigate: (String) -> Unit = {}
 ) {
     val weeklyState by viewModel.weeklyState.collectAsState()
     val selectedDate by viewModel.selectedDate.collectAsState()
@@ -86,6 +89,9 @@ fun WeeklyDetailsScreen(
                 onNextClick = { viewModel.navigateToNext() },
                 onBackClick = onBackClick
             )
+        },
+        bottomBar = {
+            ButtomNavBar(selectedRoute = Screen.Week.route, onRouteSelected = onNavigate)
         },
         containerColor = colorResource(R.color.firefly)
     ) { paddingValues ->
