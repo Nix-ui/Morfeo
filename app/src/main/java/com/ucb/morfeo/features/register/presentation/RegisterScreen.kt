@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -29,9 +31,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,6 +52,8 @@ fun RegisterScreen(
     registerViewModel: RegisterViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -78,28 +86,44 @@ fun RegisterScreen(
                     )
 
                     OutlinedTextField(
-                        maxLines = 1,
                         value = nombre,
                         onValueChange = { nombre = it },
                         label = { Text(text = "Nombre") },
+                        placeholder = { Text(text = "John Doe") },
+                        maxLines = 1,
                         shape = MaterialTheme.shapes.large,
-                        modifier = Modifier.width(300.dp)
+                        modifier = Modifier.width(300.dp),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        )
                     )
 
                     OutlinedTextField(
-                        maxLines = 1,
                         value = email,
                         onValueChange = { email = it },
                         label = { Text(text = "Email") },
+                        placeholder = { Text(text = "ejemplo@dominio.com") },
+                        maxLines = 1,
                         shape = MaterialTheme.shapes.large,
-                        modifier = Modifier.width(300.dp)
+                        modifier = Modifier.width(300.dp),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Email
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        )
                     )
 
                     OutlinedTextField(
-                        maxLines = 1,
                         value = password,
                         onValueChange = { password = it },
                         label = { Text(text = "Password") },
+                        placeholder = { Text(text = "· · · · · · · ·") },
+                        maxLines = 1,
                         visualTransformation = if (togglePasswordVisibility) VisualTransformation.None else PasswordVisualTransformation('*'),
                         shape = MaterialTheme.shapes.large,
                         trailingIcon = {
@@ -112,7 +136,17 @@ fun RegisterScreen(
                                 )
                             }
                         },
-                        modifier = Modifier.width(300.dp)
+                        modifier = Modifier.width(300.dp),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done,
+                            keyboardType = KeyboardType.Password
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                                registerViewModel.register(email, password, nombre)
+                            }
+                        )
                     )
 
                     Row(
