@@ -14,9 +14,85 @@
     <string name="log_in_title">Log In</string>
     <string name="permision_title">Permissions</string>
     <string name="permision_subtitle">Choose your destiny</string>
-    <string name="permision_body_text">The choose was already taken, you just need to know why</string>
+    <string name="permision_body_text">The choice has already been made, you just have to understand why you made it.</string>
     <string name="permision_activity_subtitle">Device Activity</string>
-    <string name="permision_activity_text">Stadistics about your device activity</string>
+    <string name="permision_activity_text">Unlocks and prolonged inactivity</string>
     <string name="settings_screen_name">Settings</string>
+    <string name="week_screen_name">Weekly Summary</string>
     <string name="notification_screen_title">Notifications</string>
+
+    <!-- Register Screen -->
+    <string name="register_title">Register</string>
+    <string name="register_name_label">Name</string>
+    <string name="register_name_placeholder">John Doe</string>
+    <string name="register_email_label">Email</string>
+    <string name="register_email_placeholder">example@domain.com</string>
+    <string name="register_age_label">Age</string>
+    <string name="register_age_placeholder">25</string>
+    <string name="register_weight_label">Weight (kg)</string>
+    <string name="register_weight_placeholder">70.5</string>
+    <string name="register_height_label">Height (m)</string>
+    <string name="register_height_placeholder">1.75</string>
+    <string name="register_password_label">Password</string>
+    <string name="register_password_placeholder">· · · · · · · ·</string>
+    <string name="register_toggle_password_visibility">Toggle password visibility</string>
+    <string name="register_already_have_account">Already have an account?</string>
+    <string name="register_login_button">Log in</string>
+    <string name="register_button">Register</string>
+    <string name="register_success_message">Registration successful!</string>
+
+    <!-- Login Screen -->
+    <string name="login_email_label">Email</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_toggle_password_visibility">Toggle password visibility</string>
+    <string name="login_no_account">Don\'t have an account?</string>
+    <string name="login_register_button">Sign up</string>
+    <string name="login_button">Log In</string>
+    <string name="login_welcome_message">Welcome %1$s</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_sleep_schedule_title">Set sleep and wake schedule</string>
+    <string name="settings_sleep_time_label">Set bedtime</string>
+    <string name="settings_set_button">Set</string>
+    <string name="settings_wake_time_label">Set wake-up time</string>
+    <string name="settings_notifications_title">Notifications</string>
+    <string name="settings_notifications_label">Notifications</string>
+    <string name="settings_appearance_title">Appearance</string>
+    <string name="settings_dark_mode_label">Dark mode</string>
+    <string name="settings_logout_button">Log Out</string>
+    <string name="settings_sleep_time_dialog_title">Select bedtime</string>
+    <string name="settings_wake_time_dialog_title">Select wake-up time</string>
+    <string name="settings_sleep_time_saved_message">Bedtime saved: %1$s</string>
+    <string name="settings_wake_time_saved_message">Wake-up time saved: %1$s</string>
+    <string name="dialog_cancel_button">Cancel</string>
+    <string name="dialog_save_button">Save</string>
+
+    <!-- Weekly Details Screen -->
+    <string name="weekly_details_error_loading">Error loading data</string>
+    <string name="weekly_details_retry_button">Retry</string>
+    <string name="weekly_details_monthly_view_wip">Monthly view in development</string>
+    <string name="weekly_details_back_button">Back</string>
+    <string name="weekly_details_previous_button">Previous</string>
+    <string name="weekly_details_next_button">Next</string>
+    <string name="weekly_details_app_icon_description">App Icon</string>
+    <string name="weekly_details_weekly_sleep_score_title">Weekly Sleep Score</string>
+    <string name="weekly_details_weekly_summary_title">Weekly Summary</string>
+    <string name="weekly_details_average_sleep_label">Average Sleep</string>
+    <string name="weekly_details_score_label">Score</string>
+    <string name="weekly_details_best_day_label">Best day</string>
+    <string name="weekly_details_worst_day_label">Worst day</string>
+    <string name="weekly_details_consistency_title">Consistency</string>
+    <string name="weekly_details_days_of_the_week_title">Days of the Week</string>
+    <string name="weekly_details_view_details_button">View details</string>
+    <string name="weekly_details_comparison_positive">+%1$d%% compared to last week</string>
+    <string name="weekly_details_comparison_negative">%1$d%% compared to last week</string>
+    <string name="weekly_details_consistency_excellent">Excellent consistency</string>
+    <string name="weekly_details_consistency_good">Good consistency</string>
+    <string name="weekly_details_consistency_improvable">You can improve consistency</string>
+
+    <!-- Welcome Screen -->
+    <string name="welcome_main_logo_description">Main logo</string>
+    <string name="welcome_title">Welcome to Morpheus</string>
+    <string name="welcome_red_pill_button">Take the red pill</string>
+
 </resources>

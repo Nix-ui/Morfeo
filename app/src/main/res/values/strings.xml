@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">morfeo</string>
-    <string name = "main_title">Morfeo</string>
+    <string name="main_title">Morfeo</string>
     <string name="welcome_screen_title">Bienvenido</string>
     <string name="dashboard_title">Tablero</string>
     <string name="log_in_title">Iniciar sesión</string>
@@ -12,4 +12,79 @@
     <string name="settings_screen_name">Ajustes</string>
     <string name="week_screen_name">Resumen semanal</string>
     <string name="notification_screen_title">Notificaciones</string>
+
+    <!-- Register Screen -->
+    <string name="register_title">Registro</string>
+    <string name="register_name_label">Nombre</string>
+    <string name="register_name_placeholder">John Doe</string>
+    <string name="register_email_label">Email</string>
+    <string name="register_email_placeholder">ejemplo@dominio.com</string>
+    <string name="register_age_label">Edad</string>
+    <string name="register_age_placeholder">25</string>
+    <string name="register_weight_label">Peso (kg)</string>
+    <string name="register_weight_placeholder">70.5</string>
+    <string name="register_height_label">Altura (m)</string>
+    <string name="register_height_placeholder">1.75</string>
+    <string name="register_password_label">Contraseña</string>
+    <string name="register_password_placeholder">· · · · · · · ·</string>
+    <string name="register_toggle_password_visibility">Alternar visibilidad de la contraseña</string>
+    <string name="register_already_have_account">¿Ya tienes una cuenta?</string>
+    <string name="register_login_button">Inicia sesión</string>
+    <string name="register_button">Registrarse</string>
+    <string name="register_success_message">¡Registro exitoso!</string>
+
+    <!-- Login Screen -->
+    <string name="login_email_label">Email</string>
+    <string name="login_password_label">Contraseña</string>
+    <string name="login_toggle_password_visibility">Alternar visibilidad de la contraseña</string>
+    <string name="login_no_account">¿No tienes una cuenta?</string>
+    <string name="login_register_button">Regístrate</string>
+    <string name="login_button">Iniciar sesión</string>
+    <string name="login_welcome_message">Bienvenido %1$s</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_sleep_schedule_title">Definir Horario de sueño y despertar</string>
+    <string name="settings_sleep_time_label">Definir la hora de dormir</string>
+    <string name="settings_set_button">Definir</string>
+    <string name="settings_wake_time_label">Definir la hora para despertar</string>
+    <string name="settings_notifications_title">Notificaciones</string>
+    <string name="settings_notifications_label">Notificaciones</string>
+    <string name="settings_appearance_title">Apariencia</string>
+    <string name="settings_dark_mode_label">Modo oscuro</string>
+    <string name="settings_logout_button">Cerrar Sesión</string>
+    <string name="settings_sleep_time_dialog_title">Seleccionar hora de dormir</string>
+    <string name="settings_wake_time_dialog_title">Seleccionar hora de despertar</string>
+    <string name="settings_sleep_time_saved_message">Hora de dormir guardada: %1$s</string>
+    <string name="settings_wake_time_saved_message">Hora para Despertar guardada: %1$s</string>
+    <string name="dialog_cancel_button">Cancelar</string>
+    <string name="dialog_save_button">Guardar</string>
+
+    <!-- Weekly Details Screen -->
+    <string name="weekly_details_error_loading">Error al cargar datos</string>
+    <string name="weekly_details_retry_button">Reintentar</string>
+    <string name="weekly_details_monthly_view_wip">Vista mensual en desarrollo</string>
+    <string name="weekly_details_back_button">Atrás</string>
+    <string name="weekly_details_previous_button">Anterior</string>
+    <string name="weekly_details_next_button">Siguiente</string>
+    <string name="weekly_details_app_icon_description">Icono de la aplicación</string>
+    <string name="weekly_details_weekly_sleep_score_title">Puntuación de Sueño Semanal</string>
+    <string name="weekly_details_weekly_summary_title">Resumen Semanal</string>
+    <string name="weekly_details_average_sleep_label">Promedio Sueño</string>
+    <string name="weekly_details_score_label">Puntuación</string>
+    <string name="weekly_details_best_day_label">Mejor día</string>
+    <string name="weekly_details_worst_day_label">Peor día</string>
+    <string name="weekly_details_consistency_title">Consistencia</string>
+    <string name="weekly_details_days_of_the_week_title">Días de la Semana</string>
+    <string name="weekly_details_view_details_button">Ver detalles</string>
+    <string name="weekly_details_comparison_positive">+%1$d%% respecto a la semana anterior</string>
+    <string name="weekly_details_comparison_negative">%1$d%% respecto a la semana anterior</string>
+    <string name="weekly_details_consistency_excellent">Excelente consistencia</string>
+    <string name="weekly_details_consistency_good">Buena consistencia</string>
+    <string name="weekly_details_consistency_improvable">Puedes mejorar la consistencia</string>
+
+    <!-- Welcome Screen -->
+    <string name="welcome_main_logo_description">Logo principal</string>
+    <string name="welcome_title">Bienvenido a Morfeo</string>
+    <string name="welcome_red_pill_button">Tomar la pastilla roja</string>
+
 </resources>

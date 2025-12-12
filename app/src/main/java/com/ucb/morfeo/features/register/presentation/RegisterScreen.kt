@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -86,7 +87,7 @@ fun RegisterScreen(
                     val registrationState by registerViewModel.registrationState.collectAsState()
 
                     Text(
-                        text = "Registro",
+                        text = stringResource(id = R.string.register_title),
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
@@ -94,8 +95,8 @@ fun RegisterScreen(
                     OutlinedTextField(
                         value = nombre,
                         onValueChange = { nombre = it },
-                        label = { Text(text = "Nombre") },
-                        placeholder = { Text(text = "John Doe") },
+                        label = { Text(text = stringResource(id = R.string.register_name_label)) },
+                        placeholder = { Text(text = stringResource(id = R.string.register_name_placeholder)) },
                         maxLines = 1,
                         shape = MaterialTheme.shapes.large,
                         modifier = Modifier.width(300.dp),
@@ -110,8 +111,8 @@ fun RegisterScreen(
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
-                        label = { Text(text = "Email") },
-                        placeholder = { Text(text = "ejemplo@dominio.com") },
+                        label = { Text(text = stringResource(id = R.string.register_email_label)) },
+                        placeholder = { Text(text = stringResource(id = R.string.register_email_placeholder)) },
                         maxLines = 1,
                         shape = MaterialTheme.shapes.large,
                         modifier = Modifier.width(300.dp),
@@ -127,8 +128,8 @@ fun RegisterScreen(
                     OutlinedTextField(
                         value = edad,
                         onValueChange = { edad = it },
-                        label = { Text(text = "Edad") },
-                        placeholder = { Text(text = "25") },
+                        label = { Text(text = stringResource(id = R.string.register_age_label)) },
+                        placeholder = { Text(text = stringResource(id = R.string.register_age_placeholder)) },
                         maxLines = 1,
                         shape = MaterialTheme.shapes.large,
                         modifier = Modifier.width(300.dp),
@@ -144,8 +145,8 @@ fun RegisterScreen(
                     OutlinedTextField(
                         value = peso,
                         onValueChange = { peso = it },
-                        label = { Text(text = "Peso (kg)") },
-                        placeholder = { Text(text = "70.5") },
+                        label = { Text(text = stringResource(id = R.string.register_weight_label)) },
+                        placeholder = { Text(text = stringResource(id = R.string.register_weight_placeholder)) },
                         maxLines = 1,
                         shape = MaterialTheme.shapes.large,
                         modifier = Modifier.width(300.dp),
@@ -161,8 +162,8 @@ fun RegisterScreen(
                     OutlinedTextField(
                         value = altura,
                         onValueChange = { altura = it },
-                        label = { Text(text = "Altura (m)") },
-                        placeholder = { Text(text = "1.75") },
+                        label = { Text(text = stringResource(id = R.string.register_height_label)) },
+                        placeholder = { Text(text = stringResource(id = R.string.register_height_placeholder)) },
                         maxLines = 1,
                         shape = MaterialTheme.shapes.large,
                         modifier = Modifier.width(300.dp),
@@ -178,8 +179,8 @@ fun RegisterScreen(
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
-                        label = { Text(text = "Password") },
-                        placeholder = { Text(text = "· · · · · · · ·") },
+                        label = { Text(text = stringResource(id = R.string.register_password_label)) },
+                        placeholder = { Text(text = stringResource(id = R.string.register_password_placeholder)) },
                         maxLines = 1,
                         visualTransformation = if (togglePasswordVisibility) VisualTransformation.None else PasswordVisualTransformation('*'),
                         shape = MaterialTheme.shapes.large,
@@ -189,7 +190,7 @@ fun RegisterScreen(
                             ) {
                                 Icon(
                                     imageVector = if (togglePasswordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                                    contentDescription = "Toggle password visibility"
+                                    contentDescription = stringResource(id = R.string.register_toggle_password_visibility)
                                 )
                             }
                         },
@@ -210,11 +211,11 @@ fun RegisterScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        Text(text = "¿Ya tienes una cuenta?")
+                        Text(text = stringResource(id = R.string.register_already_have_account))
                         TextButton(
                             onClick = { onNavigateRoute(Screen.LogIn.route) }
                         ) {
-                            Text(text = "Inicia sesión")
+                            Text(text = stringResource(id = R.string.register_login_button))
                         }
                     }
 
@@ -223,7 +224,7 @@ fun RegisterScreen(
                             registerViewModel.register(email, password, nombre, edad, peso, altura)
                         }
                     ) {
-                        Text(text = "Registrarse")
+                        Text(text = stringResource(id = R.string.register_button))
                     }
 
                     when (val state = registrationState) {
@@ -231,7 +232,7 @@ fun RegisterScreen(
                             Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
                         }
                         is RegistrationState.Success -> {
-                            Toast.makeText(context, "¡Registro exitoso!", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, stringResource(id = R.string.register_success_message), Toast.LENGTH_LONG).show()
                             onNavigateRoute(Screen.Home.route)
                         }
                         else -> {}

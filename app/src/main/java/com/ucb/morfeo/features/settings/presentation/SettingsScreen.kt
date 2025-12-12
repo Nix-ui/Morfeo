@@ -47,25 +47,25 @@ fun SettingsScreen(
 
     if(showSleepTimeDialog){
         TimePickerDialog(
-            title = "Seleccionar hora de dormir",
+            title = stringResource(id = R.string.settings_sleep_time_dialog_title),
             onDismiss = { showSleepTimeDialog = false },
             onConfirm = {timepickerState ->
                 showSleepTimeDialog = false
                 val selectedTime = String.format("%02d:%02d", timepickerState.hour, timepickerState.minute)
                 viewModel.updateSleepTime(timepickerState.hour,timepickerState.minute)
-                Toast.makeText(context, "Hora de dormir guardada: $selectedTime", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, stringResource(id = R.string.settings_sleep_time_saved_message, selectedTime), Toast.LENGTH_SHORT).show()
             }
         )
     }
     if(showWakeTimeDialog){
         TimePickerDialog(
-            title = "Seleccionar hora de despertar",
+            title = stringResource(id = R.string.settings_wake_time_dialog_title),
             onDismiss = { showWakeTimeDialog = false },
             onConfirm = {timepickerState ->
                 showWakeTimeDialog = false
                 val selectedTime = String.format("%02d:%02d", timepickerState.hour, timepickerState.minute)
                 viewModel.updateWakeupTime(timepickerState.hour,timepickerState.minute)
-                Toast.makeText(context, "Hora para Despertar guardada: $selectedTime", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, stringResource(id = R.string.settings_wake_time_saved_message, selectedTime), Toast.LENGTH_SHORT).show()
             }
         )
     }
@@ -93,7 +93,7 @@ fun SettingsScreen(
                     .align(alignment = Alignment.Start),
                 style= MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface,
-                text = "Definir Horario de sueño y despertar",
+                text = stringResource(id = R.string.settings_sleep_schedule_title),
                 fontSize = 25.sp
             )
             Card(
@@ -112,7 +112,7 @@ fun SettingsScreen(
                         modifier = Modifier.padding(start=16.dp) ,
                         style= MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
-                        text = "Definir la hora de dormir",
+                        text = stringResource(id = R.string.settings_sleep_time_label),
                         fontSize = 15.sp
                     )
                     Button(
@@ -128,7 +128,7 @@ fun SettingsScreen(
                         Text(
                             style= MaterialTheme.typography.labelSmall,
                             color = colorResource(R.color.bar_color_day),
-                            text = "Definir",
+                            text = stringResource(id = R.string.settings_set_button),
                             fontSize = 9.sp
                         )
                     }
@@ -150,7 +150,7 @@ fun SettingsScreen(
                         modifier = Modifier.padding(start=16.dp) ,
                         style= MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
-                        text = "Definir la hora para despertar",
+                        text = stringResource(id = R.string.settings_wake_time_label),
                         fontSize = 15.sp
                     )
                     Button(
@@ -166,7 +166,7 @@ fun SettingsScreen(
                         Text(
                             style= MaterialTheme.typography.labelSmall,
                             color = colorResource(R.color.bar_color_day),
-                            text = "Definir",
+                            text = stringResource(id = R.string.settings_set_button),
                             fontSize = 9.sp
                         )
                     }
@@ -178,7 +178,7 @@ fun SettingsScreen(
                     .align(alignment = Alignment.Start),
                 style= MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface,
-                text = "Notificaciones",
+                text = stringResource(id = R.string.settings_notifications_title),
                 fontSize = 20.sp
             )
 
@@ -194,7 +194,7 @@ fun SettingsScreen(
                         .fillMaxHeight()
                 ) {
                     Text(
-                        text="Notificaciones",
+                        text=stringResource(id = R.string.settings_notifications_label),
                         modifier = Modifier.padding(start=16.dp) ,
                         style= MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
@@ -222,7 +222,7 @@ fun SettingsScreen(
                     .align(alignment = Alignment.Start),
                 style= MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface,
-                text = "Apariencia",
+                text = stringResource(id = R.string.settings_appearance_title),
                 fontSize = 20.sp
             )
             Card(
@@ -237,7 +237,7 @@ fun SettingsScreen(
                         .fillMaxHeight()
                 ) {
                     Text(
-                        text="Modo oscuro",
+                        text=stringResource(id = R.string.settings_dark_mode_label),
                         modifier = Modifier.padding(start=16.dp) ,
                         style= MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
@@ -271,7 +271,7 @@ fun SettingsScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Cerrar Sesión", color = Color.White) // Ensure text is visible
+                Text(text = stringResource(id = R.string.settings_logout_button), color = Color.White) // Ensure text is visible
             }
         }
     }
@@ -308,11 +308,11 @@ fun TimePickerDialog(
                     horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(onClick = onDismiss) {
-                        Text("Cancelar")
+                        Text(stringResource(id = R.string.dialog_cancel_button))
                     }
                     Spacer(Modifier.width(8.dp))
                     TextButton(onClick = { onConfirm(timePickerState) }) {
-                        Text("Guardar")
+                        Text(stringResource(id = R.string.dialog_save_button))
                     }
                 }
             }

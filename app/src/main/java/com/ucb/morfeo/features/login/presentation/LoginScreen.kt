@@ -89,7 +89,7 @@ fun LoginScreen(
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
-                        label = { Text(text = "Email") },
+                        label = { Text(text = stringResource(id = R.string.login_email_label)) },
                         maxLines = 1,
                         shape = MaterialTheme.shapes.large,
                         modifier = Modifier.width(300.dp),
@@ -105,7 +105,7 @@ fun LoginScreen(
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
-                        label = { Text(text = "Password") },
+                        label = { Text(text = stringResource(id = R.string.login_password_label)) },
                         maxLines = 1,
                         visualTransformation = if (togglePasswordVisibility) VisualTransformation.None else PasswordVisualTransformation('*'),
                         shape = MaterialTheme.shapes.large,
@@ -115,7 +115,7 @@ fun LoginScreen(
                             ) {
                                 Icon(
                                     imageVector = if (togglePasswordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                                    contentDescription = "Toggle password visibility"
+                                    contentDescription = stringResource(id = R.string.login_toggle_password_visibility)
                                 )
                             }
                         },
@@ -136,11 +136,11 @@ fun LoginScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        Text(text = "¿No tienes una cuenta?")
+                        Text(text = stringResource(id = R.string.login_no_account))
                         TextButton(
                             onClick = { onNavigateToRegister(Screen.SignUp.route) }
                         ) {
-                            Text(text = "Registrate")
+                            Text(text = stringResource(id = R.string.login_register_button))
                         }
                     }
 
@@ -149,7 +149,7 @@ fun LoginScreen(
                             logInViewModel.logIn(email, password)
                         }
                     ) {
-                        Text(text = "Iniciar sesión")
+                        Text(text = stringResource(id = R.string.login_button))
                     }
 
                     when (val state = loginState) {
@@ -157,7 +157,7 @@ fun LoginScreen(
                             Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
                         }
                         is LogInViewModel.LogInUIState.Success -> {
-                            Toast.makeText(context, "Bienvenido ${state.userModel.nombre}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, stringResource(id = R.string.login_welcome_message, state.userModel.nombre), Toast.LENGTH_LONG).show()
                             onNavigateToHome(Screen.Home.route)
                         }
                         else -> {}
