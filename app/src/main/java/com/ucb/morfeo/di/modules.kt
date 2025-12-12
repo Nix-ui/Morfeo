@@ -28,6 +28,10 @@ import com.ucb.morfeo.features.login.domain.usecase.CheckSessionUseCase
 import com.ucb.morfeo.features.login.domain.usecase.FetchLogInUserUseCase
 import com.ucb.morfeo.features.login.presentation.LogInViewModel
 import com.ucb.morfeo.features.notification.data.worker.SleepNotificationWorker
+import com.ucb.morfeo.features.register.data.repository.RegisterRepository
+import com.ucb.morfeo.features.register.domain.repository.IRegisterRepository
+import com.ucb.morfeo.features.register.domain.usecase.RegisterUseCase
+import com.ucb.morfeo.features.register.presentation.RegisterViewModel
 //import com.ucb.morfeo.features.notification.data.repository.NotificationRepository
 //import com.ucb.morfeo.features.notification.domain.presentation.NotificationViewModel
 //import com.ucb.morfeo.features.notification.domain.repository.INotificationRepository
@@ -72,6 +76,11 @@ val appModule = module {
     single<ILogInRepository> { LogInRepository(get()) }
     factory { FetchLogInUserUseCase(get()) }
     viewModel { LogInViewModel(get()) }
+
+    // 📝 REGISTER
+    single<IRegisterRepository> { RegisterRepository(get()) }
+    factory { RegisterUseCase(get()) }
+    viewModel { RegisterViewModel(get()) }
 
     // 🛠️ MANTENIMIENTO
     single<IFirebaseConfigRepository> { FirebaseConfigRepository() }

@@ -19,6 +19,7 @@ import com.ucb.morfeo.features.core.maintenance.presentation.MaintenanceStatusVi
 import com.ucb.morfeo.features.home.presentation.HomeScreen
 import com.ucb.morfeo.features.innernotification.presentation.NotificationScreen
 import com.ucb.morfeo.features.login.presentation.LoginScreen
+import com.ucb.morfeo.features.register.presentation.RegisterScreen
 import com.ucb.morfeo.features.settings.presentation.SettingsScreen
 import com.ucb.morfeo.features.splash.presentation.SplashViewModel
 import com.ucb.morfeo.features.week.presentation.screen.WeeklyDetailsScreen
@@ -63,6 +64,19 @@ fun AppNavigator(
 
         composable(Screen.LogIn.route) {
             LoginScreen(
+                onNavigateToHome = { route ->
+                    navController.navigate(route) {
+                        popUpTo(Screen.Welcome.route) { inclusive = true }
+                    }
+                },
+                onNavigateToRegister = { route ->
+                    navController.navigate(route)
+                }
+            )
+        }
+
+        composable(Screen.SignUp.route) {
+            RegisterScreen(
                 onNavigateRoute = { route ->
                     navController.navigate(route) {
                         popUpTo(Screen.Welcome.route) { inclusive = true }
