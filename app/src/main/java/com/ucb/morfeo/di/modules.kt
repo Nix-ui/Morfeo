@@ -20,6 +20,11 @@ import com.ucb.morfeo.features.login.data.repository.LogInRepository
 import com.ucb.morfeo.features.login.domain.repository.ILogInRepository
 import com.ucb.morfeo.features.login.domain.usecase.FetchLogInUserUseCase
 import com.ucb.morfeo.features.login.presentation.LogInViewModel
+import com.ucb.morfeo.features.permissions.data.repository.PermissionRepositoryImpl
+import com.ucb.morfeo.features.permissions.domain.repository.PermissionRepository
+import com.ucb.morfeo.features.permissions.domain.usecase.GetPermissionsGrantedUseCase
+import com.ucb.morfeo.features.permissions.domain.usecase.SetPermissionsGrantedUseCase
+import com.ucb.morfeo.features.permissions.presentation.viewmodel.PermissionsViewModel
 import com.ucb.morfeo.features.register.data.repository.RegisterRepository
 import com.ucb.morfeo.features.register.domain.repository.IRegisterRepository
 import com.ucb.morfeo.features.register.domain.usecase.RegisterUseCase
@@ -74,7 +79,7 @@ val appModule = module {
 
     // ⚙️ SETTINGS
     single { SettingsDataStore(get()) }
-    viewModel { SettingsViewModel(get(), get()) }
+    viewModel { SettingsViewModel(get(), get(), get()) }
 
     //Inner Notification
     single { get<AppRoomDatabase>().notificationDao() }
@@ -97,4 +102,10 @@ val appModule = module {
     factory { CalculateConsistencyUseCase() }
     single<WeeklyRepository> { WeeklyRepositoryImpl(get(), get()) }
     viewModel { WeeklyDetailsViewModel(get(), get()) }
+    
+    // PERMISSIONS
+    single<PermissionRepository> { PermissionRepositoryImpl(androidContext()) }
+    factory { GetPermissionsGrantedUseCase(get()) }
+    factory { SetPermissionsGrantedUseCase(get()) }
+    viewModel { PermissionsViewModel(get(), get()) }
 }

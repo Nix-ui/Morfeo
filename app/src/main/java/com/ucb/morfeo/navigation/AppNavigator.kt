@@ -19,6 +19,7 @@ import com.ucb.morfeo.features.core.maintenance.presentation.MaintenanceStatusVi
 import com.ucb.morfeo.features.home.presentation.HomeScreen
 import com.ucb.morfeo.features.innernotification.presentation.NotificationScreen
 import com.ucb.morfeo.features.login.presentation.LoginScreen
+import com.ucb.morfeo.features.permissions.presentation.screen.PermissionsScreen
 import com.ucb.morfeo.features.register.presentation.RegisterScreen
 import com.ucb.morfeo.features.settings.presentation.SettingsScreen
 import com.ucb.morfeo.features.splash.presentation.SplashViewModel
@@ -126,6 +127,17 @@ fun AppNavigator(
                             inclusive = true
                         }
                     }
+                }
+            )
+        }
+
+        composable(Screen.Permissions.route) {
+            PermissionsScreen(
+                onNavigate = { route ->
+                    navController.navigate(route)
+                },
+                onPermissionsGranted = {
+                    navController.popBackStack()
                 }
             )
         }
