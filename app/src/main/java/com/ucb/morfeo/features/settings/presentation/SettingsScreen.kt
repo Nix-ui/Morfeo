@@ -53,7 +53,7 @@ fun SettingsScreen(
                 showSleepTimeDialog = false
                 val selectedTime = String.format("%02d:%02d", timepickerState.hour, timepickerState.minute)
                 viewModel.updateSleepTime(timepickerState.hour,timepickerState.minute)
-                Toast.makeText(context, stringResource(id = R.string.settings_sleep_time_saved_message, selectedTime), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.settings_sleep_time_saved_message, selectedTime), Toast.LENGTH_SHORT).show()
             }
         )
     }
@@ -65,7 +65,7 @@ fun SettingsScreen(
                 showWakeTimeDialog = false
                 val selectedTime = String.format("%02d:%02d", timepickerState.hour, timepickerState.minute)
                 viewModel.updateWakeupTime(timepickerState.hour,timepickerState.minute)
-                Toast.makeText(context, stringResource(id = R.string.settings_wake_time_saved_message, selectedTime), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.settings_wake_time_saved_message, selectedTime), Toast.LENGTH_SHORT).show()
             }
         )
     }
