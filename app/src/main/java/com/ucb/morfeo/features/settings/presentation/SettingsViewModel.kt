@@ -32,6 +32,9 @@ class SettingsViewModel(
     private val _permissionsGranted = MutableStateFlow(false)
     val permissionsGranted: StateFlow<Boolean> = _permissionsGranted.asStateFlow()
 
+    private val _sleepGoal = MutableStateFlow(8)
+    val sleepGoal: StateFlow<Int> = _sleepGoal.asStateFlow()
+
     init {
         loadSettings(getPermissionsGrantedUseCase)
     }
@@ -53,15 +56,18 @@ class SettingsViewModel(
         viewModelScope.launch {
             getPermissionsGrantedUseCase().collect { _permissionsGranted.value = it }
         }
+        viewModelScope.launch {
+            settingsDataStore.getSleepGoal().collect { _sleepGoal.value = it }
+        }
     }
 
     // 🔹 Guardar valores actualizados
-    fun updateSleepTime(hour: Int,minute: Int) {
-        viewModelScope.launch { settingsDataStore.saveSleepTime(hour,minute) }
+    fun updateSleepTime(hour: Int, minute: Int) {
+        viewModelScope.launch { settingsDataStore.saveSleepTime(hour, minute) }
     }
 
-    fun updateWakeupTime(hour: Int,minute: Int) {
-        viewModelScope.launch { settingsDataStore.saveWakeupTime(hour,minute) }
+    fun updateWakeupTime(hour: Int, minute: Int) {
+        viewModelScope.launch { settingsDataStore.saveWakeupTime(hour, minute) }
     }
 
     fun toggleNotifications(enabled: Boolean) {
@@ -70,6 +76,18 @@ class SettingsViewModel(
 
     fun updateThemeMode(mode: Int) {
         viewModelScope.launch { settingsDataStore.saveThemeMode(mode) }
+    }
+
+    fun updateSleepGoal(hours: Int) {
+        viewModelScope.launch { settingsDataStore.saveSleepGoal(hours) }
+    }
+
+    fun exportData() {
+        // TODO: Implementar lógica de exportación de datos
+    }
+
+    fun deleteAllData() {
+        // TODO: Implementar lógica de borrado de datos
     }
 
     fun logout() {
