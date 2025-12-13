@@ -1,7 +1,5 @@
 package com.ucb.morfeo.di
 
-import com.ucb.morfeo.features.settings.data.datastore.SettingsDataStore
-import com.ucb.morfeo.features.settings.presentation.SettingsViewModel
 import com.ucb.morfeo.features.core.firabase.config.data.repository.FirebaseConfigRepository
 import com.ucb.morfeo.features.core.firabase.config.domain.repository.IFirebaseConfigRepository
 import com.ucb.morfeo.features.core.firabase.config.domain.usecase.AppInMaintenanceUseCase
@@ -29,6 +27,8 @@ import com.ucb.morfeo.features.register.data.repository.RegisterRepository
 import com.ucb.morfeo.features.register.domain.repository.IRegisterRepository
 import com.ucb.morfeo.features.register.domain.usecase.RegisterUseCase
 import com.ucb.morfeo.features.register.presentation.RegisterViewModel
+import com.ucb.morfeo.features.settings.data.datastore.SettingsDataStore
+import com.ucb.morfeo.features.settings.presentation.SettingsViewModel
 import com.ucb.morfeo.features.splash.presentation.SplashViewModel
 import com.ucb.morfeo.features.welcome.data.database.AppRoomDatabase
 import com.ucb.morfeo.features.welcome.data.repository.UserRepository
@@ -77,6 +77,12 @@ val appModule = module {
     // 💾 CHECK SESSION / SPLASH
     viewModel { SplashViewModel(get()) }
 
+    // PERMISSIONS
+    single<PermissionRepository> { PermissionRepositoryImpl(androidContext()) }
+    factory { GetPermissionsGrantedUseCase(get()) }
+    factory { SetPermissionsGrantedUseCase(get()) }
+    viewModel { PermissionsViewModel(get(), get()) }
+
     // ⚙️ SETTINGS
     single { SettingsDataStore(get()) }
     viewModel { SettingsViewModel(get(), get(), get()) }
@@ -84,14 +90,17 @@ val appModule = module {
     //Inner Notification
     single { get<AppRoomDatabase>().notificationDao() }
     single { LocalNotificationDataSource(get()) }
-    single<INotificationRepository>{ NotificationRepository(get()) }
+    single<INotificationRepository> { NotificationRepository(get()) }
     single { GetAllNotificationsUseCase(get()) }
     single { MarkNotificationAsReadUseCase(get()) }
     single { RecivedNotificationUseCase(get()) }
     single { DeleteNotificationUseCase(get()) }
-    viewModel { InnerNotificationViewModel(
-        get(),get(),
-    get(),get()) }
+    viewModel {
+        InnerNotificationViewModel(
+            get(), get(),
+            get(), get()
+        )
+    }
 
 
 
@@ -102,10 +111,4 @@ val appModule = module {
     factory { CalculateConsistencyUseCase() }
     single<WeeklyRepository> { WeeklyRepositoryImpl(get(), get()) }
     viewModel { WeeklyDetailsViewModel(get(), get()) }
-    
-    // PERMISSIONS
-    single<PermissionRepository> { PermissionRepositoryImpl(androidContext()) }
-    factory { GetPermissionsGrantedUseCase(get()) }
-    factory { SetPermissionsGrantedUseCase(get()) }
-    viewModel { PermissionsViewModel(get(), get()) }
 }

@@ -2,9 +2,11 @@ package com.ucb.morfeo.features.settings.presentation
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.* 
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,10 +33,15 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
-    val uiState by viewModel.uiState.collectAsState()
 
     var showSleepTimeDialog by remember { mutableStateOf(false) }
     var showWakeTimeDialog by remember { mutableStateOf(false) }
+
+    val sleepTime by viewModel.sleepTime.collectAsState()
+    val wakeupTime by viewModel.wakeUpTime.collectAsState()
+    val notificationsEnabled by viewModel.notificationsEnabled.collectAsState()
+    val themeMode by viewModel.themeMode.collectAsState()
+    val permissionsGranted by viewModel.permissionsGranted.collectAsState()
 
     if (showSleepTimeDialog) {
         TimePickerDialog(
@@ -87,9 +94,148 @@ fun SettingsScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            // ... existing code ...
             Text(
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier.padding(16.dp)
+                    .align(alignment = Alignment.Start),
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                text = stringResource(id = R.string.settings_sleep_schedule_title),
+                fontSize = 25.sp
+            )
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(65.dp),
+                colors = CardDefaults.cardColors().copy(containerColor = colorResource(R.color.cloud_burst))
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                ) {
+
+                    Text(
+                        modifier = Modifier.padding(start = 16.dp),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = stringResource(id = R.string.settings_sleep_time_label),
+                        fontSize = 15.sp
+                    )
+                    Button(
+                        onClick = { showSleepTimeDialog = true },
+                        contentPadding = ButtonDefaults.TextButtonContentPadding,
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(30.dp)
+                            .padding(end = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorResource(R.color.firefly),
+                        )
+                    ) {
+                        Text(
+                            style = MaterialTheme.typography.labelSmall,
+                            color = colorResource(R.color.bar_color_day),
+                            text = stringResource(id = R.string.settings_set_button),
+                            fontSize = 9.sp
+                        )
+                    }
+                }
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(65.dp),
+                colors = CardDefaults.cardColors().copy(containerColor = colorResource(R.color.cloud_burst))
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                ) {
+
+                    Text(
+                        modifier = Modifier.padding(start = 16.dp),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = stringResource(id = R.string.settings_wake_time_label),
+                        fontSize = 15.sp
+                    )
+                    Button(
+                        onClick = { showWakeTimeDialog = true },
+                        contentPadding = ButtonDefaults.TextButtonContentPadding,
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(30.dp)
+                            .padding(end = 16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorResource(R.color.firefly),
+                        )
+                    ) {
+                        Text(
+                            style = MaterialTheme.typography.labelSmall,
+                            color = colorResource(R.color.bar_color_day),
+                            text = stringResource(id = R.string.settings_set_button),
+                            fontSize = 9.sp
+                        )
+                    }
+                }
+            }
+
+            Text(
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .align(alignment = Alignment.Start),
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                text = stringResource(id = R.string.settings_notifications_title),
+                fontSize = 20.sp
+            )
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(65.dp),
+                colors = CardDefaults.cardColors().copy(containerColor = colorResource(R.color.cloud_burst))
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.settings_notifications_label),
+                        modifier = Modifier.padding(start = 16.dp),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = 15.sp
+                    )
+                    Switch(
+                        checked = notificationsEnabled,
+                        onCheckedChange = {
+                            viewModel.toggleNotifications(it)
+                        },
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(30.dp)
+                            .padding(end = 16.dp),
+                        colors = SwitchDefaults.colors().copy(
+                            checkedThumbColor = colorResource(R.color.dodger_blue),
+                            checkedTrackColor = colorResource(R.color.firefly),
+                            uncheckedThumbColor = colorResource(R.color.firefly),
+                            uncheckedTrackColor = colorResource(R.color.bar_color_day)
+                        )
+                    )
+                }
+            }
+            Text(
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
                     .align(alignment = Alignment.Start),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -109,17 +255,63 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
+                        .padding(horizontal = 16.dp)
                 ) {
                     Text(
                         text = "Permisos de monitoreo",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = 15.sp
+                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = if (permissionsGranted) "Activado" else "Desactivado",
+                            color = if (permissionsGranted) colorResource(id = R.color.bar_color_day) else Color.Gray,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                            contentDescription = "Ir a permisos",
+                            tint = Color.White
+                        )
+                    }
+                }
+            }
+            Text(
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .align(alignment = Alignment.Start),
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                text = stringResource(id = R.string.settings_appearance_title),
+                fontSize = 20.sp
+            )
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(65.dp),
+                colors = CardDefaults.cardColors().copy(containerColor = colorResource(R.color.cloud_burst))
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.settings_dark_mode_label),
                         modifier = Modifier.padding(start = 16.dp),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 15.sp
                     )
                     Switch(
-                        checked = uiState.arePermissionsGranted,
-                        onCheckedChange = null, // Navigation is handled by the Card's click
+                        checked = themeMode == 1,
+                        onCheckedChange = {
+                            viewModel.updateThemeMode(if (it) 1 else 0)
+                        },
                         modifier = Modifier
                             .width(80.dp)
                             .height(30.dp)
@@ -133,6 +325,7 @@ fun SettingsScreen(
                     )
                 }
             }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
