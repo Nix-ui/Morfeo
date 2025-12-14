@@ -1,6 +1,8 @@
 package com.ucb.morfeo.features.week.presentation.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -70,12 +72,14 @@ import org.koin.androidx.compose.koinViewModel
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+
 @Composable
 fun WeeklyDetailsScreen(
     viewModel: WeeklyDetailsViewModel = koinViewModel(),
     onDailyDetailClick: (kotlinx.datetime.LocalDate) -> Unit = {},
     onBackClick: () -> Unit = {},
     onNavigate: (String) -> Unit = {}
+
 ) {
     val weeklyState by viewModel.weeklyState.collectAsState()
     val selectedDate by viewModel.selectedDate.collectAsState()
@@ -96,6 +100,21 @@ fun WeeklyDetailsScreen(
         bottomBar = {
             ButtomNavBar(selectedRoute = Screen.Week.route, onRouteSelected = onNavigate)
         },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = { onNavigate(Screen.AddSleep.route) },
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                },
+                text = { Text("Registrar") }
+            )
+        },
+
+
         containerColor = colorResource(R.color.firefly)
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {

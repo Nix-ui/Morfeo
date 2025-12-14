@@ -1,4 +1,5 @@
 package com.ucb.morfeo.navigation
+import com.ucb.morfeo.features.addsleep.presentation.AddSleepScreen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -162,6 +163,18 @@ fun AppNavigator(
                 }
             )
         }
+        composable(Screen.AddSleep.route) {
+            AddSleepScreen(
+                onBack = { navController.popBackStack() },
+                onSaved = {
+                    navController.navigate(Screen.Week.route) {
+                        popUpTo(Screen.Week.route) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+
         composable(Screen.Notifications.route) {
             NotificationScreen(
                 onBackTap = {route ->

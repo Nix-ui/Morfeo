@@ -59,6 +59,7 @@ import okhttp3.MediaType.Companion.toMediaType
 val appModule = module {
     viewModel { com.ucb.morfeo.features.details.presentation.DailyDetailsViewModel(get(), get(), get()) }
 
+    viewModel { com.ucb.morfeo.features.addsleep.presentation.AddSleepViewModel(get(), get()) }
 
     // 📦 ROOM DATABASE
     single { AppRoomDatabase.getDatabase(get()) }
