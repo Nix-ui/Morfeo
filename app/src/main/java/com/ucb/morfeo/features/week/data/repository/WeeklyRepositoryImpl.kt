@@ -49,6 +49,10 @@ class WeeklyRepositoryImpl(
         )
     }
 
+    override suspend fun getAllSleepData(userEmail: String): List<DailySleepData> {
+        return sleepDao.getAllSleepSessions(userEmail).map { it.toDailySleepData() }
+    }
+
     private fun getCurrentWeekStart(): LocalDate {
         val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
         val dayOfWeek = today.dayOfWeek.ordinal

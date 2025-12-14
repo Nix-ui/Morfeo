@@ -28,6 +28,7 @@ import com.ucb.morfeo.features.register.domain.repository.IRegisterRepository
 import com.ucb.morfeo.features.register.domain.usecase.RegisterUseCase
 import com.ucb.morfeo.features.register.presentation.RegisterViewModel
 import com.ucb.morfeo.features.settings.data.datastore.SettingsDataStore
+import com.ucb.morfeo.features.settings.domain.usecase.GetSleepDataForExportUseCase
 import com.ucb.morfeo.features.settings.presentation.SettingsViewModel
 import com.ucb.morfeo.features.splash.presentation.SplashViewModel
 import com.ucb.morfeo.features.welcome.data.database.AppRoomDatabase
@@ -85,7 +86,8 @@ val appModule = module {
 
     // ⚙️ SETTINGS
     single { SettingsDataStore(get()) }
-    viewModel { SettingsViewModel(get(), get(), get()) }
+    factory { GetSleepDataForExportUseCase(get()) } 
+    viewModel { SettingsViewModel(get(), get(), get(), get()) } 
 
     //Inner Notification
     single { get<AppRoomDatabase>().notificationDao() }

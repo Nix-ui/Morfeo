@@ -9,4 +9,7 @@ import kotlinx.datetime.LocalDate
 interface SleepDao {
     @Query("SELECT * FROM sleep_core WHERE userEmail = :userEmail AND date BETWEEN :startDate AND :endDate ORDER BY date")
     suspend fun getSleepSessionsBetween(userEmail: String, startDate: LocalDate, endDate: LocalDate): List<SleepCore>
+
+    @Query("SELECT * FROM sleep_core WHERE userEmail = :userEmail ORDER BY date")
+    suspend fun getAllSleepSessions(userEmail: String): List<SleepCore>
 }

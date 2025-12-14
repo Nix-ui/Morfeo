@@ -2,6 +2,8 @@ package com.ucb.morfeo.features.settings.presentation
 
 import android.content.Context
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,7 +32,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ucb.morfeo.R
 import com.ucb.morfeo.features.TopNavBar.presentation.TopNavBar
+import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
+import java.io.IOException
 
 @Composable
 fun ExportDataScreen(
@@ -38,6 +42,36 @@ fun ExportDataScreen(
     viewModel: SettingsViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
+    var jsonToSave by remember { mutableStateOf<String?>(null) }
+
+    val exportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/json"),
+        onResult = { uri ->
+            uri?.let { fileUri ->
+                jsonToSave?.let {
+                    try {
+                        context.contentResolver.openOutputStream(fileUri)?.use { outputStream ->
+                            outputStream.write(it.toByteArray())
+                        }
+                        showToast(context, "Datos exportados con éxito")
+                    } catch (e: IOException) {
+                        showToast(context, "Error al guardar el archivo")
+                    }
+                }
+            }
+        }
+    )
+
+    LaunchedEffect(key1 = true) {
+        viewModel.exportResult.collectLatest { result ->
+            result.onSuccess { jsonString ->
+                jsonToSave = jsonString
+                exportLauncher.launch("morfeo_export.json")
+            }.onFailure {
+                showToast(context, "Error al generar los datos: ${it.message}")
+            }
+        }
+    }
 
     var dateRangeOption by remember { mutableStateOf("Última semana") }
     val dateRanges = listOf("Última semana", "Último mes", "Desde el principio")
@@ -106,10 +140,8 @@ fun ExportDataScreen(
 
             Button(
                 onClick = {
-                    val selectedData = dataToExportOptions.filter { it.value }.keys.joinToString()
-                    // En una implementación real, pasarías estas opciones al viewModel
-                    // viewModel.exportData(dateRangeOption, selectedData)
-                    showToast(context, "Iniciando exportación para $dateRangeOption: $selectedData")
+                    val selectedDataTypes = dataToExportOptions.filter { it.value }.keys.toList()
+                    viewModel.exportData(dateRangeOption, selectedDataTypes)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = dataToExportOptions.values.any { it }
