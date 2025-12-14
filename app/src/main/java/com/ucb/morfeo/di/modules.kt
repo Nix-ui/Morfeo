@@ -57,6 +57,7 @@ import com.ucb.morfeo.features.time.presentation.TimeViewModel
 import okhttp3.MediaType.Companion.toMediaType
 
 val appModule = module {
+    viewModel { com.ucb.morfeo.features.details.presentation.DailyDetailsViewModel(get(), get()) }
 
     // 📦 ROOM DATABASE
     single { AppRoomDatabase.getDatabase(get()) }
@@ -120,20 +121,21 @@ val appModule = module {
     factory { GetWeeklySummaryUseCase(get()) }
     factory { CalculateConsistencyUseCase() }
     single<WeeklyRepository> { WeeklyRepositoryImpl(get(), get()) }
-    viewModel { WeeklyDetailsViewModel(get(), get()) }
+
+    // ✅ CAMBIO AQUÍ: ahora inyecta SleepDao también
+    viewModel { WeeklyDetailsViewModel(get(), get(), get()) }
 
     //Time
-    single{ TimeLocalDataSource(androidContext()) }
-    single <TimeRepository> { TimeRepositoryImpl(get(),get()) }
+    single { TimeLocalDataSource(androidContext()) }
+    single<TimeRepository> { TimeRepositoryImpl(get(), get()) }
     single { GetRealTimeUseCase(get()) }
     single {
-        val json = Json { ignoreUnknownKeys = true}
+        val json = Json { ignoreUnknownKeys = true }
         Retrofit.Builder()
             .baseUrl("https://worldtimeapi.org/")
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(TimeApi::class.java)
     }
-    viewModel{ TimeViewModel(get()) }
-
+    viewModel { TimeViewModel(get()) }
 }

@@ -26,6 +26,8 @@ import com.ucb.morfeo.features.splash.presentation.SplashViewModel
 import com.ucb.morfeo.features.week.presentation.screen.WeeklyDetailsScreen
 import com.ucb.morfeo.features.welcome.presentation.WelcomeScreen
 import org.koin.androidx.compose.koinViewModel
+import com.ucb.morfeo.features.details.presentation.DetailsScreen
+
 
 @Composable
 fun AppNavigator(
@@ -94,12 +96,23 @@ fun AppNavigator(
 
         composable(Screen.Week.route) {
             WeeklyDetailsScreen(
+                onDailyDetailClick = { date ->
+                    navController.navigate("${Screen.Details.route}/$date")
+                },
                 onBackClick = { navController.popBackStack() },
-                onNavigate = { route ->
-                    navController.navigate(route)
-                }
+                onNavigate = { route -> navController.navigate(route) }
             )
         }
+        composable("${Screen.Details.route}/{date}") { backStackEntry ->
+            val dateStr = backStackEntry.arguments?.getString("date") ?: return@composable
+
+            DetailsScreen(
+                dateStr = dateStr,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+
 
         composable(Screen.Analysis.route) {
             HomeScreen(
@@ -159,7 +172,8 @@ fun AppNavigator(
     }
 
     LaunchedEffect(sessionState, maintenanceState, navController) {
-        val currentRoute = navController.currentBackStack.value.lastOrNull()?.destination?.route
+        val currentRoute = navController.currentBackStackEntry?.destination?.route
+
         if (sessionState is SplashViewModel.SessionState.Loading) {
             return@LaunchedEffect
         }

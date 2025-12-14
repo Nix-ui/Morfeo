@@ -140,8 +140,32 @@ fun WeeklyDetailsScreen(
                         }
 
                         is WeeklySummaryState.Success -> {
+                            val weeklySummary = state.weeklySummary
+
+                            // ✅ BOTÓN DEMO: si no hay data para esta semana
+                            if (weeklySummary.dailyData.isEmpty()) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                                ) {
+                                    Text(
+                                        text = "No hay datos de sueño para esta semana.",
+                                        color = Color.White.copy(alpha = 0.9f),
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                    Button(
+                                        onClick = { viewModel.seedDemoWeek() },
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Text("Cargar datos demo")
+                                    }
+                                }
+                            }
+
                             WeeklySummaryContent(
-                                weeklySummary = state.weeklySummary,
+                                weeklySummary = weeklySummary,
                                 onDailyDetailClick = onDailyDetailClick
                             )
                         }
@@ -225,7 +249,7 @@ private fun WeeklyTopAppBar(
                     tint = Color.White
                 )
             }
-            
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
@@ -245,7 +269,7 @@ private fun WeeklyTopAppBar(
                     Icon(Icons.Default.ArrowForwardIos, contentDescription = stringResource(id = R.string.weekly_details_next_button), tint = Color.White)
                 }
             }
-            
+
             Icon(
                 painter = painterResource(R.drawable.morfeo),
                 contentDescription = stringResource(id = R.string.weekly_details_app_icon_description),
@@ -335,6 +359,7 @@ fun SleepScoreChartCard(dailyData: List<DailySleepData>) {
         }
     }
 }
+
 @Composable
 private fun WeeklyStatsCard(weeklySummary: com.ucb.morfeo.features.week.domain.model.WeeklySummary) {
     Card(
