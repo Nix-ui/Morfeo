@@ -13,7 +13,7 @@ import com.ucb.morfeo.features.welcome.data.database.converters.Converters
 import com.ucb.morfeo.features.welcome.data.database.dao.IUserDao
 import com.ucb.morfeo.features.welcome.data.database.entity.UserEntity
 
-@Database(entities = [UserEntity::class, NotificationEntity::class, SleepCore::class], version = 2)
+@Database(entities = [UserEntity::class, NotificationEntity::class, SleepCore::class], version = 3, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppRoomDatabase(): RoomDatabase() {
     abstract fun userDao(): IUserDao

@@ -21,16 +21,16 @@ class WeeklyRepositoryImpl(
     private val calculateConsistency: CalculateConsistencyUseCase
 ) : WeeklyRepository {
 
-    override suspend fun getWeeklySummary(weekStartDate: LocalDate?): WeeklySummary {
+    override suspend fun getWeeklySummary(userEmail: String, weekStartDate: LocalDate?): WeeklySummary {
         val startDate = weekStartDate ?: getCurrentWeekStart()
         val endDate = startDate.plusDays(6)
 
-        val currentWeekData = sleepDao.getSleepSessionsBetween(startDate, endDate)
+        val currentWeekData = sleepDao.getSleepSessionsBetween(userEmail, startDate, endDate)
             .map { it.toDailySleepData() }
 
         val previousWeekStart = startDate.minusDays(7)
         val previousWeekEnd = endDate.minusDays(7)
-        val previousWeekData = sleepDao.getSleepSessionsBetween(previousWeekStart, previousWeekEnd)
+        val previousWeekData = sleepDao.getSleepSessionsBetween(userEmail, previousWeekStart, previousWeekEnd)
             .map { it.toDailySleepData() }
 
         val consistency = calculateConsistency(currentWeekData)
@@ -105,4 +105,3 @@ private fun com.ucb.morfeo.features.core.database.entity.SleepCore.toDailySleepD
         lightSleepPercentage = this.lightSleepPercentage
     )
 }
-

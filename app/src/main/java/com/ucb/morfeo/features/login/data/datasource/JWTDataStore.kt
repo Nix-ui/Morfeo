@@ -5,7 +5,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.auth0.android.jwt.JWT
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 val Context.dataStore by preferencesDataStore(name= "login")
 class JWTDataStore(
@@ -14,6 +16,12 @@ class JWTDataStore(
     companion object{
         val JWT_TOKEN = stringPreferencesKey("jwt_token")
     }
+
+    val tokenFlow: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[JWT_TOKEN]
+        }
+
     suspend fun saveToken(token: String){
         context.dataStore.edit{
             it[JWT_TOKEN] = token

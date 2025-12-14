@@ -70,12 +70,12 @@ fun WelcomeScreen(
             ) {
                 Image(
                     painter = painterResource(R.drawable.morfeo),
-                    contentDescription = "Logo principal",
+                    contentDescription = stringResource(id = R.string.welcome_main_logo_description),
                     modifier = Modifier.size(200.dp)
                         .clip(CircleShape)
 
                 )
-                Text(text = "Bienvenido a Morfeo", textAlign = TextAlign.Center,
+                Text(text = stringResource(id = R.string.welcome_title), textAlign = TextAlign.Center,
                     style = TextStyle(
                         color = Color.Cyan,
                         fontSize = 30.sp,
@@ -100,7 +100,7 @@ fun WelcomeScreen(
                         )
                     ){
                         Text(
-                            "Tomar la pastilla roja",
+                            stringResource(id = R.string.welcome_red_pill_button),
                             color = Color.White,
                             style = TextStyle(
                                 fontSize = 15.sp

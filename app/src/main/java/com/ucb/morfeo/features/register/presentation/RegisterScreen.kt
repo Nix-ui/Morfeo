@@ -1,4 +1,4 @@
-package com.ucb.morfeo.features.login.presentation
+package com.ucb.morfeo.features.register.presentation
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -48,10 +50,9 @@ import com.ucb.morfeo.navigation.Screen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun LoginScreen(
-    onNavigateToHome: (String) -> Unit = {},
-    onNavigateToRegister: (String) -> Unit = {},
-    logInViewModel: LogInViewModel = koinViewModel()
+fun RegisterScreen(
+    onNavigateRoute: (String) -> Unit = {},
+    registerViewModel: RegisterViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
@@ -63,7 +64,8 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .background(colorResource(R.color.firefly)),
+                .background(colorResource(R.color.firefly))
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -75,21 +77,42 @@ fun LoginScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    var nombre by remember { mutableStateOf("") }
                     var email by remember { mutableStateOf("") }
                     var password by remember { mutableStateOf("") }
+                    var edad by remember { mutableStateOf("") }
+                    var peso by remember { mutableStateOf("") }
+                    var altura by remember { mutableStateOf("") }
                     var togglePasswordVisibility by remember { mutableStateOf(false) }
-                    val loginState by logInViewModel.logInState.collectAsState()
+                    val registrationState by registerViewModel.registrationState.collectAsState()
 
                     Text(
-                        text = stringResource(R.string.log_in_title),
+                        text = stringResource(id = R.string.register_title),
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
 
                     OutlinedTextField(
+                        value = nombre,
+                        onValueChange = { nombre = it },
+                        label = { Text(text = stringResource(id = R.string.register_name_label)) },
+                        placeholder = { Text(text = stringResource(id = R.string.register_name_placeholder)) },
+                        maxLines = 1,
+                        shape = MaterialTheme.shapes.large,
+                        modifier = Modifier.width(300.dp),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        )
+                    )
+
+                    OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
-                        label = { Text(text = stringResource(id = R.string.login_email_label)) },
+                        label = { Text(text = stringResource(id = R.string.register_email_label)) },
+                        placeholder = { Text(text = stringResource(id = R.string.register_email_placeholder)) },
                         maxLines = 1,
                         shape = MaterialTheme.shapes.large,
                         modifier = Modifier.width(300.dp),
@@ -103,9 +126,61 @@ fun LoginScreen(
                     )
 
                     OutlinedTextField(
+                        value = edad,
+                        onValueChange = { edad = it },
+                        label = { Text(text = stringResource(id = R.string.register_age_label)) },
+                        placeholder = { Text(text = stringResource(id = R.string.register_age_placeholder)) },
+                        maxLines = 1,
+                        shape = MaterialTheme.shapes.large,
+                        modifier = Modifier.width(300.dp),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        )
+                    )
+
+                    OutlinedTextField(
+                        value = peso,
+                        onValueChange = { peso = it },
+                        label = { Text(text = stringResource(id = R.string.register_weight_label)) },
+                        placeholder = { Text(text = stringResource(id = R.string.register_weight_placeholder)) },
+                        maxLines = 1,
+                        shape = MaterialTheme.shapes.large,
+                        modifier = Modifier.width(300.dp),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        )
+                    )
+
+                    OutlinedTextField(
+                        value = altura,
+                        onValueChange = { altura = it },
+                        label = { Text(text = stringResource(id = R.string.register_height_label)) },
+                        placeholder = { Text(text = stringResource(id = R.string.register_height_placeholder)) },
+                        maxLines = 1,
+                        shape = MaterialTheme.shapes.large,
+                        modifier = Modifier.width(300.dp),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next,
+                            keyboardType = KeyboardType.Number
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                        )
+                    )
+
+                    OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
-                        label = { Text(text = stringResource(id = R.string.login_password_label)) },
+                        label = { Text(text = stringResource(id = R.string.register_password_label)) },
+                        placeholder = { Text(text = stringResource(id = R.string.register_password_placeholder)) },
                         maxLines = 1,
                         visualTransformation = if (togglePasswordVisibility) VisualTransformation.None else PasswordVisualTransformation('*'),
                         shape = MaterialTheme.shapes.large,
@@ -115,7 +190,7 @@ fun LoginScreen(
                             ) {
                                 Icon(
                                     imageVector = if (togglePasswordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                                    contentDescription = stringResource(id = R.string.login_toggle_password_visibility)
+                                    contentDescription = stringResource(id = R.string.register_toggle_password_visibility)
                                 )
                             }
                         },
@@ -127,7 +202,7 @@ fun LoginScreen(
                         keyboardActions = KeyboardActions(
                             onDone = {
                                 focusManager.clearFocus()
-                                logInViewModel.logIn(email, password)
+                                registerViewModel.register(email, password, nombre, edad, peso, altura)
                             }
                         )
                     )
@@ -136,29 +211,29 @@ fun LoginScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        Text(text = stringResource(id = R.string.login_no_account))
+                        Text(text = stringResource(id = R.string.register_already_have_account))
                         TextButton(
-                            onClick = { onNavigateToRegister(Screen.SignUp.route) }
+                            onClick = { onNavigateRoute(Screen.LogIn.route) }
                         ) {
-                            Text(text = stringResource(id = R.string.login_register_button))
+                            Text(text = stringResource(id = R.string.register_login_button))
                         }
                     }
 
                     Button(
                         onClick = {
-                            logInViewModel.logIn(email, password)
+                            registerViewModel.register(email, password, nombre, edad, peso, altura)
                         }
                     ) {
-                        Text(text = stringResource(id = R.string.login_button))
+                        Text(text = stringResource(id = R.string.register_button))
                     }
 
-                    when (val state = loginState) {
-                        is LogInViewModel.LogInUIState.Error -> {
+                    when (val state = registrationState) {
+                        is RegistrationState.Error -> {
                             Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
                         }
-                        is LogInViewModel.LogInUIState.Success -> {
-                            Toast.makeText(context, stringResource(id = R.string.login_welcome_message, state.userModel.nombre), Toast.LENGTH_LONG).show()
-                            onNavigateToHome(Screen.Home.route)
+                        is RegistrationState.Success -> {
+                            Toast.makeText(context, stringResource(id = R.string.register_success_message), Toast.LENGTH_LONG).show()
+                            onNavigateRoute(Screen.Home.route)
                         }
                         else -> {}
                     }
@@ -170,6 +245,6 @@ fun LoginScreen(
 
 @Composable
 @Preview
-fun LoginScreenPreview() {
-    LoginScreen()
+fun RegisterScreenPreview() {
+    RegisterScreen()
 }

@@ -50,6 +50,7 @@ import com.ucb.morfeo.R
 import com.ucb.morfeo.navigation.buttonNavBar.presentation.ButtomNavBar
 import com.ucb.morfeo.features.TopNavBar.presentation.TopNavBar
 import com.ucb.morfeo.features.core.maintenance.presentation.MaintenanceStatusViewModel
+import com.ucb.morfeo.features.time.presentation.TimeView
 import com.ucb.morfeo.navigation.Screen
 import kotlinx.coroutines.launch
 
@@ -90,6 +91,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp, alignment = Alignment.CenterVertically)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
+            TimeCard()
             SleepScoreCard(
                 score = sleepScore,
                 improvement = weeklyImprovement
@@ -107,6 +109,37 @@ fun HomeScreen(
     }
 }
 
+@Composable
+fun TimeCard(){
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .border(
+                width = 2.dp,
+                color = Color.White,
+                shape = RoundedCornerShape(16.dp)
+            ),
+        colors = CardDefaults.cardColors(
+            containerColor = colorResource(R.color.cloud_burst)
+        ),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+    ){
+        Column(
+            modifier= Modifier.fillMaxWidth()
+                .fillMaxHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            TimeView(
+                modifier = Modifier.fillMaxWidth()
+                    .fillMaxHeight()
+                    .fillMaxSize()
+            )
+        }
+    }
+}
 
 @Composable
 fun SleepScoreCard(

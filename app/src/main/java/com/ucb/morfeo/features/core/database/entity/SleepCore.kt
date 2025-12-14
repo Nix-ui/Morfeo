@@ -7,7 +7,8 @@ import kotlinx.datetime.LocalDateTime
 
 @Entity(tableName = "sleep_core")
 data class SleepCore(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val userEmail: String,
     val date: LocalDate,
     val sleepDuration: Long,
     val sleepScore: Int,
@@ -17,4 +18,4 @@ data class SleepCore(
     val remSleepPercentage: Float,
     val lightSleepPercentage: Float,
     val awakeDuration: Long
-)
+){}

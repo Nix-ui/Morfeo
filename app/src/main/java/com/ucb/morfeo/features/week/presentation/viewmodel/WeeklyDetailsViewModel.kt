@@ -2,6 +2,7 @@ package com.ucb.morfeo.features.week.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ucb.morfeo.features.login.data.datasource.JWTDataStore
 import com.ucb.morfeo.features.week.domain.model.WeeklySummary
 import com.ucb.morfeo.features.week.domain.usecase.GetWeeklySummaryUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +22,8 @@ enum class ViewMode {
 }
 
 class WeeklyDetailsViewModel(
-    private val getWeeklySummary: GetWeeklySummaryUseCase
+    private val getWeeklySummary: GetWeeklySummaryUseCase,
+    private val jwtDataStore: JWTDataStore
 ) : ViewModel() {
 
     private val _weeklyState = MutableStateFlow<WeeklySummaryState>(WeeklySummaryState.Loading)
@@ -43,16 +45,25 @@ class WeeklyDetailsViewModel(
         viewModelScope.launch {
             _weeklyState.value = WeeklySummaryState.Loading
             try {
-                val startDate = weekStart ?: _selectedDate.value
-                val result = getWeeklySummary(startDate)
-                if (result.isSuccess) {
-                    _weeklyState.value = WeeklySummaryState.Success(result.getOrThrow())
-                    _selectedDate.value = startDate
-                } else {
-                    _weeklyState.value = WeeklySummaryState.Error(
-                        result.exceptionOrNull()?.message ?: "Error desconocido"
-                    )
-                }
+                jwtDataStore.getUserMail().fold(
+                    onSuccess = { userEmail ->
+                        viewModelScope.launch {
+                            val startDate = weekStart ?: _selectedDate.value
+                            val result = getWeeklySummary(userEmail, startDate)
+                            if (result.isSuccess) {
+                                _weeklyState.value = WeeklySummaryState.Success(result.getOrThrow())
+                                _selectedDate.value = startDate
+                            } else {
+                                _weeklyState.value = WeeklySummaryState.Error(
+                                    result.exceptionOrNull()?.message ?: "Error desconocido"
+                                )
+                            }
+                        }
+                    },
+                    onFailure = {
+                        _weeklyState.value = WeeklySummaryState.Error("No se pudo obtener el email del usuario.")
+                    }
+                )
             } catch (e: Exception) {
                 _weeklyState.value = WeeklySummaryState.Error(e.message ?: "Error al cargar datos")
             }

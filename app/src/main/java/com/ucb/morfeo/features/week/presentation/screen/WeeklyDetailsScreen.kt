@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
@@ -60,6 +61,8 @@ import com.ucb.morfeo.features.week.domain.model.DailySleepData
 import com.ucb.morfeo.features.week.presentation.viewmodel.ViewMode
 import com.ucb.morfeo.features.week.presentation.viewmodel.WeeklyDetailsViewModel
 import com.ucb.morfeo.features.week.presentation.viewmodel.WeeklySummaryState
+import com.ucb.morfeo.navigation.Screen
+import com.ucb.morfeo.navigation.buttonNavBar.presentation.ButtomNavBar
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.plus
 import kotlinx.datetime.toJavaLocalDate
@@ -71,7 +74,8 @@ import java.util.Locale
 fun WeeklyDetailsScreen(
     viewModel: WeeklyDetailsViewModel = koinViewModel(),
     onDailyDetailClick: (kotlinx.datetime.LocalDate) -> Unit = {},
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onNavigate: (String) -> Unit = {}
 ) {
     val weeklyState by viewModel.weeklyState.collectAsState()
     val selectedDate by viewModel.selectedDate.collectAsState()
@@ -86,6 +90,9 @@ fun WeeklyDetailsScreen(
                 onNextClick = { viewModel.navigateToNext() },
                 onBackClick = onBackClick
             )
+        },
+        bottomBar = {
+            ButtomNavBar(selectedRoute = Screen.Week.route, onRouteSelected = onNavigate)
         },
         containerColor = colorResource(R.color.firefly)
     ) { paddingValues ->
@@ -114,7 +121,7 @@ fun WeeklyDetailsScreen(
                                     verticalArrangement = Arrangement.Center
                                 ) {
                                     Text(
-                                        text = "Error al cargar datos",
+                                        text = stringResource(id = R.string.weekly_details_error_loading),
                                         style = MaterialTheme.typography.titleMedium,
                                         color = MaterialTheme.colorScheme.error
                                     )
@@ -126,7 +133,7 @@ fun WeeklyDetailsScreen(
                                     )
                                     Spacer(modifier = Modifier.height(16.dp))
                                     Button(onClick = { viewModel.loadWeeklySummary() }) {
-                                        Text("Reintentar")
+                                        Text(stringResource(id = R.string.weekly_details_retry_button))
                                     }
                                 }
                             }
@@ -146,7 +153,7 @@ fun WeeklyDetailsScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Vista mensual en desarrollo", color = Color.White)
+                        Text(stringResource(id = R.string.weekly_details_monthly_view_wip), color = Color.White)
                     }
                 }
             }
@@ -214,7 +221,7 @@ private fun WeeklyTopAppBar(
             IconButton(onClick = onBackClick) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
+                    contentDescription = stringResource(id = R.string.weekly_details_back_button),
                     tint = Color.White
                 )
             }
@@ -225,7 +232,7 @@ private fun WeeklyTopAppBar(
                 modifier = Modifier.weight(1f)
             ) {
                 IconButton(onClick = onPreviousClick) {
-                    Icon(Icons.Default.ArrowBackIos, contentDescription = "Anterior", tint = Color.White)
+                    Icon(Icons.Default.ArrowBackIos, contentDescription = stringResource(id = R.string.weekly_details_previous_button), tint = Color.White)
                 }
 
                 Text(
@@ -235,13 +242,13 @@ private fun WeeklyTopAppBar(
                 )
 
                 IconButton(onClick = onNextClick) {
-                    Icon(Icons.Default.ArrowForwardIos, contentDescription = "Siguiente", tint = Color.White)
+                    Icon(Icons.Default.ArrowForwardIos, contentDescription = stringResource(id = R.string.weekly_details_next_button), tint = Color.White)
                 }
             }
             
             Icon(
                 painter = painterResource(R.drawable.morfeo),
-                contentDescription = "App Icon",
+                contentDescription = stringResource(id = R.string.weekly_details_app_icon_description),
                 tint = Color.Unspecified,
                 modifier = Modifier
                     .size(40.dp)
@@ -311,7 +318,7 @@ fun SleepScoreChartCard(dailyData: List<DailySleepData>) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "Puntuación de Sueño Semanal",
+                text = stringResource(id = R.string.weekly_details_weekly_sleep_score_title),
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White
             )
@@ -320,14 +327,9 @@ fun SleepScoreChartCard(dailyData: List<DailySleepData>) {
             Chart(
                 chart = columnChart(),
                 chartModelProducer = chartEntryModelProducer,
-                startAxis = rememberStartAxis(
-//                    axisLineColor = Color.White.copy(alpha = 0.5f),
-//                    axisLabelColor = Color.White
-                ),
+                startAxis = rememberStartAxis(),
                 bottomAxis = rememberBottomAxis(
                     valueFormatter = bottomAxisValueFormatter,
-//                    axisLineColor = Color.White.copy(alpha = 0.5f),
-//                    axisLabelColor = Color.White
                 )
             )
         }
@@ -346,7 +348,7 @@ private fun WeeklyStatsCard(weeklySummary: com.ucb.morfeo.features.week.domain.m
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "Resumen Semanal",
+                text = stringResource(id = R.string.weekly_details_weekly_summary_title),
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -358,13 +360,13 @@ private fun WeeklyStatsCard(weeklySummary: com.ucb.morfeo.features.week.domain.m
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 StatItem(
-                    label = "Promedio Sueño",
+                    label = stringResource(id = R.string.weekly_details_average_sleep_label),
                     value = formatDuration(weeklySummary.averageSleepDuration),
                     color = MaterialTheme.colorScheme.primary
                 )
 
                 StatItem(
-                    label = "Puntuación",
+                    label = stringResource(id = R.string.weekly_details_score_label),
                     value = "${weeklySummary.averageSleepScore}",
                     color = getScoreColor(weeklySummary.averageSleepScore)
                 )
@@ -378,7 +380,7 @@ private fun WeeklyStatsCard(weeklySummary: com.ucb.morfeo.features.week.domain.m
             ) {
                 weeklySummary.bestSleepDay?.let { bestDay ->
                     StatItem(
-                        label = "Mejor día",
+                        label = stringResource(id = R.string.weekly_details_best_day_label),
                         value = getDayName(bestDay.date),
                         color = MaterialTheme.colorScheme.tertiary
                     )
@@ -386,7 +388,7 @@ private fun WeeklyStatsCard(weeklySummary: com.ucb.morfeo.features.week.domain.m
 
                 weeklySummary.worstSleepDay?.let { worstDay ->
                     StatItem(
-                        label = "Peor día",
+                        label = stringResource(id = R.string.weekly_details_worst_day_label),
                         value = getDayName(worstDay.date),
                         color = MaterialTheme.colorScheme.error
                     )
@@ -430,7 +432,7 @@ private fun ConsistencyCard(weeklySummary: com.ucb.morfeo.features.week.domain.m
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "Consistencia",
+                text = stringResource(id = R.string.weekly_details_consistency_title),
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White
             )
@@ -478,7 +480,7 @@ private fun DailySleepList(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "Días de la Semana",
+                text = stringResource(id = R.string.weekly_details_days_of_the_week_title),
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White
             )
@@ -541,7 +543,7 @@ private fun DailySleepItem(
             Spacer(modifier = Modifier.width(8.dp))
             Icon(
                 Icons.Default.ChevronRight,
-                contentDescription = "Ver detalles",
+                contentDescription = stringResource(id = R.string.weekly_details_view_details_button),
                 tint = Color.White.copy(alpha = 0.8f)
             )
         }
@@ -573,9 +575,9 @@ private fun WeekComparisonCard(weeklySummary: com.ucb.morfeo.features.week.domai
 
             Text(
                 text = if (comparison > 0) {
-                    "+${comparison.toInt()}% respecto a la semana anterior"
+                    stringResource(id = R.string.weekly_details_comparison_positive, comparison.toInt())
                 } else {
-                    "${comparison.toInt()}% respecto a la semana anterior"
+                    stringResource(id = R.string.weekly_details_comparison_negative, comparison.toInt())
                 },
                 style = MaterialTheme.typography.bodyMedium,
                 color = if (comparison > 0) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.error
@@ -617,10 +619,11 @@ private fun getConsistencyColor(score: Float): Color {
     }
 }
 
+@Composable
 private fun getConsistencyMessage(score: Float): String {
     return when {
-        score >= 80 -> "Excelente consistencia"
-        score >= 60 -> "Buena consistencia"
-        else -> "Puedes mejorar la consistencia"
+        score >= 80 -> stringResource(id = R.string.weekly_details_consistency_excellent)
+        score >= 60 -> stringResource(id = R.string.weekly_details_consistency_good)
+        else -> stringResource(id = R.string.weekly_details_consistency_improvable)
     }
 }
