@@ -13,11 +13,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledIconToggleButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import com.ucb.morfeo.R
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,7 +24,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.ucb.morfeo.features.TopNavBar.presentation.TopNavBar
 
@@ -35,7 +31,12 @@ import com.ucb.morfeo.features.TopNavBar.presentation.TopNavBar
 fun PermisionScreen(isBackeable:Boolean = false , onNavigateRoute: (String) -> Unit = {}) {
     Scaffold (
         topBar ={
-            TopNavBar(isBackeable, stringResource(R.string.permision_title), onNavigateRoute)
+            TopNavBar(
+                isBackEnable = isBackeable, 
+                currentScreenName = stringResource(R.string.permision_title),
+                onBackScreen = {},
+                onNavigateTo = onNavigateRoute
+            )
         },
         containerColor = colorResource(R.color.firefly)
     ){innerPadding ->

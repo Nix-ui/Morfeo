@@ -30,7 +30,8 @@ import com.ucb.morfeo.R
 
 @Composable
 fun NotificationScreen(
-    onBackTap: (String)->Unit={},
+    onBack: () -> Unit = {},
+    onNavigate: (String) -> Unit = {},
     viewModel: InnerNotificationViewModel = koinViewModel()
 ) {
     val notifications = viewModel.uiState.collectAsState()
@@ -39,11 +40,11 @@ fun NotificationScreen(
         topBar = { TopNavBar(
             isBackEnable = true,
             currentScreenName = stringResource(R.string.notification_screen_title),
-            onBackScreen = onBackTap
+            onBackScreen = onBack
         ) },
         bottomBar = { ButtomNavBar(
             selectedRoute = "Notifications",
-            onRouteSelected = onBackTap
+            onRouteSelected = onNavigate
         )},
         containerColor = colorResource(R.color.firefly)
     ) {innerPadding ->
@@ -69,7 +70,7 @@ fun NotificationScreen(
                     ) {
                         items(items=state.notifications){ notification->
                             NotificationViewCard(
-                                onNavigatePath = onBackTap,
+                                onNavigatePath = onNavigate,
                                 notification = notification,
                                 onDeleteClick = { viewModel.delete(notification.id) },
                                 onReadClick = { viewModel.markAsRead(notification.id)}

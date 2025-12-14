@@ -230,6 +230,18 @@ fun SettingsScreen(
                 onClick = { showToast(context, "Abriendo política de privacidad...") } // Placeholder
             )
 
+            SettingsSectionTitle(text = "Información")
+
+            SettingCardNavigation(
+                label = stringResource(id = R.string.about_morfeo_button),
+                onClick = { onNavigate(Screen.About.route) }
+            )
+
+            SettingCardNavigation(
+                label = stringResource(id = R.string.help_center_button),
+                onClick = { showToast(context, "Abriendo centro de ayuda...") }
+            )
+
             Spacer(modifier = Modifier.weight(1f))
 
             Button(

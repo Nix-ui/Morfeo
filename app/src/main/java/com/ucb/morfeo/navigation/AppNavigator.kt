@@ -21,6 +21,7 @@ import com.ucb.morfeo.features.innernotification.presentation.NotificationScreen
 import com.ucb.morfeo.features.login.presentation.LoginScreen
 import com.ucb.morfeo.features.permissions.presentation.screen.PermissionsScreen
 import com.ucb.morfeo.features.register.presentation.RegisterScreen
+import com.ucb.morfeo.features.settings.presentation.AboutScreen
 import com.ucb.morfeo.features.settings.presentation.SettingsScreen
 import com.ucb.morfeo.features.splash.presentation.SplashViewModel
 import com.ucb.morfeo.features.week.presentation.screen.WeeklyDetailsScreen
@@ -131,6 +132,10 @@ fun AppNavigator(
             )
         }
 
+        composable(Screen.About.route) {
+            AboutScreen(onNavigateUp = { navController.popBackStack() })
+        }
+
         composable(Screen.Permissions.route) {
             PermissionsScreen(
                 onNavigate = { route ->
@@ -151,7 +156,8 @@ fun AppNavigator(
         }
         composable(Screen.Notifications.route) {
             NotificationScreen(
-                onBackTap = {route ->
+                onBack = { navController.popBackStack() },
+                onNavigate = { route ->
                     navController.navigate(route)
                 }
             )

@@ -14,5 +14,6 @@ sealed class Screen(val route:String) {
     object Profile:Screen("/profile")
     object Permissions:Screen("/permissions")
     object Notifications:Screen("/notifications")
+    object About:Screen("/about")
 
 }
