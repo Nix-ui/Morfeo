@@ -99,7 +99,12 @@ fun SettingsScreen(
 
     Scaffold(
         topBar = {
-            TopNavBar(true, stringResource(R.string.settings_screen_name), onNavigateTo = onNavigate)
+            TopNavBar(
+                isBackEnable = true, 
+                currentScreenName = stringResource(R.string.settings_screen_name), 
+                onNavigateTo = onNavigate,
+                onBackScreen = { onNavigate(Screen.Home.route) } 
+            )
         },
         bottomBar = {
             ButtomNavBar(Screen.Settings.route, onRouteSelected = onNavigate)
@@ -214,10 +219,7 @@ fun SettingsScreen(
 
             SettingCardNavigation(
                 label = "Exportar mis datos",
-                onClick = { 
-                    viewModel.exportData()
-                    showToast(context, "Exportando datos...") // Placeholder
-                }
+                onClick = { onNavigate(Screen.ExportData.route) }
             )
 
             SettingCardNavigation(
@@ -227,7 +229,7 @@ fun SettingsScreen(
 
             SettingCardNavigation(
                 label = "Política de Privacidad",
-                onClick = { showToast(context, "Abriendo política de privacidad...") } // Placeholder
+                onClick = { onNavigate(Screen.PrivacyPolicy.route) }
             )
 
             SettingsSectionTitle(text = "Información")
@@ -239,7 +241,7 @@ fun SettingsScreen(
 
             SettingCardNavigation(
                 label = stringResource(id = R.string.help_center_button),
-                onClick = { showToast(context, "Abriendo centro de ayuda...") }
+                onClick = { onNavigate(Screen.HelpCenter.route) }
             )
 
             Spacer(modifier = Modifier.weight(1f))

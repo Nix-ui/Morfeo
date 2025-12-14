@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ucb.morfeo.R
@@ -40,6 +41,7 @@ import org.koin.androidx.compose.koinViewModel
 fun PermissionsScreen(
     onNavigate: (String) -> Unit = {},
     onPermissionsGranted: () -> Unit = {},
+    onBack: () -> Unit = {},
     viewModel: PermissionsViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -73,7 +75,12 @@ fun PermissionsScreen(
 
     Scaffold(
         topBar = {
-            TopNavBar(isBackEnable = false, currentScreenName = "Permisos", onNavigateTo = onNavigate)
+            TopNavBar(
+                isBackEnable = true, 
+                currentScreenName = stringResource(id = R.string.permision_title), 
+                onNavigateTo = onNavigate,
+                onBackScreen = onBack
+            )
         },
         containerColor = colorResource(R.color.firefly)
     ) { paddingValues ->
