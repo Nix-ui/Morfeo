@@ -80,6 +80,8 @@ fun WeeklyDetailsScreen(
     val weeklyState by viewModel.weeklyState.collectAsState()
     val selectedDate by viewModel.selectedDate.collectAsState()
     val viewMode by viewModel.viewMode.collectAsState()
+    val weekVsPrev by viewModel.weekVsPrev.collectAsState()
+
 
     Scaffold(
         topBar = {
@@ -166,8 +168,10 @@ fun WeeklyDetailsScreen(
 
                             WeeklySummaryContent(
                                 weeklySummary = weeklySummary,
+                                weekVsPrev = weekVsPrev,
                                 onDailyDetailClick = onDailyDetailClick
                             )
+
                         }
                     }
                 }
@@ -285,9 +289,11 @@ private fun WeeklyTopAppBar(
 @Composable
 private fun WeeklySummaryContent(
     weeklySummary: com.ucb.morfeo.features.week.domain.model.WeeklySummary,
+    weekVsPrev: WeeklyDetailsViewModel.WeekVsPrevUi?,
     onDailyDetailClick: (kotlinx.datetime.LocalDate) -> Unit,
     modifier: Modifier = Modifier
-) {
+)
+ {
     LazyColumn(
         modifier = modifier.padding(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -295,7 +301,14 @@ private fun WeeklySummaryContent(
         item {
             WeeklyStatsCard(weeklySummary)
         }
-
+        item {
+            if (weekVsPrev != null) {
+                WeekVsPreviousCard(weekVsPrev)
+            } else {
+                // fallback a tu card antigua si aún quieres
+                WeekComparisonCard(weeklySummary)
+            }
+        }
         item {
             SleepScoreChartCard(weeklySummary.dailyData)
         }
@@ -311,9 +324,8 @@ private fun WeeklySummaryContent(
             )
         }
 
-        item {
-            WeekComparisonCard(weeklySummary)
-        }
+
+
     }
 }
 
@@ -524,6 +536,59 @@ private fun DailySleepList(
         }
     }
 }
+@Composable
+private fun WeekVsPreviousCard(ui: WeeklyDetailsViewModel.WeekVsPrevUi) {
+    fun fmtMin(m: Long): String {
+        val t = kotlin.math.abs(m)
+        val h = t / 60
+        val mm = t % 60
+        return "${h}h ${mm}m"
+    }
+
+    fun signedMin(m: Long) = (if (m >= 0) "+" else "-") + fmtMin(m)
+    fun signedPts(p: Int) = (if (p >= 0) "+" else "-") + kotlin.math.abs(p) + " pts"
+    fun signedPct(p: Float) = (if (p >= 0f) "+" else "-") + kotlin.math.abs(p).toInt() + "%"
+
+    val good = MaterialTheme.colorScheme.tertiary
+    val bad = MaterialTheme.colorScheme.error
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.1f)
+        )
+    ) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text("Comparación vs semana anterior", style = MaterialTheme.typography.titleMedium, color = Color.White)
+
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Duración", color = Color.White.copy(alpha = 0.8f))
+                Text(
+                    "${fmtMin(ui.currentAvgMinutes)} • Prev: ${fmtMin(ui.prevAvgMinutes)} • ${signedMin(ui.diffMinutes)}",
+                    color = if (ui.diffMinutes >= 0) good else bad
+                )
+            }
+
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Score", color = Color.White.copy(alpha = 0.8f))
+                Text(
+                    "${ui.currentAvgScore} • Prev: ${ui.prevAvgScore} • ${signedPts(ui.diffScore)}",
+                    color = if (ui.diffScore >= 0) good else bad
+                )
+            }
+
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Consistencia", color = Color.White.copy(alpha = 0.8f))
+                Text(
+                    "${ui.currentConsistency.toInt()}% • Prev: ${ui.prevConsistency.toInt()}% • ${signedPct(ui.diffConsistency)}",
+                    color = if (ui.diffConsistency >= 0f) good else bad
+                )
+            }
+        }
+    }
+}
 
 @Composable
 private fun DailySleepItem(
@@ -652,3 +717,4 @@ private fun getConsistencyMessage(score: Float): String {
         else -> stringResource(id = R.string.weekly_details_consistency_improvable)
     }
 }
+
