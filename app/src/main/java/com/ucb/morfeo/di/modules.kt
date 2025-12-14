@@ -1,5 +1,7 @@
 package com.ucb.morfeo.di
 
+import androidx.compose.ui.res.stringResource
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.ucb.morfeo.features.core.firabase.config.data.repository.FirebaseConfigRepository
 import com.ucb.morfeo.features.core.firabase.config.domain.repository.IFirebaseConfigRepository
 import com.ucb.morfeo.features.core.firabase.config.domain.usecase.AppInMaintenanceUseCase
@@ -40,9 +42,19 @@ import com.ucb.morfeo.features.week.domain.repository.WeeklyRepository
 import com.ucb.morfeo.features.week.domain.usecase.CalculateConsistencyUseCase
 import com.ucb.morfeo.features.week.domain.usecase.GetWeeklySummaryUseCase
 import com.ucb.morfeo.features.week.presentation.viewmodel.WeeklyDetailsViewModel
+import kotlinx.serialization.json.Json
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import retrofit2.Retrofit
+import com.ucb.morfeo.R
+import com.ucb.morfeo.features.time.data.local.TimeLocalDataSource
+import com.ucb.morfeo.features.time.data.remote.TimeApi
+import com.ucb.morfeo.features.time.data.repository.TimeRepositoryImpl
+import com.ucb.morfeo.features.time.domain.repository.TimeRepository
+import com.ucb.morfeo.features.time.domain.usecase.GetRealTimeUseCase
+import com.ucb.morfeo.features.time.presentation.TimeViewModel
+import okhttp3.MediaType.Companion.toMediaType
 
 val appModule = module {
 
@@ -102,8 +114,6 @@ val appModule = module {
         )
     }
 
-
-
     single { NotificationManagerHelper(androidContext()) }
 
     //Week Module
@@ -111,4 +121,19 @@ val appModule = module {
     factory { CalculateConsistencyUseCase() }
     single<WeeklyRepository> { WeeklyRepositoryImpl(get(), get()) }
     viewModel { WeeklyDetailsViewModel(get(), get()) }
+
+    //Time
+    single{ TimeLocalDataSource(androidContext()) }
+    single <TimeRepository> { TimeRepositoryImpl(get(),get()) }
+    single { GetRealTimeUseCase(get()) }
+    single {
+        val json = Json { ignoreUnknownKeys = true}
+        Retrofit.Builder()
+            .baseUrl("https://worldtimeapi.org/")
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .build()
+            .create(TimeApi::class.java)
+    }
+    viewModel{ TimeViewModel(get()) }
+
 }

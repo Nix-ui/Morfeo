@@ -95,4 +95,5 @@
     <string name="welcome_title">Welcome to Morpheus</string>
     <string name="welcome_red_pill_button">Take the red pill</string>
 
+    <string name="time_api">https://worldtimeapi.org/</string>
 </resources>
