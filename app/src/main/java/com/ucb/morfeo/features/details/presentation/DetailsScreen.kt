@@ -22,7 +22,6 @@ fun DetailsScreen(
     viewModel: DailyDetailsViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-
     val date = remember(dateStr) { parseKotlinLocalDate(dateStr) }
 
     LaunchedEffect(dateStr) {
@@ -104,8 +103,20 @@ fun DetailsScreen(
                 is DailyDetailsState.Success -> {
                     val sleep = s.sleep
 
+                    // ✅ 1) Card Hoy vs Promedio semanal (AQUÍ es donde va)
+                    item {
+                        TodayVsWeekCard(
+                            todayMinutes = sleep.sleepDuration,
+                            todayScore = sleep.sleepScore,
+                            avgMinutes = s.weeklyAvgDurationMinutes,
+                            avgScore = s.weeklyAvgScore
+                        )
+                    }
+
+                    // ✅ 2) Resumen del día
                     item { SummaryCard(sleep) }
 
+                    // ✅ 3) Fases
                     item {
                         SleepPhasesCard(
                             deep = sleep.deepSleepPercentage,
@@ -114,7 +125,7 @@ fun DetailsScreen(
                         )
                     }
 
-                    // Por ahora dejamos metas en null (pendiente)
+                    // ✅ 4) Objetivo vs real (pendiente, por ahora null)
                     item {
                         GoalVsRealCard(
                             sleep = sleep,
@@ -123,6 +134,7 @@ fun DetailsScreen(
                         )
                     }
 
+                    // ✅ 5) Insight
                     item {
                         InsightCard(
                             sleep = sleep,
@@ -139,6 +151,57 @@ fun DetailsScreen(
 /* ---------- UI CARDS ---------- */
 
 @Composable
+private fun TodayVsWeekCard(
+    todayMinutes: Long,
+    todayScore: Int,
+    avgMinutes: Long,
+    avgScore: Int
+) {
+    val diffMin = todayMinutes - avgMinutes
+    val diffScore = todayScore - avgScore
+
+    Card {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(
+                "Hoy vs promedio semanal",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Duración", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(
+                    "${formatDurationMinutes(todayMinutes)}  •  Prom: ${formatDurationMinutes(avgMinutes)}  •  ${formatSignedMinutes(diffMin.toInt())}"
+                )
+            }
+
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Score", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("$todayScore  •  Prom: $avgScore  •  ${formatSignedPoints(diffScore)}")
+            }
+
+            val msg = when {
+                diffMin >= 15 && diffScore >= 3 -> "Buen día: dormiste más que tu promedio y tu score subió."
+                diffMin <= -15 && diffScore <= -3 -> "Ojo: hoy bajaste en tiempo y score vs tu semana."
+                diffMin >= 15 -> "Dormiste un poco más que tu promedio. Buen ritmo."
+                diffMin <= -15 -> "Dormiste un poco menos que tu promedio. Trata de recuperar 15–30 min."
+                diffScore >= 3 -> "Tu score está mejor que tu promedio semanal."
+                diffScore <= -3 -> "Tu score está por debajo de tu promedio semanal."
+                else -> "Estás cerca de tu promedio semanal."
+            }
+
+
+            Text(msg, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
+private fun formatSignedPoints(diff: Int): String {
+    val sign = if (diff >= 0) "+" else "-"
+    return "$sign${kotlin.math.abs(diff)} pts"
+}
+
+@Composable
 private fun SummaryCard(s: SleepCore) {
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -149,8 +212,16 @@ private fun SummaryCard(s: SleepCore) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column {
-                    Text("Sleep Score", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Text("${s.sleepScore}", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
+                    Text(
+                        "Sleep Score",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        "${s.sleepScore}",
+                        style = MaterialTheme.typography.headlineLarge,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
                 AssistChip(onClick = {}, label = { Text(formatDurationMinutes(s.sleepDuration)) })
             }
@@ -272,7 +343,7 @@ private fun InsightCard(sleep: SleepCore, goalSleepHHmm: Long?, goalWakeHHmm: Lo
 
 private fun parseKotlinLocalDate(dateStr: String): LocalDate? {
     return try {
-        val d = java.time.LocalDate.parse(dateStr) // "2025-12-08"
+        val d = java.time.LocalDate.parse(dateStr)
         LocalDate(d.year, d.monthValue, d.dayOfMonth)
     } catch (_: Exception) {
         null
