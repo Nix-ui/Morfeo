@@ -66,6 +66,16 @@
     <string name="settings_wake_time_saved_message">Wake-up time saved: %1$s</string>
     <string name="dialog_cancel_button">Cancel</string>
     <string name="dialog_save_button">Save</string>
+    <string name="about_morfeo_button">About Morfeo</string>
+    <string name="help_center_button">Help Center</string>
+    <string name="about_screen_title">About</string>
+    <string name="morfeo_logo_description">Morfeo Logo</string>
+    <string name="about_mission_title">Our Mission</string>
+    <string name="about_mission_text">Morpheus helps you understand and improve your sleep patterns by analyzing your device usage, without invading your privacy.</string>
+    <string name="about_how_it_works_title">How it works</string>
+    <string name="about_how_it_works_text">We use algorithms that detect periods of prolonged inactivity to estimate your sleep hours.</string>
+    <string name="about_privacy_title">Privacy</string>
+    <string name="about_privacy_text">All data is processed locally on your device.</string>
 
     <!-- Weekly Details Screen -->
     <string name="weekly_details_error_loading">Error loading data</string>

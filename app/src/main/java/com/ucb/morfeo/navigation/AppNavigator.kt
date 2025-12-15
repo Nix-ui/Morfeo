@@ -21,6 +21,10 @@ import com.ucb.morfeo.features.innernotification.presentation.NotificationScreen
 import com.ucb.morfeo.features.login.presentation.LoginScreen
 import com.ucb.morfeo.features.permissions.presentation.screen.PermissionsScreen
 import com.ucb.morfeo.features.register.presentation.RegisterScreen
+import com.ucb.morfeo.features.settings.presentation.AboutScreen
+import com.ucb.morfeo.features.settings.presentation.ExportDataScreen
+import com.ucb.morfeo.features.settings.presentation.HelpCenterScreen
+import com.ucb.morfeo.features.settings.presentation.PrivacyPolicyScreen
 import com.ucb.morfeo.features.settings.presentation.SettingsScreen
 import com.ucb.morfeo.features.sleepanalysis.presentaion.SleepTrackingScreen
 import com.ucb.morfeo.features.splash.presentation.SplashViewModel
@@ -134,6 +138,10 @@ fun AppNavigator(
             )
         }
 
+        composable(Screen.About.route) {
+            AboutScreen(onNavigateUp = { navController.popBackStack() })
+        }
+
         composable(Screen.Permissions.route) {
             PermissionsScreen(
                 onNavigate = { route ->
@@ -141,7 +149,8 @@ fun AppNavigator(
                 },
                 onPermissionsGranted = {
                     navController.popBackStack()
-                }
+                },
+                onBack = { navController.popBackStack() }
             )
         }
 
@@ -154,10 +163,22 @@ fun AppNavigator(
         }
         composable(Screen.Notifications.route) {
             NotificationScreen(
-                onBackTap = {route ->
+                onBack = { navController.popBackStack() },
+                onNavigate = { route ->
                     navController.navigate(route)
                 }
             )
+        }
+        composable(Screen.PrivacyPolicy.route) {
+            PrivacyPolicyScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(Screen.HelpCenter.route) {
+            HelpCenterScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(Screen.ExportData.route) {
+            ExportDataScreen(onBack = { navController.popBackStack() })
         }
     }
 

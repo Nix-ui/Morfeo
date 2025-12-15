@@ -58,6 +58,16 @@
     <string name="settings_wake_time_saved_message">Hora para Despertar guardada: %1$s</string>
     <string name="dialog_cancel_button">Cancelar</string>
     <string name="dialog_save_button">Guardar</string>
+    <string name="about_morfeo_button">Acerca de Morfeo</string>
+    <string name="help_center_button">Centro de ayuda</string>
+    <string name="about_screen_title">Acerca de</string>
+    <string name="morfeo_logo_description">Logo de Morfeo</string>
+    <string name="about_mission_title">Nuestra misión</string>
+    <string name="about_mission_text">Morfeo te ayuda a entender y mejorar tus patrones de sueño mediante el análisis de tu uso del dispositivo, sin invadir tu privacidad.</string>
+    <string name="about_how_it_works_title">Cómo funciona</string>
+    <string name="about_how_it_works_text">Utilizamos algoritmos que detectan periodos de inactividad prolongada para estimar tus horas de sueño.</string>
+    <string name="about_privacy_title">Privacidad</string>
+    <string name="about_privacy_text">Todos los datos se procesan localmente en tu dispositivo.</string>
 
     <!-- Weekly Details Screen -->
     <string name="weekly_details_error_loading">Error al cargar datos</string>
