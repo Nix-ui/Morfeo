@@ -9,15 +9,19 @@ import com.ucb.morfeo.features.innernotification.database.dao.INotificationDao
 import com.ucb.morfeo.features.innernotification.database.entity.NotificationEntity
 import com.ucb.morfeo.features.core.database.dao.SleepDao
 import com.ucb.morfeo.features.core.database.entity.SleepCore
+import com.ucb.morfeo.features.sleepanalysis.database.dao.IAudioAnalysisDao
+import com.ucb.morfeo.features.sleepanalysis.database.entity.AudioAnalysis
+import com.ucb.morfeo.features.sleepanalysis.database.entity.AudioPeak
 import com.ucb.morfeo.features.welcome.data.database.converters.Converters
 import com.ucb.morfeo.features.welcome.data.database.dao.IUserDao
 import com.ucb.morfeo.features.welcome.data.database.entity.UserEntity
 
-@Database(entities = [UserEntity::class, NotificationEntity::class, SleepCore::class], version = 3, exportSchema = false)
+@Database(entities = [UserEntity::class, NotificationEntity::class, SleepCore::class, AudioAnalysis::class, AudioPeak::class], version = 3, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppRoomDatabase(): RoomDatabase() {
     abstract fun userDao(): IUserDao
     abstract fun sleepDao(): SleepDao
+    abstract fun analysisDao(): IAudioAnalysisDao
     abstract fun notificationDao(): INotificationDao
 
     companion object{

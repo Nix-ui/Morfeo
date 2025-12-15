@@ -15,7 +15,7 @@ class SplashViewModel(
     sealed class SessionState {
         object Loading : SessionState()
         object NoSession : SessionState()
-        object ActiveSession : SessionState()
+        data class ActiveSession(val userEmail: String) : SessionState()
     }
 
     private val _sessionState = MutableStateFlow<SessionState>(SessionState.Loading)
@@ -27,7 +27,12 @@ class SplashViewModel(
                 if (token.isNullOrBlank()) {
                     _sessionState.value = SessionState.NoSession
                 } else {
-                    _sessionState.value = SessionState.ActiveSession
+                    jwtDataStore.getUserMail().onSuccess { email->
+                        _sessionState.value = SessionState.ActiveSession(email)
+                    }.onFailure {
+                        _sessionState.value= SessionState.NoSession
+                        jwtDataStore.clearToken()
+                    }
                 }
             }
         }

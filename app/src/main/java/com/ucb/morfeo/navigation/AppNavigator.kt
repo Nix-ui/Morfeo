@@ -1,5 +1,6 @@
 package com.ucb.morfeo.navigation
-
+import com.ucb.morfeo.features.addsleep.presentation.AddSleepScreen
+import com.ucb.morfeo.features.tips.presentation.TipsScreen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -21,11 +22,18 @@ import com.ucb.morfeo.features.innernotification.presentation.NotificationScreen
 import com.ucb.morfeo.features.login.presentation.LoginScreen
 import com.ucb.morfeo.features.permissions.presentation.screen.PermissionsScreen
 import com.ucb.morfeo.features.register.presentation.RegisterScreen
+import com.ucb.morfeo.features.settings.presentation.AboutScreen
+import com.ucb.morfeo.features.settings.presentation.ExportDataScreen
+import com.ucb.morfeo.features.settings.presentation.HelpCenterScreen
+import com.ucb.morfeo.features.settings.presentation.PrivacyPolicyScreen
 import com.ucb.morfeo.features.settings.presentation.SettingsScreen
+import com.ucb.morfeo.features.sleepanalysis.presentaion.SleepTrackingScreen
 import com.ucb.morfeo.features.splash.presentation.SplashViewModel
 import com.ucb.morfeo.features.week.presentation.screen.WeeklyDetailsScreen
 import com.ucb.morfeo.features.welcome.presentation.WelcomeScreen
 import org.koin.androidx.compose.koinViewModel
+import com.ucb.morfeo.features.details.presentation.DetailsScreen
+
 
 @Composable
 fun AppNavigator(
@@ -62,7 +70,6 @@ fun AppNavigator(
                 }
             )
         }
-
         composable(Screen.LogIn.route) {
             LoginScreen(
                 onNavigateToHome = { route ->
@@ -94,19 +101,33 @@ fun AppNavigator(
 
         composable(Screen.Week.route) {
             WeeklyDetailsScreen(
+                onDailyDetailClick = { date ->
+                    navController.navigate("${Screen.Details.route}/$date")
+                },
                 onBackClick = { navController.popBackStack() },
-                onNavigate = { route ->
-                    navController.navigate(route)
-                }
+                onNavigate = { route -> navController.navigate(route) }
+            )
+        }
+        composable("${Screen.Details.route}/{date}") { backStackEntry ->
+            val dateStr = backStackEntry.arguments?.getString("date") ?: return@composable
+
+            DetailsScreen(
+                dateStr = dateStr,
+                onBack = { navController.popBackStack() }
             )
         }
 
+
+
         composable(Screen.Analysis.route) {
-            HomeScreen(
-                onNavigatedToTab = { route ->
-                    navController.navigate(route)
-                }
-            )
+            if(sessionState is SplashViewModel.SessionState.ActiveSession){
+                SleepTrackingScreen(
+                    userEmail = (sessionState as SplashViewModel.SessionState.ActiveSession).userEmail,
+                    onNavigate = {route-> navController.navigate(route)}
+                )
+            }else{
+                navController.navigate(Screen.LogIn.route)
+            }
         }
 
         composable(Screen.Profile.route) {
@@ -131,6 +152,10 @@ fun AppNavigator(
             )
         }
 
+        composable(Screen.About.route) {
+            AboutScreen(onNavigateUp = { navController.popBackStack() })
+        }
+
         composable(Screen.Permissions.route) {
             PermissionsScreen(
                 onNavigate = { route ->
@@ -138,28 +163,52 @@ fun AppNavigator(
                 },
                 onPermissionsGranted = {
                     navController.popBackStack()
-                }
+                },
+                onBack = { navController.popBackStack() }
             )
         }
 
         composable(Screen.Tips.route) {
-            HomeScreen(
-                onNavigatedToTab = { route ->
+            TipsScreen(
+                onGoToAddSleep = { navController.navigate(Screen.AddSleep.route) }
+            )
+        }
+        composable(Screen.AddSleep.route) {
+            AddSleepScreen(
+                onBack = { navController.popBackStack() },
+                onSaved = {
+                    navController.navigate(Screen.Week.route) {
+                        popUpTo(Screen.Week.route) { inclusive = true }
+                    }
+                }
+            )
+        }
+
+
+        composable(Screen.Notifications.route) {
+            NotificationScreen(
+                onBack = { navController.popBackStack() },
+                onNavigate = { route ->
                     navController.navigate(route)
                 }
             )
         }
-        composable(Screen.Notifications.route) {
-            NotificationScreen(
-                onBackTap = {route ->
-                    navController.navigate(route)
-                }
-            )
+        composable(Screen.PrivacyPolicy.route) {
+            PrivacyPolicyScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(Screen.HelpCenter.route) {
+            HelpCenterScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable(Screen.ExportData.route) {
+            ExportDataScreen(onBack = { navController.popBackStack() })
         }
     }
 
     LaunchedEffect(sessionState, maintenanceState, navController) {
-        val currentRoute = navController.currentBackStack.value.lastOrNull()?.destination?.route
+        val currentRoute = navController.currentBackStackEntry?.destination?.route
+
         if (sessionState is SplashViewModel.SessionState.Loading) {
             return@LaunchedEffect
         }

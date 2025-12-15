@@ -14,5 +14,12 @@ sealed class Screen(val route:String) {
     object Profile:Screen("/profile")
     object Permissions:Screen("/permissions")
     object Notifications:Screen("/notifications")
+    object About:Screen("/about")
+    object PrivacyPolicy:Screen("/privacy-policy")
+    object HelpCenter:Screen("/help-center")
+    object ExportData:Screen("/export-data")
+    object AddSleep : Screen("/add_sleep")
+
+
 
 }

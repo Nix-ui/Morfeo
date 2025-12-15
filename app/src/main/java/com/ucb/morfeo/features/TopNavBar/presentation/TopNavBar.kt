@@ -36,9 +36,9 @@ import com.ucb.morfeo.navigation.Screen
 fun TopNavBar(
     isBackEnable: Boolean,
     currentScreenName: String,
-    onBackScreen : (String)->Unit = {},
-    onNavigateTo : (String)->Unit = {}
-){
+    onBackScreen: () -> Unit = {},
+    onNavigateTo: (String) -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -46,8 +46,8 @@ fun TopNavBar(
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        Color.White.copy(0.0f),
-                        Color.White.copy(0.06f)
+                        Color.White.copy(alpha = 0.0f),
+                        Color.White.copy(alpha = 0.06f)
                     )
                 )
             )
@@ -60,7 +60,7 @@ fun TopNavBar(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             if (isBackEnable) {
-                IconButton(onClick = { onBackScreen(Screen.Home.route) }) {
+                IconButton(onClick = { onBackScreen() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
@@ -77,7 +77,7 @@ fun TopNavBar(
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceAround
-                    ) {
+                ) {
                     Text(
                         text = "Morfeo",
                         fontSize = 14.sp,
@@ -93,9 +93,7 @@ fun TopNavBar(
                 }
             }
             IconButton(
-                onClick = {
-                    onNavigateTo(Screen.Notifications.route)
-                }
+                onClick = { onNavigateTo(Screen.Notifications.route) }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.morfeo),
@@ -112,6 +110,6 @@ fun TopNavBar(
 
 @Preview
 @Composable
-fun previewTopNavBar(){
-    TopNavBar(false,"Welcome")
+fun previewTopNavBar() {
+    TopNavBar(false, "Welcome")
 }

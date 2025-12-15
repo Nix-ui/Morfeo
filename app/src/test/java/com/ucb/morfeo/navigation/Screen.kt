@@ -1,4 +1,4 @@
-package com.ucb.morfeo.navigation
+            package com.ucb.morfeo.navigation
 
 sealed class Screen (val route:String){
 }

@@ -1,6 +1,5 @@
 package com.ucb.morfeo.features.sleepanalysis.domain.model
 
-import com.ucb.morfeo.features.core.database.entity.AudioAnalysis
 import kotlinx.datetime.LocalDateTime
 
 data class SleepAnalysis(
@@ -15,5 +14,21 @@ data class SleepAnalysis(
     val remSleepPercentage: Float,
     val lightSleepPercentage: Float,
     val awakeDuration: Long,
-    val audioAnalysis: AudioAnalysis? = null
+    val audioAnalysis: DomainAudioAnalysis? = null
 )
+data class DomainAudioAnalysis(
+    val peaks: List<DomainAudioPeak>,
+    val snoreCount: Int,
+    val movementCount: Int,
+    val apneaEvents: Int
+)
+
+data class DomainAudioPeak(
+    val timestamp: Long,
+    val amplitude: Float,
+    val frequency: Float,
+    val peakType: PeakType
+)
+enum class PeakType{
+    SNORE, MOVEMENT, APNEA, OTHER
+}
