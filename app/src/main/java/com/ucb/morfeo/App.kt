@@ -3,30 +3,32 @@ package com.ucb.morfeo
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import android.os.Build
 import androidx.work.Configuration
 import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
-import com.ucb.morfeo.di.KoinWorkerFactory
 import com.ucb.morfeo.di.appModule
-import com.ucb.morfeo.features.innernotification.data.NotificationManagerHelper
 import com.ucb.morfeo.features.notification.data.worker.SleepNotificationWorker
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
 import java.util.concurrent.TimeUnit
 import org.koin.android.ext.android.get
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
-class App : Application(){
+class App : Application(), Configuration.Provider {
 
-    override fun onCreate() {
-        super.onCreate()
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
         startKoin {
             androidContext(this@App)
             modules(appModule)
         }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
         createNotificationChannel()
         val periodicWork = PeriodicWorkRequestBuilder<SleepNotificationWorker>(
             15, TimeUnit.MINUTES
@@ -38,6 +40,7 @@ class App : Application(){
                 periodicWork
             )
     }
+
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
@@ -51,4 +54,9 @@ class App : Application(){
             manager.createNotificationChannel(channel)
         }
     }
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(get<WorkerFactory>())
+            .build()
 }
