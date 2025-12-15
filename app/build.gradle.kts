@@ -162,6 +162,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     // Vico - Charts
     implementation(libs.bundles.vico)
+    implementation("com.google.accompanist:accompanist-permissions:0.37.2")
 }
 sentry {
     org.set("universidad-catolica-bolivi-tm")

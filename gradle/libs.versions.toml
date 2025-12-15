@@ -29,6 +29,8 @@ firebaseAuth = "24.0.1"
 serialization = "1.6.3"
 vico = "1.14.0"
 workmanager = "2.11.0"
+accompanist = "0.37.2"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -62,6 +64,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 # CORREGIDO: El nombre del módulo era incorrecto. Este es el correcto para la versión de Jake Wharton.
 retrofit-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerialization" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okHttp" }
+accompanist-permissions = { module="com.google.accompanist:accompanist-permisions", version.ref="accompanist" }
 
 # DI
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref="koin"}

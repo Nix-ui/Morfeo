@@ -48,6 +48,17 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import com.ucb.morfeo.R
+import com.ucb.morfeo.features.sleepanalysis.data.repository.SleepAnalysisRepository
+import com.ucb.morfeo.features.sleepanalysis.domain.repository.ISleepAnalysisRepository
+import com.ucb.morfeo.features.sleepanalysis.domain.usecase.AnalizeSleepAudioUseCase
+import com.ucb.morfeo.features.sleepanalysis.domain.usecase.CancelSleepSessionUseCase
+import com.ucb.morfeo.features.sleepanalysis.domain.usecase.GetSleepHistoryUseCase
+import com.ucb.morfeo.features.sleepanalysis.domain.usecase.StartSleepTrackingUseCase
+import com.ucb.morfeo.features.sleepanalysis.domain.usecase.StopSleepTrackingUseCase
+import com.ucb.morfeo.features.sleepanalysis.presentaion.SleepTrackingViewModel
+import com.ucb.morfeo.features.sleepanalysis.utils.AudioAnalyzer
+import com.ucb.morfeo.features.sleepanalysis.utils.AudioFileManager
+import com.ucb.morfeo.features.sleepanalysis.utils.AudioRecorder
 import com.ucb.morfeo.features.time.data.local.TimeLocalDataSource
 import com.ucb.morfeo.features.time.data.remote.TimeApi
 import com.ucb.morfeo.features.time.data.repository.TimeRepositoryImpl
@@ -136,4 +147,33 @@ val appModule = module {
     }
     viewModel{ TimeViewModel(get()) }
 
+    //Analysis
+    single{ get<AppRoomDatabase>().analysisDao()}
+    single{ AudioRecorder() }
+    single{ AudioAnalyzer(androidContext()) }
+    single{ AudioFileManager(androidContext()) }
+    single<ISleepAnalysisRepository> {
+        SleepAnalysisRepository(
+        get(),
+        get(),
+        get(),
+        get(),
+        get(),
+        androidContext())
+    }
+    factory{ StartSleepTrackingUseCase(get()) }
+    factory{ StopSleepTrackingUseCase(get()) }
+    factory{ AnalizeSleepAudioUseCase(get()) }
+    factory{ GetSleepHistoryUseCase(get()) }
+    factory{ CancelSleepSessionUseCase(get()) }
+
+    viewModel{
+        SleepTrackingViewModel(
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
 }

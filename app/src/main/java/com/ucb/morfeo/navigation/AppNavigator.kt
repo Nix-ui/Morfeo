@@ -22,6 +22,7 @@ import com.ucb.morfeo.features.login.presentation.LoginScreen
 import com.ucb.morfeo.features.permissions.presentation.screen.PermissionsScreen
 import com.ucb.morfeo.features.register.presentation.RegisterScreen
 import com.ucb.morfeo.features.settings.presentation.SettingsScreen
+import com.ucb.morfeo.features.sleepanalysis.presentaion.SleepTrackingScreen
 import com.ucb.morfeo.features.splash.presentation.SplashViewModel
 import com.ucb.morfeo.features.week.presentation.screen.WeeklyDetailsScreen
 import com.ucb.morfeo.features.welcome.presentation.WelcomeScreen
@@ -62,7 +63,6 @@ fun AppNavigator(
                 }
             )
         }
-
         composable(Screen.LogIn.route) {
             LoginScreen(
                 onNavigateToHome = { route ->
@@ -102,11 +102,14 @@ fun AppNavigator(
         }
 
         composable(Screen.Analysis.route) {
-            HomeScreen(
-                onNavigatedToTab = { route ->
-                    navController.navigate(route)
-                }
-            )
+            if(sessionState is SplashViewModel.SessionState.ActiveSession){
+                SleepTrackingScreen(
+                    userEmail = (sessionState as SplashViewModel.SessionState.ActiveSession).userEmail,
+                    onNavigate = {route-> navController.navigate(route)}
+                )
+            }else{
+                navController.navigate(Screen.LogIn.route)
+            }
         }
 
         composable(Screen.Profile.route) {
