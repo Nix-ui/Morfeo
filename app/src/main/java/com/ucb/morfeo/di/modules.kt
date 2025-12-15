@@ -1,6 +1,8 @@
 package com.ucb.morfeo.di
 
 import androidx.compose.ui.res.stringResource
+import com.ucb.morfeo.features.tips.domain.usecase.GeneratePersonalizedTipsUseCase
+import com.ucb.morfeo.features.tips.presentation.TipsViewModel
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.ucb.morfeo.features.core.firabase.config.data.repository.FirebaseConfigRepository
 import com.ucb.morfeo.features.core.firabase.config.domain.repository.IFirebaseConfigRepository
@@ -69,6 +71,9 @@ import com.ucb.morfeo.features.time.presentation.TimeViewModel
 import okhttp3.MediaType.Companion.toMediaType
 
 val appModule = module {
+    viewModel { com.ucb.morfeo.features.details.presentation.DailyDetailsViewModel(get(), get(), get()) }
+
+    viewModel { com.ucb.morfeo.features.addsleep.presentation.AddSleepViewModel(get(), get()) }
 
     // 📦 ROOM DATABASE
     single { AppRoomDatabase.getDatabase(get()) }
@@ -109,8 +114,8 @@ val appModule = module {
 
     // ⚙️ SETTINGS
     single { SettingsDataStore(get()) }
-    factory { GetSleepDataForExportUseCase(get()) } 
-    viewModel { SettingsViewModel(get(), get(), get(), get()) } 
+    factory { GetSleepDataForExportUseCase(get()) }
+    viewModel { SettingsViewModel(get(), get(), get(), get()) }
 
     //Inner Notification
     single { get<AppRoomDatabase>().notificationDao() }
@@ -133,14 +138,16 @@ val appModule = module {
     factory { GetWeeklySummaryUseCase(get()) }
     factory { CalculateConsistencyUseCase() }
     single<WeeklyRepository> { WeeklyRepositoryImpl(get(), get()) }
-    viewModel { WeeklyDetailsViewModel(get(), get()) }
+
+    // ✅ CAMBIO AQUÍ: ahora inyecta SleepDao también
+    viewModel { WeeklyDetailsViewModel(get(), get(), get()) }
 
     //Time
-    single{ TimeLocalDataSource(androidContext()) }
-    single <TimeRepository> { TimeRepositoryImpl(get(),get()) }
+    single { TimeLocalDataSource(androidContext()) }
+    single<TimeRepository> { TimeRepositoryImpl(get(), get()) }
     single { GetRealTimeUseCase(get()) }
     single {
-        val json = Json { ignoreUnknownKeys = true}
+        val json = Json { ignoreUnknownKeys = true }
         Retrofit.Builder()
             .baseUrl("https://worldtimeapi.org/")
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
@@ -178,4 +185,6 @@ val appModule = module {
             get()
         )
     }
+    factory { GeneratePersonalizedTipsUseCase() }
+    viewModel { TipsViewModel(get(), get(), get(), get()) }
 }
