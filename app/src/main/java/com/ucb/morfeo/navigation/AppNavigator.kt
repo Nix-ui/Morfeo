@@ -1,6 +1,6 @@
 package com.ucb.morfeo.navigation
 import com.ucb.morfeo.features.addsleep.presentation.AddSleepScreen
-
+import com.ucb.morfeo.features.tips.presentation.TipsScreen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -157,10 +157,8 @@ fun AppNavigator(
         }
 
         composable(Screen.Tips.route) {
-            HomeScreen(
-                onNavigatedToTab = { route ->
-                    navController.navigate(route)
-                }
+            TipsScreen(
+                onGoToAddSleep = { navController.navigate(Screen.AddSleep.route) }
             )
         }
         composable(Screen.AddSleep.route) {

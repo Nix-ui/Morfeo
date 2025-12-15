@@ -1,6 +1,8 @@
 package com.ucb.morfeo.di
 
 import androidx.compose.ui.res.stringResource
+import com.ucb.morfeo.features.tips.domain.usecase.GeneratePersonalizedTipsUseCase
+import com.ucb.morfeo.features.tips.presentation.TipsViewModel
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.ucb.morfeo.features.core.firabase.config.data.repository.FirebaseConfigRepository
 import com.ucb.morfeo.features.core.firabase.config.domain.repository.IFirebaseConfigRepository
@@ -140,4 +142,6 @@ val appModule = module {
             .create(TimeApi::class.java)
     }
     viewModel { TimeViewModel(get()) }
+    factory { GeneratePersonalizedTipsUseCase() }
+    viewModel { TipsViewModel(get(), get(), get(), get()) }
 }
