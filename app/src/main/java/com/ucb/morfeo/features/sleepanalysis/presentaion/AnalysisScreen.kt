@@ -110,7 +110,7 @@ fun SleepTrackingScreen(
                 true,
                 "Analysis",
                 onNavigateTo = onNavigate,
-                onBackScreen = onNavigate,
+                onBackScreen = { onNavigate(Screen.Home.route)},
             )
         },
         bottomBar = { ButtomNavBar(
