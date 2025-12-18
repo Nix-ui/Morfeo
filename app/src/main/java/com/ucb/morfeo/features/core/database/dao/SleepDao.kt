@@ -21,6 +21,14 @@ interface SleepDao {
     @Query("SELECT * FROM sleep_core WHERE id =:id")
     suspend fun getSleepCoreById(id: Int): SleepCore?
 
+    @Query("""
+        SELECT * FROM sleep_core 
+        WHERE userEmail = :userEmail 
+        ORDER BY wakeTime DESC 
+        LIMIT 1
+    """)
+    suspend fun getLastSleepByEmail(userEmail: String): SleepCore?
+
     @Query("SELECT * FROM sleep_core WHERE userEmail= :email ORDER BY date DESC")
     fun getSleepHistory(email: String): Flow<List<SleepCore>>
 

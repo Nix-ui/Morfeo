@@ -71,6 +71,8 @@ import kotlinx.datetime.toJavaLocalDate
 import org.koin.androidx.compose.koinViewModel
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 
 @Composable
@@ -697,7 +699,7 @@ private fun WeekComparisonCard(weeklySummary: com.ucb.morfeo.features.week.domai
 
 private fun formatDuration(duration: kotlin.time.Duration): String {
     val hours = duration.inWholeHours
-    val minutes = duration.inWholeMinutes % 60
+    val minutes = duration.inWholeMinutes
     return "${hours}h ${minutes}m"
 }
 

@@ -6,6 +6,8 @@ import com.ucb.morfeo.features.week.domain.model.SleepConsistency
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 class CalculateConsistencyUseCase {
     operator fun invoke(dailyData: List<DailySleepData>): SleepConsistency {
@@ -21,7 +23,7 @@ class CalculateConsistencyUseCase {
 
         val bedTimeVariance = calculateTimeVariance(dailyData.map { it.bedTime })
         val wakeTimeVariance = calculateTimeVariance(dailyData.map { it.wakeTime })
-        val sleepDurationVariance = calculateDurationVariance(dailyData.map { it.sleepDuration })
+        val sleepDurationVariance = calculateDurationVariance(dailyData.map { it.sleepDuration})
 
         val consistencyScore = calculateConsistencyScore(
             bedTimeVariance,
@@ -89,13 +91,13 @@ class CalculateConsistencyUseCase {
         val firstScore = calculateConsistencyScore(
             calculateTimeVariance(firstHalf.map { it.bedTime }),
             calculateTimeVariance(firstHalf.map { it.wakeTime }),
-            calculateDurationVariance(firstHalf.map { it.sleepDuration })
+            calculateDurationVariance(firstHalf.map { it.sleepDuration})
         )
 
         val secondScore = calculateConsistencyScore(
             calculateTimeVariance(secondHalf.map { it.bedTime }),
             calculateTimeVariance(secondHalf.map { it.wakeTime }),
-            calculateDurationVariance(secondHalf.map { it.sleepDuration })
+            calculateDurationVariance(secondHalf.map { it.sleepDuration})
         )
 
         return when {

@@ -20,6 +20,8 @@ import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.datetime.minus
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 class SettingsViewModel(
     private val settingsDataStore: SettingsDataStore,
@@ -116,7 +118,7 @@ class SettingsViewModel(
                     val dataToSerialize = filteredByDate.map { dailyData ->
                         SleepDataExport(
                             date = dailyData.date.toString(),
-                            sleepDuration = if (dataTypes.contains("Horas de sueño")) dailyData.sleepDuration.inWholeMinutes else null,
+                            sleepDuration = if (dataTypes.contains("Horas de sueño")) dailyData.sleepDuration.inWholeMilliseconds else null,
                             sleepScore = if (dataTypes.contains("Puntuación de sueño")) dailyData.sleepScore else null
                         )
                     }
