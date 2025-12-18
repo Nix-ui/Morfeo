@@ -19,8 +19,8 @@ android {
         applicationId = "com.ucb.morfeo"
         minSdk = 26
         targetSdk = 36
-        versionCode = 4
-        versionName = "1.0.4"
+        versionCode = 5
+        versionName = "1.05"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -46,6 +46,13 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+    
+    // SOLUCIÓN PARA 16 KB: Evita comprimir librerías nativas para permitir su alineación
+    packaging {
+        jniLibs {
+            useLegacyPackaging = false
+        }
     }
 }
 
@@ -122,8 +129,8 @@ dependencies {
 
     // Networking
     implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlinx.serialization) // Agregado
-    implementation(libs.okhttp) // Agregado
+    implementation(libs.retrofit.kotlinx.serialization)
+    implementation(libs.okhttp)
     implementation(libs.kotlinx.serialization)
 
     // Firebase
