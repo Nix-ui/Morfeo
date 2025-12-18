@@ -1,6 +1,8 @@
 package com.ucb.morfeo.features.week.data.repository
 
+import android.util.Log
 import com.ucb.morfeo.features.core.database.dao.SleepDao
+import com.ucb.morfeo.features.home.domain.model.SleepRecordScoreModel
 import com.ucb.morfeo.features.week.domain.model.DailySleepData
 import com.ucb.morfeo.features.week.domain.model.WeeklySummary
 import com.ucb.morfeo.features.week.domain.usecase.CalculateConsistencyUseCase
@@ -13,13 +15,33 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 class WeeklyRepositoryImpl(
     private val sleepDao: SleepDao,
     private val calculateConsistency: CalculateConsistencyUseCase
 ) : WeeklyRepository {
+
+    override suspend fun getLastSleepRecord(userEmail: String): Result<SleepRecordScoreModel> {
+        val sleepCore = sleepDao.getLastSleepByEmail(userEmail)
+        return if(sleepCore != null){
+            Result.success(
+                SleepRecordScoreModel(
+                    date=sleepCore.date,
+                    avgSleepDuration = sleepCore.sleepDuration,
+                    wakeTime = sleepCore.wakeTime,
+                    bedTime = sleepCore.bedTime,
+                    sleepScore = sleepCore.sleepScore
+                )
+            )
+        }else{
+            Result.failure(Exception("Records not Found"))
+        }
+    }
 
     override suspend fun getWeeklySummary(userEmail: String, weekStartDate: LocalDate?): WeeklySummary {
         val startDate = weekStartDate ?: getCurrentWeekStart()
@@ -88,6 +110,8 @@ class WeeklyRepositoryImpl(
     }
 }
 
+
+
 // Extension functions para LocalDate
 private fun LocalDate.plusDays(days: Long): LocalDate {
     return this.plus(days, DateTimeUnit.DAY)
@@ -100,7 +124,7 @@ private fun LocalDate.minusDays(days: Long): LocalDate {
 private fun com.ucb.morfeo.features.core.database.entity.SleepCore.toDailySleepData(): DailySleepData {
     return DailySleepData(
         date = this.date,
-        sleepDuration = this.sleepDuration.toLong().minutes,
+        sleepDuration = this.sleepDuration.milliseconds,
         sleepScore = this.sleepScore,
         bedTime = this.bedTime,
         wakeTime = this.wakeTime,

@@ -1,5 +1,6 @@
 package com.ucb.morfeo.features.week.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ucb.morfeo.features.core.database.dao.SleepDao
@@ -86,6 +87,7 @@ class WeeklyDetailsViewModel(
                     }
 
                     val current = currentRes.getOrThrow()
+                    Log.d("WeekSumary","${current.averageSleepDuration}")
                     _weeklyState.value = WeeklySummaryState.Success(current)
                     _selectedDate.value = startDate
 
@@ -100,7 +102,6 @@ class WeeklyDetailsViewModel(
                             if (current.dailyData.isNotEmpty() && prev.dailyData.isNotEmpty()) {
                                 val currMin = current.averageSleepDuration.inWholeMinutes
                                 val prevMin = prev.averageSleepDuration.inWholeMinutes
-
                                 WeekVsPrevUi(
                                     currentAvgMinutes = currMin,
                                     prevAvgMinutes = prevMin,

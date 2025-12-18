@@ -1,6 +1,5 @@
 package com.ucb.morfeo.features.home.presentation
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -20,16 +19,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,20 +47,34 @@ import androidx.compose.ui.unit.sp
 import com.ucb.morfeo.R
 import com.ucb.morfeo.navigation.buttonNavBar.presentation.ButtomNavBar
 import com.ucb.morfeo.features.TopNavBar.presentation.TopNavBar
-import com.ucb.morfeo.features.core.maintenance.presentation.MaintenanceStatusViewModel
 import com.ucb.morfeo.features.time.presentation.TimeView
-import com.ucb.morfeo.navigation.Screen
-import kotlinx.coroutines.launch
+import kotlinx.datetime.isoDayNumber
+import org.koin.androidx.compose.koinViewModel
+
+fun convertirMillisAHHMM(millis: Long): String {
+    val horas = millis / (1000 * 60 * 60)
+    val minutes = (millis % (1000 * 60 * 60)) / (1000 * 60)
+    val hrs = if(horas<10){
+        "0${horas}"
+    }else{
+        "$horas"
+    }
+    val mnts = if(minutes.toInt() < 10){
+        "0${minutes}"
+    }else{
+        "$minutes"
+    }
+    return "${hrs}:${mnts}"
+}
 
 @Composable
 fun HomeScreen(
-    onNavigatedToTab: (String) -> Unit = {}
+    onNavigatedToTab: (String) -> Unit = {},
+    homeViewModel: HomeViewModel = koinViewModel()
 ){
-    val sleepScore = 50
-    val averageSleep = "7h 25m"
-    val bedTime = "23:40"
-    val wakeTime = "06:58"
-    val weeklyImprovement = 5
+    LaunchedEffect(Unit) {
+        homeViewModel.getLastRecord()
+    }
     var selectItem by remember { mutableStateOf("") }
     val context = LocalContext.current
     Scaffold(
@@ -83,29 +95,83 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState(), true),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp, alignment = Alignment.CenterVertically)
-        ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            TimeCard()
-            SleepScoreCard(
-                score = sleepScore,
-                improvement = weeklyImprovement
-            )
-            SleepStatsCard(
-                averageSleep = averageSleep,
-                bedTime = bedTime,
-                wakeTime = wakeTime
-            )
-            SleepWeeklyBar(
-                weekScore = listOf(20,40,79,59,39,0,0)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+        val sleepRecord by homeViewModel.uiState.collectAsState()
+        when(sleepRecord){
+            is HomeViewModel.HomeStateUI.Loading -> {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ){
+                    CircularProgressIndicator()
+                }
+            }
+            is HomeViewModel.HomeStateUI.Error -> {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ){
+                    Text(
+                        text = "Error",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Medium
+                        )
+                    )
+                }
+            }
+            is HomeViewModel.HomeStateUI.Empty -> {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ){
+                    Text(
+                        text = "Sin datos del sueño",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
+                            fontWeight = FontWeight.Medium
+                        )
+                    )
+                }
+            }
+            is HomeViewModel.HomeStateUI.Success -> {
+                val record = (sleepRecord as HomeViewModel.HomeStateUI.Success).lastRecord
+                val bedTime = convertirMillisAHHMM(record.bedTime.time.toMillisecondOfDay().toLong())
+                val wakeTime = convertirMillisAHHMM(record.wakeTime.time.toMillisecondOfDay().toLong())
+                val weeklyImprovement = record.date.dayOfWeek.isoDayNumber
+                Column(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .verticalScroll(rememberScrollState(), true),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp, alignment = Alignment.CenterVertically)
+                ) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    TimeCard()
+                    SleepScoreCard(
+                        score = record.sleepScore,
+                        improvement = weeklyImprovement
+                    )
+                    SleepStatsCard(
+                        averageSleep = convertirMillisAHHMM(record.avgSleepDuration),
+                        bedTime = bedTime,
+                        wakeTime = wakeTime
+                    )
+                    SleepWeeklyBar(
+                        weekScore = listOf(20,40,79,59,39,0,0),
+                        weekDay = weeklyImprovement-1
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            }
         }
+
     }
 }
 
@@ -350,14 +416,13 @@ fun SleepStatItem(
 @Composable
 fun SleepWeeklyBar(
     weekScore: List<Int>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    weekDay: Int
 ) {
     require(weekScore.size == 7) { "weekScore debe tener exactamente 7 elementos" }
 
     val daysOfWeek = listOf("Lu", "Ma", "Mi", "Ju", "Vi", "Sa", "Do")
     val maxScore = weekScore.maxOrNull() ?: 100
-    val todayIndex = 4
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -477,17 +542,17 @@ fun SleepWeeklyBar(
                             score = score,
                             day = daysOfWeek[index],
                             maxScore = maxScore,
-                            isHighlighted = index == todayIndex,
+                            isHighlighted = index == weekDay,
                             maxHeight = 100.dp
                         )
                     }
                 }
-                if (todayIndex < weekScore.size) {
-                    val highlightedScore = weekScore[todayIndex]
+                if (weekDay < weekScore.size) {
+                    val highlightedScore = weekScore[weekDay]
                     Box(
                         modifier = Modifier
                             .offset(
-                                x = (todayIndex * 45).dp,
+                                x = (weekDay * 45).dp,
                                 y = (-20).dp
                             )
                             .background(

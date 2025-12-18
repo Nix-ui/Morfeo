@@ -1,5 +1,6 @@
 package com.ucb.morfeo.features.login.data.repository
 
+import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -48,8 +49,10 @@ class LogInRepository(
         }
     }
 
-    private fun createSampleJwtTokenString(firebaseUser: FirebaseUser, logInUser: LogInUser): String {
-        return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ik1vcmZlbyIsImVtYWlsIjoibW9yZmVvQHVjYi5lZHUuYm8iLCJpYXQiOjE1MTYyMzkwMjJ9.-mCtaDlhaRXlSV43Di4BQdTcbklOBmCLdz44esWOeYs"
+    private  suspend fun createSampleJwtTokenString(firebaseUser: FirebaseUser, logInUser: LogInUser): String {
+        val data = firebaseUser.getIdToken(true).await().token ?: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ik1vcmZlbyIsImVtYWlsIjoibW9yZmVvQHVjYi5lZHUuYm8iLCJpYXQiOjE1MTYyMzkwMjJ9.-mCtaDlhaRXlSV43Di4BQdTcbklOBmCLdz44esWOeYs"
+        Log.d("Token",data)
+        return data
     }
 
     private fun createUserModelFromFirebaseUser(firebaseUser: FirebaseUser, logInUser: LogInUser,name: String): UserModel{

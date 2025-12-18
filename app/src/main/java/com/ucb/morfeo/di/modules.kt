@@ -51,6 +51,8 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import com.ucb.morfeo.R
+import com.ucb.morfeo.features.home.domain.usecase.GetLastRecord
+import com.ucb.morfeo.features.home.presentation.HomeViewModel
 import com.ucb.morfeo.features.sleepanalysis.data.repository.SleepAnalysisRepository
 import com.ucb.morfeo.features.sleepanalysis.domain.repository.ISleepAnalysisRepository
 import com.ucb.morfeo.features.sleepanalysis.domain.usecase.AnalizeSleepAudioUseCase
@@ -187,4 +189,6 @@ val appModule = module {
     }
     factory { GeneratePersonalizedTipsUseCase() }
     viewModel { TipsViewModel(get(), get(), get(), get()) }
+    single{ GetLastRecord(get()) }
+    viewModel{ HomeViewModel(get(),get()) }
 }
